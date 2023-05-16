@@ -1,7 +1,7 @@
 use serde::{Serialize,Deserialize};
 
 #[derive(Debug,Serialize,Deserialize,Clone)]
-pub struct SysUserEntity{
+pub struct SysUser{
   pub user_id:i64,
   pub dept_id:Option<i64>,
   pub user_name:String,

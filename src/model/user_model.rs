@@ -1,4 +1,4 @@
-use salvo::oapi::{ToSchema};
+use salvo::{oapi::{ToSchema}, macros::Extractible};
 use serde::{Serialize,Deserialize};
 
 // 验证码返回
@@ -11,12 +11,15 @@ pub struct CaptchaRes{
 }
 
 // 登录请求参数
-#[derive(Serialize, Deserialize, Clone, Debug, ToSchema)]
+#[derive(Serialize, Deserialize, Clone, Debug, ToSchema,Extractible)]
+#[extract(
+  default_source(from = "body")
+)]
 pub struct LoginReq{
-  pub code:String,
-  pub password:String,
-  pub username:String,
-  pub uuid:String
+  pub code:Option<String>,
+  pub password:Option<String>,
+  pub username:Option<String>,
+  pub uuid:Option<String>
 }
 
 

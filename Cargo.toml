@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-salvo = {version="0.41.0",features=["serve-static","oapi","logging"]}
+salvo = {version="0.41.0",features=["serve-static","oapi","logging","catch-panic"]}
 captcha = "0.0.9"
 md5 = "0.7.0"
 jsonwebtoken = "8"

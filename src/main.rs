@@ -1,13 +1,16 @@
 use rbatis::Rbatis;
-use once_cell::sync::{Lazy,OnceCell};
+use once_cell::sync::Lazy;
 use rbdc_mysql::driver::MysqlDriver;
-use salvo::{Server, Listener,Router};
+use salvo::catcher::Catcher;
+use salvo::prelude::CatchPanic;
+use salvo::{Server, Listener,Router, Service};
 use salvo::conn::TcpListener;
 use salvo::serve_static::StaticDir;
 use salvo::oapi::swagger_ui::SwaggerUi;
 use salvo::oapi::{Info, OpenApi};
 use salvo::logging::Logger;
 use redis::{Client};
+
 
 mod controller;
 mod service;
@@ -47,24 +50,30 @@ async fn main() {
     );
 
     let router = Router::new().hoop(Logger::new())
+        .hoop(CatchPanic::new())
         .push(static_dir)
         .push(
             Router::new().push(
                 // 需要验证的api
                 // Router::with_path("/captchaImage").hoop(common_controller::auth_token).get(user_controller::get_captcha)
                 Router::with_path("/captchaImage").get(user_controller::get_captcha)
+            ).push(
+                Router::with_path("/login").post(user_controller::login)
             )
         );
         // .push(
         //     Router::new().hoop(common_controller::auth_token);
         // );
 
+
     let doc = OpenApi::new(Info::new("todos api", "0.0.1")).merge_router(&router);
     let router = router
     .push(doc.into_router("/api-doc/openapi.json"))
     .push(SwaggerUi::new("/api-doc/openapi.json").into_router("swagger-ui"));
 
+    let service = Service::new(router).catcher(Catcher::default().hoop(common_controller::catcher_err));
+
     Server::new(
-        TcpListener::new("0.0.0.0:8080").bind().await
-    ).serve(router).await;
+        TcpListener::new("0.0.0.0:8081").bind().await
+    ).serve(service).await;
 }
