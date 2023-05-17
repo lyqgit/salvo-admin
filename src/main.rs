@@ -37,7 +37,7 @@ async fn main() {
     GLOBAL_DB.link(MysqlDriver {}, "mysql://root:123456@localhost/ry-vue").await.unwrap();
 
 
-    tracing::info!("Listening on http://127.0.0.1:8080");
+    tracing::error!("start in {}","Listening on http://127.0.0.1:8080");
     tracing::debug!("Listening on http://127.0.0.1:8080");
     tracing::warn!("Listening on http://127.0.0.1:8080");
 
@@ -74,6 +74,6 @@ async fn main() {
     let service = Service::new(router).catcher(Catcher::default().hoop(common_controller::catcher_err));
 
     Server::new(
-        TcpListener::new("0.0.0.0:8081").bind().await
+        TcpListener::new("0.0.0.0:8080").bind().await
     ).serve(service).await;
 }

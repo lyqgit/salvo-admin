@@ -1,5 +1,5 @@
 use salvo::{handler, Request,Response, FlowCtrl, Depot, prelude::StatusCode};
-use crate::utils::res::{res_json_custom,res_custom};
+use crate::utils::res::{res_json_custom};
 
 #[handler]
 pub async fn auth_token(&self,req:&mut Request,res:&mut Response, ctrl: &mut FlowCtrl){

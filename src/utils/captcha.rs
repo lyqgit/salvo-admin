@@ -1,7 +1,7 @@
 use captcha::Captcha;
 use captcha::filters::Noise;
 
-#[warn(dead_code)]
+#[allow(dead_code)]
 pub fn create_captcha()->(String,Option<String>){
     let mut captcha_obj = Captcha::new();
     captcha_obj.add_chars(5)

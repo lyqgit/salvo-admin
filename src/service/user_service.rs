@@ -15,6 +15,7 @@ pub async fn get_user_by_up(username:String,password:String)->Result<Option<SysU
   Ok(one)
 }
 
+#[allow(dead_code)]
 pub async fn get_captcha_by_code(code:String)->Result<Option<SysCaptcha>,Error>{
   let list = SysCaptcha::select_captcha_by_code(&mut GLOBAL_DB.clone(), code).await?;
   let one = list.get(0).cloned();
