@@ -1,5 +1,6 @@
 use salvo::{oapi::{ToSchema}, macros::Extractible};
 use serde::{Serialize,Deserialize};
+use crate::entity::sys_user_entity::SysUser;
 
 // 验证码返回
 #[derive(Serialize, Deserialize, Clone, Debug, ToSchema)]
@@ -28,4 +29,13 @@ pub struct LoginReq{
 pub struct LoginRes{
   pub token:String,
 }
+
+// 登录返回
+#[derive(Serialize, Deserialize, Clone, Debug, ToSchema)]
+pub struct UserInfo{
+  pub permissions:Vec<String>,
+  pub roles:Vec<String>,
+  pub user:SysUser
+}
+
 

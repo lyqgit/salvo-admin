@@ -563,6 +563,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "fast_log"
+version = "1.5.54"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "194b068294a8db7ca8ef383ad02944a6e4423b951f1a63d712efca65e094e322"
+dependencies = [
+ "crossbeam",
+ "crossbeam-channel",
+ "crossbeam-utils",
+ "dark-std",
+ "fastdate",
+ "log",
+ "once_cell",
+ "parking_lot",
+]
+
+[[package]]
 name = "fastdate"
 version = "0.1.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2040,8 +2056,10 @@ name = "salvo-admin"
 version = "0.1.0"
 dependencies = [
  "captcha",
+ "fast_log",
  "fastdate",
  "jsonwebtoken",
+ "log",
  "md5",
  "once_cell",
  "rbatis",

@@ -1,11 +1,23 @@
 use salvo::{handler, Request,Response, FlowCtrl, Depot, prelude::StatusCode};
 use crate::utils::res::{res_json_custom};
+use crate::utils::redis;
 
 #[handler]
-pub async fn auth_token(&self,req:&mut Request,res:&mut Response, ctrl: &mut FlowCtrl){
+pub async fn auth_token(&self,req:&mut Request,res:&mut Response, ctrl: &mut FlowCtrl,depot: &mut Depot){
   println!("走中间件");
-  if let Some(_token) = req.headers().get("token"){
+  if let Some(token) = req.headers().get("Authorization"){
     println!("有token");
+    // 验证token
+    match redis::get::<i32,&str>(&token.to_str().unwrap().to_string().replace("Bearer ","")){
+      Err(_)=>{
+        ctrl.skip_rest();
+        res.render(res_json_custom::<()>(401,"token无效".to_string()));
+      },
+      Ok(user_id)=>{
+        depot.insert("userId",user_id);
+      }
+    }
+    
   }else{
     println!("没有token");
     ctrl.skip_rest();
@@ -27,6 +39,7 @@ pub async fn catcher_err(&self, _req: &Request, _depot: &Depot, res: &mut Respon
       StatusCode::INTERNAL_SERVER_ERROR=>{
         println!("500错误");
         ctrl.skip_rest();
+        res.body("".into());
         res.render(res_json_custom::<()>(500, "发生错误".to_string()));
       },
       // StatusCode::BAD_REQUEST=>{

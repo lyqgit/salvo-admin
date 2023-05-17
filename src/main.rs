@@ -20,6 +20,8 @@ mod entity;
 mod utils;
 
 use controller::{user_controller,common_controller};
+use tracing::Level;
+use tracing_subscriber::FmtSubscriber;
 
 pub static GLOBAL_DB: Lazy<Rbatis> = Lazy::new(|| Rbatis::new());
 
@@ -32,13 +34,20 @@ pub static GLOBAL_REDIS:Lazy<Client> = Lazy::new(||{
 #[tokio::main]
 async fn main() {
 
-    tracing_subscriber::fmt::init();
+    let subscriber = FmtSubscriber::builder()
+        // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
+        // will be written to stdout.
+        .with_max_level(Level::INFO)
+        // completes the builder.
+        .finish();
+
+    
+    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
+    fast_log::init(fast_log::Config::new().console()).expect("rbatis init fail");
+    
     // 连接数据库
     GLOBAL_DB.link(MysqlDriver {}, "mysql://root:123456@localhost/ry-vue").await.unwrap();
 
-
-    tracing::error!("start in {}","Listening on http://127.0.0.1:8080");
-    tracing::debug!("Listening on http://127.0.0.1:8080");
     tracing::warn!("Listening on http://127.0.0.1:8080");
 
 
@@ -60,10 +69,12 @@ async fn main() {
             ).push(
                 Router::with_path("/login").post(user_controller::login)
             )
+        )
+        .push(
+            Router::new().hoop(common_controller::auth_token).push(
+                Router::with_path("/getInfo").get(user_controller::get_info)
+            )
         );
-        // .push(
-        //     Router::new().hoop(common_controller::auth_token);
-        // );
 
 
     let doc = OpenApi::new(Info::new("todos api", "0.0.1")).merge_router(&router);

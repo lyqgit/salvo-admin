@@ -1,11 +1,17 @@
+use salvo::oapi::ToSchema;
 use serde::{Serialize,Deserialize};
 
-#[derive(Debug,Serialize,Deserialize,Clone)]
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
 pub struct SysUser{
+  #[serde(rename(serialize = "userId"))]
   pub user_id:i64,
+  #[serde(rename(serialize = "deptId"))]
   pub dept_id:Option<i64>,
+  #[serde(rename(serialize = "userName"))]
   pub user_name:String,
+  #[serde(rename(serialize = "nickName"))]
   pub nick_name:String,
+  #[serde(rename(serialize = "userType"))]
   pub user_type:Option<String>,
   pub email:Option<String>,
   pub phonenumber:Option<String>,
@@ -13,14 +19,23 @@ pub struct SysUser{
   pub avatar:Option<String>,
   pub password:Option<String>,
   pub status:Option<String>,
+  #[serde(rename(serialize = "delFlag"))]
   pub del_flag:Option<String>,
+  #[serde(rename(serialize = "loginIp"))]
   pub login_ip:Option<String>,
+  #[serde(rename(serialize = "loginDate"))]
   pub login_date:Option<String>,
+  #[serde(rename(serialize = "createBy"))]
   pub create_by:Option<String>,
+  #[serde(rename(serialize = "createTime"))]
   pub create_time:Option<String>,
+  #[serde(rename(serialize = "updateBy"))]
   pub update_by:Option<String>,
+  #[serde(rename(serialize = "updateTime"))]
   pub update_time:Option<String>,
   pub remark:Option<String>,
+  #[serde(rename(serialize = "realName"))]
   pub real_name:Option<String>,
+  #[serde(rename(serialize = "expireTime"))]
   pub expire_time:Option<i64>,
 }
