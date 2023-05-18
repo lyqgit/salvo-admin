@@ -83,7 +83,7 @@ pub async fn get_info(depot: &mut Depot)->Res<UserInfo>{
         match role_service::get_roles_by_user_id(user_id).await{
           Ok(role_list)=>{
             if user.user_name.eq("admin"){
-              let user_info = UserInfo{user,roles:Vec::new(),permissions:vec!["*:*:*".to_string()]};
+              let user_info = UserInfo{user,roles:vec![String::from("admin")],permissions:vec!["*:*:*".to_string()]};
               Ok(res_json_ok(Some(user_info)))
             }else{
               let permissions = menu_service::get_menu_by_role_id(true,role_list.join(",")).await.unwrap();
@@ -104,4 +104,9 @@ pub async fn get_info(depot: &mut Depot)->Res<UserInfo>{
       Err(res_json_custom(400,err.to_string()))
     }
   }
+}
+
+
+pub async fn get_routers(){
+  
 }

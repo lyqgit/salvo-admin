@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
   <select id="select_roles_by_user_id">
-    `select role_name from sys_role sr 
+    `select sr.* from sys_role sr 
     inner join sys_user_role sur on sr.role_id = sur.role_id
     where sur.user_id = #{id}`
   </select>

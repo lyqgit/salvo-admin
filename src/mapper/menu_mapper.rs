@@ -4,3 +4,7 @@ use rbatis::{html_sql, executor::Executor};
 async fn select_menus_by_role_id(rb: &mut dyn Executor,is_admin:bool,id:String)->rbatis::Result<Vec<String>>{
   impled!()
 }
+
+async fn select_menus_by_user_id(rb: &mut dyn Executor,is_admin:bool,id:String){
+
+}
