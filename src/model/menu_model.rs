@@ -1,11 +1,14 @@
 use salvo::oapi::ToSchema;
 use serde::{Serialize};
 
-#[derive(Debug,Serialize,ToSchema)]
+#[derive(Debug,Serialize,ToSchema,Clone)]
 pub struct Router{
   #[serde(rename(serialize = "alwaysShow"))]
-  pub always_show:bool,
   #[serde(skip_serializing_if = "Option::is_none")]
+  pub always_show:Option<bool>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  #[serde(default = "None")]
+  #[schema(example = "[]")]
   pub children:Option<Vec<Router>>,
   pub component:String,
   pub hidden:bool,
@@ -16,7 +19,7 @@ pub struct Router{
   pub redirect:Option<String>,
 }
 
-#[derive(Debug,Serialize,ToSchema)]
+#[derive(Debug,Serialize,ToSchema,Clone)]
 pub struct Meta{
   pub icon:String,
   pub link:Option<String>,

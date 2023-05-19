@@ -1,5 +1,6 @@
 use salvo::oapi::ToSchema;
 use serde::{Serialize,Deserialize};
+use rbatis::rbdc::datetime::DateTime;
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
 pub struct SysUser{
@@ -24,15 +25,15 @@ pub struct SysUser{
   #[serde(rename(serialize = "loginIp"))]
   pub login_ip:Option<String>,
   #[serde(rename(serialize = "loginDate"))]
-  pub login_date:Option<String>,
+  pub login_date:Option<DateTime>,
   #[serde(rename(serialize = "createBy"))]
   pub create_by:Option<String>,
   #[serde(rename(serialize = "createTime"))]
-  pub create_time:Option<String>,
+  pub create_time:Option<DateTime>,
   #[serde(rename(serialize = "updateBy"))]
   pub update_by:Option<String>,
   #[serde(rename(serialize = "updateTime"))]
-  pub update_time:Option<String>,
+  pub update_time:Option<DateTime>,
   pub remark:Option<String>,
   #[serde(rename(serialize = "realName"))]
   pub real_name:Option<String>,

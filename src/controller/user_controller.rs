@@ -1,7 +1,8 @@
 use crate::utils::captcha;
 use salvo::Depot;
+use salvo::Request;
 use salvo::oapi::extract::JsonBody;
-use salvo::{oapi::endpoint};
+use salvo::{oapi::endpoint,handler};
 use crate::model::user_model::{CaptchaRes,LoginReq,LoginRes,UserInfo};
 use crate::utils::res::{Res,res_json_ok,res_json_err,ResObj,res_json_custom};
 use uuid::Uuid;
@@ -11,10 +12,11 @@ use crate::service::menu_service;
 use crate::utils::webtoken::create_token;
 use crate::utils::md5::create_md5;
 use crate::utils::redis;
+use crate::model::menu_model::Router;
 
 #[endpoint(
   responses(
-    (status = 200,body=ResObj<CaptchaRes>)
+    (status = 200,body=ResObj<CaptchaRes>,description ="获取验证码")
   ),
 )]
 pub async fn get_captcha()->Res<CaptchaRes>{
@@ -30,7 +32,7 @@ pub async fn get_captcha()->Res<CaptchaRes>{
 
 #[endpoint(
   responses(
-    (status = 200,body=ResObj<LoginRes>)
+    (status = 200,body=ResObj<LoginRes>,description ="登录")
   ),
 )]
 pub async fn login(login_body:JsonBody<LoginReq>)->Res<LoginRes>{
@@ -72,7 +74,7 @@ pub async fn login(login_body:JsonBody<LoginReq>)->Res<LoginRes>{
 
 #[endpoint(
   responses(
-    (status = 200,body=ResObj<UserInfo>)
+    (status = 200,body=ResObj<UserInfo>,description ="获取用户信息")
   ),
 )]
 pub async fn get_info(depot: &mut Depot)->Res<UserInfo>{
@@ -82,7 +84,7 @@ pub async fn get_info(depot: &mut Depot)->Res<UserInfo>{
       if let Some(user) = user_op{
         match role_service::get_roles_by_user_id(user_id).await{
           Ok(role_list)=>{
-            if user.user_name.eq("admin"){
+            if role_list.contains(&String::from("admin")){
               let user_info = UserInfo{user,roles:vec![String::from("admin")],permissions:vec!["*:*:*".to_string()]};
               Ok(res_json_ok(Some(user_info)))
             }else{
@@ -106,7 +108,44 @@ pub async fn get_info(depot: &mut Depot)->Res<UserInfo>{
   }
 }
 
-
-pub async fn get_routers(){
-  
+#[handler]
+pub async fn get_routers(depot: &mut Depot)->Res<Vec<Router>>{
+  let user_id = depot.get::<i32>("userId").copied().unwrap();
+  // Ok(res_json_ok(Some(user_id)))
+  match role_service::get_roles_by_user_id(user_id).await{
+    Ok(role_list)=>{
+      if role_list.contains(&String::from("admin")){
+        menu_service::get_router_tree(true, user_id).await.map_or_else(|err|{
+          Err(res_json_custom(400,err.to_string()))
+        }, |v|{
+          Ok(res_json_ok(Some(v)))
+        })
+        
+      }else{
+        menu_service::get_router_tree(false, user_id).await.map_or_else(|err|{
+          Err(res_json_custom(400,err.to_string()))
+        }, |v|{
+          Ok(res_json_ok(Some(v)))
+        })
+      }
+    },
+    Err(err)=>{
+      Err(res_json_custom(400,err.to_string()))
+    }
+  }
 }
+
+#[endpoint(
+  responses(
+    (status = 200,body=ResObj<()>,description ="退出登录")
+  ),
+)]
+pub async fn log_out(req:&mut Request)->Res<()>{
+  if let Some(token) = req.headers().get("Authorization"){
+    redis::del(token.to_str().unwrap());
+    Ok(res_json_ok(None))
+  }else{
+    Ok(res_json_custom(401,"用户无权限".to_string()))
+  }
+}
+

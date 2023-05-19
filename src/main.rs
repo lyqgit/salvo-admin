@@ -63,7 +63,7 @@ async fn main() {
         .push(static_dir)
         .push(
             Router::new().push(
-                // 需要验证的api
+                
                 // Router::with_path("/captchaImage").hoop(common_controller::auth_token).get(user_controller::get_captcha)
                 Router::with_path("/captchaImage").get(user_controller::get_captcha)
             ).push(
@@ -71,8 +71,16 @@ async fn main() {
             )
         )
         .push(
-            Router::new().hoop(common_controller::auth_token).push(
+            // 需要验证的api
+            Router::new().hoop(common_controller::auth_token)
+            .push(
                 Router::with_path("/getInfo").get(user_controller::get_info)
+            )
+            .push(
+                Router::with_path("/getRouters").get(user_controller::get_routers)
+            )
+            .push(
+                Router::with_path("/logout").post(user_controller::log_out)
             )
         );
 

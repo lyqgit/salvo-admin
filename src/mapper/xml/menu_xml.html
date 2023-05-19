@@ -1,17 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
   <select id="select_menus_by_role_id">
-    `select sm.* from sys_menu sm 
+    `select sm.* from sys_menu sm `
     <if test="is_admin != true">
-      inner join sys_role_menu srm on sm.menu_id = srm.menu_id 
+      `inner join sys_role_menu srm on sm.menu_id = srm.menu_id 
       where srm.role_id in ( #{id} )`
     </if>
   </select>
 
   <select id="select_menus_by_user_id">
-    `select sm.* from sys_menu sm 
+    `select sm.* from sys_menu sm `
     <if test="is_admin != true">
-      inner join sys_role_menu srm on sm.menu_id = sm.menu_id 
+      `inner join sys_role_menu srm on srm.menu_id = sm.menu_id 
       inner join sys_user_role sur on sur.role_id = srm.role_id 
       where sur.user_id = #{id} `
     </if>
