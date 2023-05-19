@@ -19,7 +19,7 @@ mod model;
 mod entity;
 mod utils;
 
-use controller::{user_controller,common_controller};
+use controller::{user_controller,common_controller,dict_controller};
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
 
@@ -81,6 +81,9 @@ async fn main() {
             )
             .push(
                 Router::with_path("/logout").post(user_controller::log_out)
+            )
+            .push(
+                Router::with_path("/system/dict/type/list").get(dict_controller::get_dict_list)
             )
         );
 

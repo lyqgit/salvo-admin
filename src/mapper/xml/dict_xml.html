@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+  <select id="select_dcit_type_by_page">
+    `select * from sys_dict_type`
+    <where>
+      `1 = 1`
+      <if test="dict_name != ''">
+        `and dict_name = #{dict_name}`
+      </if>
+      <if test="dict_type != ''">
+        `and dict_type = #{dict_type}`
+      </if>
+      <if test="status != ''">
+        `and status = #{status}`
+      </if>
+      <if test="begin_time != ''">
+        `and create_time between #{begin_time} and #{end_time}`
+      </if>
+      ` limit #{page_num},#{page_size}`
+    </where>
+  </select>
+  <select id="select_dcit_type_by_count">
+    `select count(*) from sys_dict_type`
+    <where>
+      `1 = 1`
+      <if test="dict_name != ''">
+        `and dict_name = #{dict_name}`
+      </if>
+      <if test="dict_type != ''">
+        `and dict_type = #{dict_type}`
+      </if>
+      <if test="status != ''">
+        `and status = #{status}`
+      </if>
+      <if test="begin_time != ''">
+        `and create_time between #{begin_time} and #{end_time}`
+      </if>
+    </where>
+  </select>
+</mapper>
