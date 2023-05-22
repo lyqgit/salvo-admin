@@ -1,7 +1,8 @@
+use salvo::oapi::ToSchema;
 use serde::{Serialize,Deserialize};
 use rbatis::rbdc::datetime::DateTime;
 
-#[derive(Debug,Serialize,Deserialize,Clone)]
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
 pub struct SysDictData{
   #[serde(rename(serialize="dictCode"))]
   pub dict_code:i64,

@@ -8,15 +8,15 @@
         `and dict_name = #{dict_name}`
       </if>
       <if test="dict_type != ''">
-        `and dict_type = #{dict_type}`
+        ` and dict_type = #{dict_type}`
       </if>
       <if test="status != ''">
-        `and status = #{status}`
+        ` and status = #{status}`
       </if>
       <if test="begin_time != ''">
-        `and create_time between #{begin_time} and #{end_time}`
+        ` and create_time between #{begin_time} and #{end_time}`
       </if>
-      ` limit #{page_num},#{page_size}`
+        ` limit #{page_num},#{page_size}`
     </where>
   </select>
   <select id="select_dcit_type_by_count">
@@ -24,17 +24,39 @@
     <where>
       `1 = 1`
       <if test="dict_name != ''">
-        `and dict_name = #{dict_name}`
+        ` and dict_name = #{dict_name}`
       </if>
       <if test="dict_type != ''">
-        `and dict_type = #{dict_type}`
+        ` and dict_type = #{dict_type}`
       </if>
       <if test="status != ''">
-        `and status = #{status}`
+        ` and status = #{status}`
       </if>
       <if test="begin_time != ''">
-        `and create_time between #{begin_time} and #{end_time}`
+        ` and create_time between #{begin_time} and #{end_time}`
       </if>
     </where>
   </select>
+  <select id="select_dict_data_by_type">
+    `select * from sys_dict_data`
+    <where>
+      `dict_type = #{dict_type} `
+    </where>
+  </select>
+  <select id="select_dict_by_id">
+    `select * from sys_dict_type`
+    <where>
+      `dict_id = #{dict_id} `
+    </where>
+  </select>
+  <delete id="del_dict_by_id">
+    delete from sys_dict_type `
+    <where>
+      `dict_id in `
+      <foreach collection="arr" item="item" open="(" close=")" index="key" separator="," >
+        #{item}
+      </foreach>
+    </where>
+     
+  </delete>
 </mapper>

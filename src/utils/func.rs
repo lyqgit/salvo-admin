@@ -66,3 +66,24 @@ pub fn router_arr_to_tree(re_list:&mut Vec<Router>,ori_arr:Vec<SysMenu>,pid:i64)
     }
   }
 }
+
+pub fn create_page(page_num:u64,page_size:u64)->(u64,u64){
+  
+  let mut size = 10;
+  if page_size >1{
+    size = page_size
+  }
+  let mut num = 0;
+  if page_num >1{
+    num = (page_num - 1)*size
+  }
+  (num,size)
+}
+
+pub fn is_modify_ok(affected:u64)->bool{
+  if affected>=1{
+    true
+  }else{
+    false
+  }
+}

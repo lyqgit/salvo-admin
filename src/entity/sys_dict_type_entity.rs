@@ -19,5 +19,26 @@ pub struct SysDictType{
   pub update_by:Option<String>,
   #[serde(rename(serialize="updateTime"))]
   pub update_time:Option<DateTime>,
-  remark:Option<String>
+  pub remark:Option<String>
+}
+
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+pub struct ModifySysDictType{
+  #[serde(rename(deserialize="dictId"))]
+  pub dict_id:i64,
+  #[serde(rename(deserialize="dictName"))]
+  pub dict_name:String,
+  #[serde(rename(deserialize="dictType"))]
+  pub dict_type:String,
+  pub status:String,
+  #[serde(rename(deserialize="createBy"))]
+  pub create_by:String,
+  #[serde(rename(deserialize="createTime"))]
+  pub create_time:DateTime,
+  #[serde(rename(deserialize="updateBy"))]
+  pub update_by:Option<String>,
+  #[serde(rename(deserialize="updateTime"))]
+  pub update_time:Option<DateTime>,
+  pub remark:Option<String>
 }

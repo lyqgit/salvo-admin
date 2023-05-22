@@ -14,6 +14,7 @@ pub fn get<T:FromRedisValue,K:ToRedisArgs>(key:K)->RedisResult<T>{
 }
 
 #[allow(dead_code)]
+#[allow(unused_must_use)]
 pub fn del<K:ToRedisArgs>(key:K)->RedisResult<()>{
   let _:() = Client::del(&mut GLOBAL_REDIS.clone(),key)?;
   Ok(())

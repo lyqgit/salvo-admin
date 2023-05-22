@@ -34,7 +34,7 @@ pub async fn catcher_err(&self, _req: &Request, _depot: &Depot, res: &mut Respon
       StatusCode::NOT_FOUND=>{
         // ctrl.skip_rest();
         println!("任意状态,{:#?}",res.body.size());
-        res.render(res_json_custom::<()>(404, "发生错误".to_string()));
+        res.render(res_json_custom::<()>(404, "没有对应的接口".to_string()));
       },
       StatusCode::INTERNAL_SERVER_ERROR=>{
         println!("500错误");

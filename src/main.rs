@@ -85,6 +85,15 @@ async fn main() {
             .push(
                 Router::with_path("/system/dict/type/list").get(dict_controller::get_dict_list)
             )
+            .push(
+                Router::with_path("/system/dict/data/type/<type>").get(dict_controller::get_dict_list_by_type)
+            )
+            .push(
+                Router::with_path("/system/dict/type/<id>").get(dict_controller::get_dict_by_id).delete(dict_controller::del_dict_type)
+            )
+            .push(
+                Router::with_path("/system/dict/type").post(dict_controller::add_dict_type).put(dict_controller::edit_dict_type)
+            )
         );
 
 
