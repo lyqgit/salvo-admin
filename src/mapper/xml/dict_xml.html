@@ -109,5 +109,10 @@
       </foreach>
     </where>
   </delete>
-
+  <select id="select_dict_data_by_id">
+    ` select * from sys_dict_data `
+    <where>
+      `dict_code = #{dict_code}`
+    </where>
+  </select>
 </mapper>

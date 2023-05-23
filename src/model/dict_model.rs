@@ -133,12 +133,59 @@ impl From<AddSysDictDataVo> for SysDictDataEntity{
       dict_type:s.dict_type,
       css_class:s.css_class,
       list_class:s.list_class,
-      is_default:String::from(""),
+      is_default:String::from("N"),
       status:s.status,
       create_by:String::from(""),
       create_time:DateTime::now(),
       update_by:String::from(""),
       update_time:None,
+      remark:s.remark,
+    }
+  }
+}
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
+pub struct DictDataDetail{
+  pub id:i64,
+}
+
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[schema(rename_all="camelCase")]
+#[serde(rename_all="camelCase")]
+pub struct EditSysDictData{
+  pub dict_code:i64,
+  pub dict_sort:i8,
+  pub dict_label:String,
+  pub dict_value:String,
+  pub dict_type:String,
+  pub css_class:Option<String>,
+  pub list_class:Option<String>,
+  pub is_default:String,
+  pub status:String,
+  pub create_by:String,
+  pub create_time:DateTime,
+  pub update_by:String,
+  pub update_time:Option<DateTime>,
+  pub remark:Option<String>
+}
+
+impl From<EditSysDictData> for SysDictDataEntity{
+  fn from(s:EditSysDictData)->Self{
+    Self{
+      dict_code:s.dict_code,
+      dict_sort:s.dict_sort,
+      dict_label:s.dict_label,
+      dict_value:s.dict_value,
+      dict_type:s.dict_type,
+      css_class:s.css_class,
+      list_class:s.list_class,
+      is_default:s.is_default,
+      status:s.status,
+      create_by:s.create_by,
+      create_time:s.create_time,
+      update_by:s.update_by,
+      update_time:s.update_time,
       remark:s.remark,
     }
   }

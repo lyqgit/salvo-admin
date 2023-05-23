@@ -49,6 +49,11 @@ pub async fn del_dict_data_by_id(rb: &mut dyn Executor,arr:Vec<&str>)->rbatis::R
   impled!()
 }
 
+#[html_sql("src/mapper/xml/dict_xml.html")]
+pub async fn select_dict_data_by_id(rb: &mut dyn Executor,dict_code:i64)->rbatis::Result<Vec<SysDictData>>{
+  impled!()
+}
+
 crud!(SysDictType{});
 crud!(SysDictDataEntity{},"sys_dict_data");
 crud!(ModifySysDictType{},"sys_dict_type");

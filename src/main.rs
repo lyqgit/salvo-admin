@@ -89,10 +89,10 @@ async fn main() {
                 Router::with_path("/system/dict/data/list").get(dict_controller::get_dict_data_list)
             )
             .push(
-                Router::with_path("/system/dict/data").post(dict_controller::post_add_dict_data)
+                Router::with_path("/system/dict/data").post(dict_controller::post_add_dict_data).put(dict_controller::put_edit_dict_data)
             )
             .push(
-                Router::with_path("/system/dict/data/<id>").delete(dict_controller::del_dict_type_data)
+                Router::with_path("/system/dict/data/<id>").delete(dict_controller::del_dict_type_data).get(dict_controller::get_dict_type_data_by_id)
             )
             .push(
                 Router::with_path("/system/dict/data/type/<type>").get(dict_controller::get_dict_list_by_type)

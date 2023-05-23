@@ -7,7 +7,7 @@ use crate::entity::sys_dict_type_entity::{SysDictType,ModifySysDictType};
 use crate::model::common_model::Page;
 use crate::utils::func;
 use rbatis::rbdc::datetime::DateTime;
-use crate::model::dict_model::{DictTypeDataPagePayload,AddSysDictDataVo};
+use crate::model::dict_model::{DictTypeDataPagePayload, AddSysDictDataVo, EditSysDictData};
 
 pub async fn get_dict_by_page(page_num:u64,page_size:u64,dict_name:&str,dict_type:&str,status:&str,begin_time:&str,end_time:&str)->rbatis::Result<Page<SysDictType>>{
 
@@ -70,13 +70,28 @@ pub async fn get_dict_data_by_page(page_num:u64,page_size:u64,dict_type:String,s
   Ok(Page { rows: list, total: count })
 }
 
-pub async fn add_dict_data(payload:AddSysDictDataVo)->rbatis::Result<bool>{
-  let sys_dict_data:SysDictDataEntity = payload.into();
+pub async fn add_dict_data(user_id:i32,payload:AddSysDictDataVo)->rbatis::Result<bool>{
+  let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", user_id).await?;
+  let user = user.get(0).unwrap();
+  let mut sys_dict_data:SysDictDataEntity = payload.into();
+  sys_dict_data.create_by = user.user_name.clone();
   let rows = SysDictDataEntity::insert(&mut GLOBAL_DB.clone(),&sys_dict_data).await?;
   Ok(func::is_modify_ok(rows.rows_affected))
 }
 
 pub async fn del_dict_data_type(dict_code:Vec<&str>)->rbatis::Result<bool>{
   let rows = dict_mapper::del_dict_data_by_id(&mut GLOBAL_DB.clone(),dict_code).await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
+}
+
+pub async fn select_dict_data_by_id(dict_code:i64)->rbatis::Result<Option<SysDictData>>{
+  let list = dict_mapper::select_dict_data_by_id(&mut GLOBAL_DB.clone(),dict_code).await?;
+  let one = list.get(0).cloned();
+  Ok(one)
+}
+
+pub async fn edit_dict_data(payload:EditSysDictData)->rbatis::Result<bool>{
+  let sysDictDataEntity:SysDictDataEntity = payload.into();
+  let rows = SysDictDataEntity::update_by_column(&mut GLOBAL_DB.clone(),&sysDictDataEntity,"dict_code").await?;
   Ok(func::is_modify_ok(rows.rows_affected))
 }

@@ -3,7 +3,7 @@ use salvo::Depot;
 use salvo::{oapi::endpoint, Request};
 use crate::entity::sys_dict_data_entity::SysDictData;
 use crate::model::common_model::Page;
-use crate::model::dict_model::{AddDictType,DictTypeDataPagePayload,AddSysDictDataVo,DictTypePagePayload};
+use crate::model::dict_model::{AddDictType, DictTypeDataPagePayload, AddSysDictDataVo, DictTypePagePayload, DictDataDetail, EditSysDictData};
 use crate::utils::res::{res_json_ok,res_json_custom,ResObj};
 use crate::{service::dict_service, utils::res::Res, entity::sys_dict_type_entity::{SysDictType,ModifySysDictType}};
 
@@ -187,8 +187,9 @@ pub async fn get_dict_data_list(req:&mut Request)->Res<Page<SysDictData>>{
     (status = 200,body=ResObj<()>,description ="创建字典数据")
   )
 )]
-pub async fn post_add_dict_data(payload:JsonBody<AddSysDictDataVo>)->Res<()>{
-  match dict_service::add_dict_data(payload.into_inner()).await{
+pub async fn post_add_dict_data(payload:JsonBody<AddSysDictDataVo>,depot:&mut Depot)->Res<()>{
+  let user_id = depot.get::<i32>("userId").copied().unwrap();
+  match dict_service::add_dict_data(user_id,payload.into_inner()).await{
     Ok(v)=>{
       if v {
         Ok(res_json_ok(Some(())))
@@ -215,6 +216,48 @@ pub async fn del_dict_type_data(req:&mut Request)->Res<()>{
     return Err(res_json_custom(400,"缺少参数".to_string()));
   }
   match dict_service::del_dict_data_type(code).await {
+    Ok(v)=>{
+      if v {
+        Ok(res_json_ok(Some(())))
+      }else{
+        Err(res_json_custom(400,"删除失败".to_string()))
+      }
+    },
+    Err(err)=>{
+      Err(res_json_custom(400,err.to_string()))
+    }
+  }
+}
+
+
+#[endpoint(
+  parameters(
+    DictDataDetail
+  ),
+  responses(
+    (status = 200,body=ResObj<Option<SysDictData>>,description ="字典类型数据详情")
+  )
+)]
+pub async fn get_dict_type_data_by_id(req:&mut Request)->Res<Option<SysDictData>>{
+  let code:DictDataDetail = req.parse_params().unwrap();
+  match dict_service::select_dict_data_by_id(code.id).await {
+    Ok(v)=>{
+      Ok(res_json_ok(Some(v)))
+    },
+    Err(err)=>{
+      Err(res_json_custom(400,err.to_string()))
+    }
+  }
+}
+
+
+#[endpoint(
+  responses(
+    (status = 200,body=ResObj<()>,description ="修改字典数据")
+  )
+)]
+pub async fn put_edit_dict_data(payload:JsonBody<EditSysDictData>)->Res<()>{
+  match dict_service::edit_dict_data(payload.into_inner()).await{
     Ok(v)=>{
       if v {
         Ok(res_json_ok(Some(())))
