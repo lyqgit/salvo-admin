@@ -4,6 +4,7 @@ use crate::entity::sys_user_entity::SysUser;
 
 // 验证码返回
 #[derive(Serialize, Deserialize, Clone, Debug, ToSchema)]
+#[schema(rename_all="camelCase")]
 pub struct CaptchaRes{
   #[serde(rename="captchaEnabled")]
   pub captcha_enabled:Option<bool>,

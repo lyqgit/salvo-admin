@@ -3,7 +3,7 @@ use crate::utils::res::{res_json_custom};
 use crate::utils::redis;
 
 #[handler]
-pub async fn auth_token(&self,req:&mut Request,res:&mut Response, ctrl: &mut FlowCtrl,depot: &mut Depot){
+pub async fn auth_token(req:&mut Request,res:&mut Response, ctrl: &mut FlowCtrl,depot: &mut Depot){
   println!("走中间件");
   if let Some(token) = req.headers().get("Authorization"){
     println!("有token");
@@ -17,7 +17,7 @@ pub async fn auth_token(&self,req:&mut Request,res:&mut Response, ctrl: &mut Flo
         depot.insert("userId",user_id);
       }
     }
-    
+
   }else{
     println!("没有token");
     ctrl.skip_rest();

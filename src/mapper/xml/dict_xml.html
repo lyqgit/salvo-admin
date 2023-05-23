@@ -1,11 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
-  <select id="select_dcit_type_by_page">
+
+  <!-- 类型 -->
+  <select id="select_dict_type_by_page">
     `select * from sys_dict_type`
     <where>
       `1 = 1`
       <if test="dict_name != ''">
-        `and dict_name = #{dict_name}`
+        ` and dict_name = #{dict_name}`
       </if>
       <if test="dict_type != ''">
         ` and dict_type = #{dict_type}`
@@ -19,7 +21,7 @@
         ` limit #{page_num},#{page_size}`
     </where>
   </select>
-  <select id="select_dcit_type_by_count">
+  <select id="select_dict_type_by_count">
     `select count(*) from sys_dict_type`
     <where>
       `1 = 1`
@@ -57,6 +59,55 @@
         #{item}
       </foreach>
     </where>
-     
   </delete>
+  <select id="select_all_dict_type">
+    `select * from sys_dict_type`
+  </select>
+
+
+
+
+  <!-- 类型数据 -->
+  <select id="select_dict_type_data_by_page">
+    `select * from sys_dict_data
+    <where>
+      `1 = 1`
+      <if test="dict_label != ''">
+        ` and dict_label = #{dict_label}`
+      </if>
+      <if test="dict_type != ''">
+        ` and dict_type = #{dict_type}`
+      </if>
+      <if test="status != ''">
+        ` and status = #{status}`
+      </if>
+        ` limit #{page_num},#{page_size}`
+    </where>
+  </select>
+  <select id="select_dict_type_data_by_count">
+    `select count(*) from sys_dict_data`
+    <where>
+      `1 = 1`
+      <if test="dict_label != ''">
+        ` and dict_label = #{dict_label}`
+      </if>
+      <if test="dict_type != ''">
+        ` and dict_type = #{dict_type}`
+      </if>
+      <if test="status != ''">
+        ` and status = #{status}`
+      </if>
+    </where>
+  </select>
+
+  <delete id="del_dict_data_by_id">
+    `delete from sys_dict_data `
+    <where>
+      `dict_code in `
+      <foreach collection="arr" item="item" open="(" close=")" index="key" separator="," >
+        #{item}
+      </foreach>
+    </where>
+  </delete>
+
 </mapper>

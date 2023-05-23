@@ -1,4 +1,4 @@
-use crate::entity::sys_dict_data_entity::SysDictData;
+use crate::entity::sys_dict_data_entity::{SysDictData,SysDictDataEntity};
 use salvo::oapi::extract::JsonBody;
 use crate::entity::sys_user_entity::SysUser;
 use crate::mapper::dict_mapper;
@@ -7,12 +7,13 @@ use crate::entity::sys_dict_type_entity::{SysDictType,ModifySysDictType};
 use crate::model::common_model::Page;
 use crate::utils::func;
 use rbatis::rbdc::datetime::DateTime;
+use crate::model::dict_model::{DictTypeDataPagePayload,AddSysDictDataVo};
 
 pub async fn get_dict_by_page(page_num:u64,page_size:u64,dict_name:&str,dict_type:&str,status:&str,begin_time:&str,end_time:&str)->rbatis::Result<Page<SysDictType>>{
 
   let (num,size) = func::create_page(page_num, page_size);
-  let list:Vec<SysDictType> = dict_mapper::select_dcit_type_by_page(&mut GLOBAL_DB.clone(),dict_name,dict_type,status,begin_time,end_time,num,size).await?;
-  let count:u64 = dict_mapper::select_dcit_type_by_count(&mut GLOBAL_DB.clone(),dict_name,dict_type,status,begin_time,end_time).await?;
+  let list:Vec<SysDictType> = dict_mapper::select_dict_type_by_page(&mut GLOBAL_DB.clone(),dict_name,dict_type,status,begin_time,end_time,num,size).await?;
+  let count:u64 = dict_mapper::select_dict_type_by_count(&mut GLOBAL_DB.clone(),dict_name,dict_type,status,begin_time,end_time).await?;
   Ok(Page { rows: list, total: count })
 }
 
@@ -54,5 +55,28 @@ pub async fn edit_dict_type(user_id:i32,dict:JsonBody<ModifySysDictType>)->rbati
 
 pub async fn del_dict_type(dict_id:Vec<&str>)->rbatis::Result<bool>{
   let rows = dict_mapper::del_dict_by_id(&mut GLOBAL_DB.clone(),dict_id).await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
+}
+
+pub async fn get_all_dict_type()->rbatis::Result<Vec<SysDictType>>{
+  let list = dict_mapper::select_all_dict_type(&mut GLOBAL_DB.clone()).await?;
+  Ok(list)
+}
+
+pub async fn get_dict_data_by_page(page_num:u64,page_size:u64,dict_type:String,status:Option<String>,dict_label:Option<String>)->rbatis::Result<Page<SysDictData>>{
+  let (num,size) = func::create_page(page_num, page_size);
+  let list:Vec<SysDictData> = dict_mapper::select_dict_type_data_by_page(&mut GLOBAL_DB.clone(),dict_label.clone(),dict_type.clone(),status.clone(),num,size).await?;
+  let count:u64 = dict_mapper::select_dict_type_data_by_count(&mut GLOBAL_DB.clone(),dict_label.clone(),dict_type.clone(),status.clone()).await?;
+  Ok(Page { rows: list, total: count })
+}
+
+pub async fn add_dict_data(payload:AddSysDictDataVo)->rbatis::Result<bool>{
+  let sys_dict_data:SysDictDataEntity = payload.into();
+  let rows = SysDictDataEntity::insert(&mut GLOBAL_DB.clone(),&sys_dict_data).await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
+}
+
+pub async fn del_dict_data_type(dict_code:Vec<&str>)->rbatis::Result<bool>{
+  let rows = dict_mapper::del_dict_data_by_id(&mut GLOBAL_DB.clone(),dict_code).await?;
   Ok(func::is_modify_ok(rows.rows_affected))
 }

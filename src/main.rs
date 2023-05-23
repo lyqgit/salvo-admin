@@ -34,21 +34,21 @@ pub static GLOBAL_REDIS:Lazy<Client> = Lazy::new(||{
 #[tokio::main]
 async fn main() {
 
-    let subscriber = FmtSubscriber::builder()
+    // let subscriber = FmtSubscriber::builder()
         // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
         // will be written to stdout.
-        .with_max_level(Level::INFO)
+        // .with_max_level(Level::INFO)
         // completes the builder.
-        .finish();
+        // .finish();
 
     
-    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
+    // tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
     fast_log::init(fast_log::Config::new().console()).expect("rbatis init fail");
     
     // 连接数据库
     GLOBAL_DB.link(MysqlDriver {}, "mysql://root:123456@localhost/ry-vue").await.unwrap();
 
-    tracing::warn!("Listening on http://127.0.0.1:8080");
+    // tracing::warn!("Listening on http://127.0.0.1:8080");
 
 
     let static_dir = Router::with_path("/static").get(
@@ -68,6 +68,8 @@ async fn main() {
                 Router::with_path("/captchaImage").get(user_controller::get_captcha)
             ).push(
                 Router::with_path("/login").post(user_controller::login)
+            ).push(
+                Router::with_path("/logout").post(user_controller::log_out)
             )
         )
         .push(
@@ -79,14 +81,24 @@ async fn main() {
             .push(
                 Router::with_path("/getRouters").get(user_controller::get_routers)
             )
-            .push(
-                Router::with_path("/logout").post(user_controller::log_out)
-            )
+
             .push(
                 Router::with_path("/system/dict/type/list").get(dict_controller::get_dict_list)
             )
             .push(
+                Router::with_path("/system/dict/data/list").get(dict_controller::get_dict_data_list)
+            )
+            .push(
+                Router::with_path("/system/dict/data").post(dict_controller::post_add_dict_data)
+            )
+            .push(
+                Router::with_path("/system/dict/data/<id>").delete(dict_controller::del_dict_type_data)
+            )
+            .push(
                 Router::with_path("/system/dict/data/type/<type>").get(dict_controller::get_dict_list_by_type)
+            )
+            .push(
+                Router::with_path("/system/dict/type/optionselect").get(dict_controller::get_all_dict_type)
             )
             .push(
                 Router::with_path("/system/dict/type/<id>").get(dict_controller::get_dict_by_id).delete(dict_controller::del_dict_type)

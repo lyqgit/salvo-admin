@@ -3,6 +3,7 @@ use serde::{Serialize,Deserialize};
 use rbatis::rbdc::datetime::DateTime;
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[schema(rename_all="camelCase")]
 pub struct SysMenu{
   #[serde(rename(serialize = "roleId"))]
   pub menu_id:i64,

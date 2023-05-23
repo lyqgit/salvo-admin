@@ -142,8 +142,9 @@ pub async fn get_routers(depot: &mut Depot)->Res<Vec<Router>>{
 )]
 pub async fn log_out(req:&mut Request)->Res<()>{
   if let Some(token) = req.headers().get("Authorization"){
-    redis::del(token.to_str().unwrap());
-    Ok(res_json_ok(None))
+    match redis::del(token.to_str().unwrap().to_string().replace("Bearer ","")){
+      _=>Ok(res_json_ok(None))
+    }
   }else{
     Ok(res_json_custom(401,"用户无权限".to_string()))
   }
