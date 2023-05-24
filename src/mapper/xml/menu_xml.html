@@ -16,4 +16,17 @@
       where sur.user_id = #{id} `
     </if>
   </select>
+
+  <select id="select_menus_list">
+    `select * from sys_menu`
+    <where>
+      `1 = 1`
+      <if test="menu_name != ''">
+        ` and menu_name = #{menu_name}`
+      </if>
+      <if test="status != ''">
+        ` and status = #{status}`
+      </if>
+    </where>
+  </select>
 </mapper>

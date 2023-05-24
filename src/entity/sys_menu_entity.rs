@@ -1,11 +1,8 @@
-use salvo::oapi::ToSchema;
 use serde::{Serialize,Deserialize};
 use rbatis::rbdc::datetime::DateTime;
 
-#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[derive(Debug,Serialize,Deserialize,Clone)]
 pub struct SysMenu{
-  #[serde(rename(serialize = "roleId"))]
   pub menu_id:i64,
   pub menu_name:String,
   pub parent_id:i64,

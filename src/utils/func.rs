@@ -36,8 +36,10 @@ pub fn router_arr_to_tree(re_list:&mut Vec<Router>,ori_arr:Vec<SysMenu>,pid:i64)
           }
         })(),
         component:it.component.clone().map_or(String::from("Layout"), |v|{
-            if v.is_empty(){
+            if v.is_empty() && it.parent_id == 0 && it.menu_type.eq("M"){
               String::from("Layout")
+            }else if it.parent_id != 0 && it.menu_type.eq("M"){
+              String::from("ParentView")
             }else{
               v
             }
@@ -47,7 +49,9 @@ pub fn router_arr_to_tree(re_list:&mut Vec<Router>,ori_arr:Vec<SysMenu>,pid:i64)
         hidden:it.status.eq("1"),
         name:it.path.clone(),
         path:(||->String{
-          if it.menu_type.eq("C"){
+          if it.menu_type.eq("C") || it.is_frame == 0{
+            it.path.clone()
+          }else if it.menu_type.eq("M") && it.parent_id != 0{
             it.path.clone()
           }else{
             "/".to_owned()+&it.path
