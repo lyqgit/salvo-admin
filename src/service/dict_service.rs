@@ -91,7 +91,7 @@ pub async fn select_dict_data_by_id(dict_code:i64)->rbatis::Result<Option<SysDic
 }
 
 pub async fn edit_dict_data(payload:EditSysDictData)->rbatis::Result<bool>{
-  let sysDictDataEntity:SysDictDataEntity = payload.into();
-  let rows = SysDictDataEntity::update_by_column(&mut GLOBAL_DB.clone(),&sysDictDataEntity,"dict_code").await?;
+  let sys_dict_data_entity:SysDictDataEntity = payload.into();
+  let rows = SysDictDataEntity::update_by_column(&mut GLOBAL_DB.clone(), &sys_dict_data_entity, "dict_code").await?;
   Ok(func::is_modify_ok(rows.rows_affected))
 }

@@ -7,8 +7,7 @@ pub struct Router{
   #[serde(rename(serialize = "alwaysShow"))]
   #[serde(skip_serializing_if = "Option::is_none")]
   pub always_show:Option<bool>,
-  #[schema(default = "[]")]
-  #[schema(example = "[]")]
+  #[serde(skip_serializing_if = "Option::is_none")]
   pub children:Option<Vec<Router>>,
   pub component:String,
   pub hidden:bool,

@@ -14,7 +14,7 @@ pub fn router_arr_to_tree(re_list:&mut Vec<Router>,ori_arr:Vec<SysMenu>,pid:i64)
             None
           }
         })(),
-        no_cache:it.is_cache==0
+        no_cache:it.is_cache==1
       };
 
       let mut children = Vec::<Router>::new();
@@ -22,7 +22,7 @@ pub fn router_arr_to_tree(re_list:&mut Vec<Router>,ori_arr:Vec<SysMenu>,pid:i64)
 
       let temp_router = Router{
         always_show:(||->Option<bool>{
-          if it.visible.eq("0") && !it.menu_type.eq("C"){
+          if it.visible.eq("0") && !it.menu_type.eq("C") && it.is_frame == 1{
             Some(true)
           }else{
             None

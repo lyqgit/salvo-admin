@@ -43,10 +43,8 @@ async fn main() {
 
     
     // tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
-    fast_log::init(fast_log::Config::new().console()).expect("rbatis init fail");
-    
     // 连接数据库
-    GLOBAL_DB.link(MysqlDriver {}, "mysql://root:123456@localhost/ry-vue").await.unwrap();
+    utils::mysql::init_db().await;
 
     // tracing::warn!("Listening on http://127.0.0.1:8080");
 
@@ -109,7 +107,7 @@ async fn main() {
         );
 
 
-    let doc = OpenApi::new(Info::new("todos api", "0.0.1")).merge_router(&router);
+    let doc = OpenApi::new(Info::new("后台接口文档", "0.0.1")).merge_router(&router);
     let router = router
     .push(doc.into_router("/api-doc/openapi.json"))
     .push(SwaggerUi::new("/api-doc/openapi.json").into_router("swagger-ui"));

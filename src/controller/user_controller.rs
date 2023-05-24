@@ -15,6 +15,9 @@ use crate::utils::redis;
 use crate::model::menu_model::Router;
 
 #[endpoint(
+  tags(
+    (name="user",description ="获取验证码")
+  ),
   responses(
     (status = 200,body=ResObj<CaptchaRes>,description ="获取验证码")
   ),
