@@ -2057,7 +2057,6 @@ version = "0.1.0"
 dependencies = [
  "captcha",
  "fast_log",
- "fastdate",
  "jsonwebtoken",
  "log",
  "md5",

@@ -1,6 +1,7 @@
-use crate::model::menu_model::{Router,Meta};
+use crate::model::menu_model::{Router, Meta, MenuTree, SysMenuPage};
 use crate::entity::sys_menu_entity::SysMenu;
 
+// 路由数组转树
 pub fn router_arr_to_tree(re_list:&mut Vec<Router>,ori_arr:Vec<SysMenu>,pid:i64){
   for (_,it) in ori_arr.iter().enumerate(){
     if pid == it.parent_id && !it.menu_type.eq("F"){
@@ -65,6 +66,31 @@ pub fn router_arr_to_tree(re_list:&mut Vec<Router>,ori_arr:Vec<SysMenu>,pid:i64)
           }
         })(),
         meta:temp_meta
+      };
+      re_list.push(temp_router)
+    }
+  }
+}
+
+// 菜单数组转树
+pub fn menu_arr_to_tree(re_list:&mut Vec<MenuTree>,ori_arr:Vec<SysMenuPage>,pid:i64){
+  for (_,it) in ori_arr.iter().enumerate(){
+    if pid == it.parent_id && !it.menu_type.eq("F"){
+
+
+      let mut children = Vec::<MenuTree>::new();
+      menu_arr_to_tree(&mut children,ori_arr.clone(),it.menu_id);
+
+      let temp_router = MenuTree{
+        children:(||->Option<Vec<MenuTree>>{
+          if children.len()>0{
+            Some(children)
+          }else{
+            None
+          }
+        })(),
+        id:it.menu_id,
+        label:it.menu_name.clone()
       };
       re_list.push(temp_router)
     }

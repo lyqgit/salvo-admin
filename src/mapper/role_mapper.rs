@@ -1,4 +1,4 @@
-use rbatis::{html_sql, executor::Executor};
+use rbatis::{html_sql, executor::Executor,crud};
 use rbatis::rbdc::datetime::DateTime;
 use crate::entity::sys_role_entity::SysRole;
 use crate::model::role_model::SysRoleList;
@@ -17,3 +17,5 @@ pub async fn select_roles_by_page(rb: &mut dyn Executor,page_num:u64,page_size:u
 pub async fn select_roles_count(rb: &mut dyn Executor,role_name:Option<String>,role_key:Option<String>,begin_time:Option<DateTime>,end_time:Option<DateTime>)->rbatis::Result<u64>{
   impled!()
 }
+
+crud!(SysRole{});

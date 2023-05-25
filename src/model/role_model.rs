@@ -40,3 +40,20 @@ pub struct SysRolePagePayload{
     #[parameter(value_type = Option<String>)]
     pub end_time:Option<DateTime>,
 }
+
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[serde(rename_all(deserialize ="camelCase"))]
+#[schema(rename_all="camelCase")]
+pub struct SysRoleModifyPayload{
+    pub dept_check_strictly:bool,
+    pub menu_check_strictly:bool,
+    pub dept_ids:Vec<i64>,
+    pub menu_ids:Vec<i64>,
+    pub remark:Option<String>,
+    pub role_key:String,
+    pub role_name:String,
+    pub status:String,
+    pub role_sort:i64,
+    pub role_id:Option<i64>,
+}

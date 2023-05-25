@@ -1,5 +1,5 @@
 use serde::{Serialize,Deserialize};
-use fastdate::DateTime;
+use rbatis::rbdc::datetime::DateTime;
 
 #[derive(Debug,Serialize,Deserialize,Clone)]
 pub struct SysCaptcha{

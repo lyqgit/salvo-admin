@@ -62,7 +62,20 @@ pub fn res_json_custom<T:ToSchema>(code:i32,msg:String)->Json<ResObj<T>>{
 pub type Res<T> = Result<Json<ResObj<T>>,Json<ResObj<()>>>;
 
 #[allow(dead_code)]
-pub fn promise_ok<T:ToSchema>(res:rbatis::Result<T>, resolve: Box<dyn FnOnce(T) -> Json<ResObj<T>>>)->Res<T>{
+pub fn match_ok<T:ToSchema>(res:rbatis::Result<T>)->Res<T>{
+    match res {
+        Ok(v)=>{
+            Ok(res_json_ok(Some(v)))
+        },
+        Err(err)=>{
+            Err(res_json_custom(400,err.to_string()))
+        }
+    }
+}
+
+
+#[allow(dead_code)]
+pub fn match_custom_ok<T:ToSchema>(res:rbatis::Result<T>, resolve: Box<dyn FnOnce(T) -> Json<ResObj<T>>>)->Res<T>{
     match res {
         Ok(v)=>{
             Ok(resolve(v))

@@ -16,5 +16,5 @@ pub struct SysRole{
   pub create_time:DateTime,
   pub update_by:Option<String>,
   pub update_time:Option<DateTime>,
-  pub remark:String,
+  pub remark:Option<String>,
 }

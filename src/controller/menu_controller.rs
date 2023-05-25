@@ -1,8 +1,8 @@
-use salvo::{Depot, oapi::endpoint, Request};
+use salvo::{Depot, handler, oapi::endpoint, Request};
 use salvo::oapi::extract::{JsonBody,PathParam};
-use crate::model::menu_model::{SysMenuModifyPayload, SysMenuPage, SysMenuPagePayload};
+use crate::model::menu_model::{MenuTree, SysMenuModifyPayload, SysMenuPage, SysMenuPagePayload};
 use crate::service::menu_service;
-use crate::utils::res::{Res, res_json_custom, res_json_ok,ResObj};
+use crate::utils::res::{match_ok, Res, res_json_custom, res_json_ok, ResObj};
 
 #[endpoint(
     parameters(
@@ -101,4 +101,10 @@ pub async fn put_edit_menu(payload:JsonBody<SysMenuModifyPayload>,depot:&mut Dep
             Err(res_json_custom(400,err.to_string()))
         }
     }
+}
+
+
+#[handler]
+pub async fn get_menu_tree()->Res<Vec<MenuTree>>{
+    match_ok(menu_service::get_menu_tree().await)
 }

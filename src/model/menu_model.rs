@@ -181,3 +181,12 @@ impl From<SysMenuModifyPayload> for SysMenu{
 
   }
 }
+
+
+#[derive(Debug,Serialize,ToSchema,Clone)]
+pub struct MenuTree{
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub children:Option<Vec<MenuTree>>,
+  pub id:i64,
+  pub label:String,
+}

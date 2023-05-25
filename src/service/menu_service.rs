@@ -3,7 +3,7 @@ use crate::mapper::menu_mapper;
 use crate::GLOBAL_DB;
 use crate::entity::sys_menu_entity::SysMenu;
 use crate::entity::sys_user_entity::SysUser;
-use crate::model::menu_model::{Router, SysMenuModifyPayload, SysMenuPage};
+use crate::model::menu_model::{MenuTree, Router, SysMenuModifyPayload, SysMenuPage};
 use crate::utils::func;
 
 pub async fn get_menu_by_role_id(is_admin:bool,id:String)->rbatis::Result<Vec<String>>{
@@ -28,6 +28,13 @@ pub async fn get_router_tree(is_admin:bool,id:i32)->rbatis::Result<Vec<Router>>{
 pub async fn get_menu_list(menu_name:Option<String>,status:Option<String>)->rbatis::Result<Vec<SysMenuPage>>{
   let list:Vec<SysMenuPage> = menu_mapper::select_menus_list(&mut GLOBAL_DB.clone(),menu_name,status).await?;
   Ok(list)
+}
+
+pub async fn get_menu_tree()->rbatis::Result<Vec<MenuTree>>{
+  let list:Vec<SysMenuPage> = menu_mapper::select_menus_list(&mut GLOBAL_DB.clone(),None,None).await?;
+  let mut menu_tree_list = Vec::<MenuTree>::new();
+  func::menu_arr_to_tree(&mut menu_tree_list,list,0);
+  Ok(menu_tree_list)
 }
 
 pub async fn add_menu(user_id:i32,payload:SysMenuModifyPayload)->rbatis::Result<bool>{
