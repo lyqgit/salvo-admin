@@ -7,7 +7,7 @@
     <where>
       `1 = 1`
       <if test="dict_name != ''">
-        ` and dict_name = #{dict_name}`
+        ` and dict_name like '%${dict_name}%'`
       </if>
       <if test="dict_type != ''">
         ` and dict_type = #{dict_type}`

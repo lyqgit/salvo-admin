@@ -21,6 +21,7 @@ mod utils;
 use controller::{user_controller,common_controller,dict_controller,menu_controller};
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
+use crate::controller::role_controller;
 
 pub static GLOBAL_DB: Lazy<Rbatis> = Lazy::new(|| Rbatis::new());
 
@@ -111,6 +112,9 @@ async fn main() {
             )
             .push(
                 Router::with_path("/system/menu/<id:num>").delete(menu_controller::del_menu_by_id).get(menu_controller::get_menu_by_id)
+            )
+            .push(
+                Router::with_path("/system/role/list").get(role_controller::get_roles_by_page)
             )
         );
 

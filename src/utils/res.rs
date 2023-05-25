@@ -60,3 +60,15 @@ pub fn res_json_custom<T:ToSchema>(code:i32,msg:String)->Json<ResObj<T>>{
 
 #[allow(dead_code)]
 pub type Res<T> = Result<Json<ResObj<T>>,Json<ResObj<()>>>;
+
+#[allow(dead_code)]
+pub fn promise_ok<T:ToSchema>(res:rbatis::Result<T>, resolve: Box<dyn FnOnce(T) -> Json<ResObj<T>>>)->Res<T>{
+    match res {
+        Ok(v)=>{
+            Ok(resolve(v))
+        },
+        Err(err)=>{
+            Err(res_json_custom(400,err.to_string()))
+        }
+    }
+}

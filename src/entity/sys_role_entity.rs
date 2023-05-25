@@ -1,11 +1,8 @@
-use salvo::oapi::ToSchema;
 use serde::{Serialize,Deserialize};
 use rbatis::rbdc::datetime::DateTime;
 
-#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[derive(Debug,Serialize,Deserialize,Clone)]
 pub struct SysRole{
-  #[serde(rename(serialize = "roleId"))]
   pub role_id:i64,
   pub role_name:String,
   pub role_key:String,

@@ -5,4 +5,36 @@
     inner join sys_user_role sur on sr.role_id = sur.role_id
     where sur.user_id = #{id}`
   </select>
+
+  <select id="select_roles_by_page">
+    `select * from sys_role`
+    <where>
+      ` 1 = 1`
+      <if test="role_name != ''">
+        ` and role_name like '%${role_name}%' `
+      </if>
+      <if test="role_key != ''">
+        ` and role_key = #{role_key} `
+      </if>
+      <if test="begin_time != ''">
+        ` and create_time between #{begin_time} and #{end_time} `
+      </if>
+      ` limit #{page_num},#{page_size}`
+    </where>
+  </select>
+  <select id="select_roles_count">
+    `select count(*) from sys_role`
+    <where>
+      ` 1 = 1`
+      <if test="role_name != ''">
+        ` and role_name like '%${role_name}%' `
+      </if>
+      <if test="role_key != ''">
+        ` and role_key = #{role_key} `
+      </if>
+      <if test="begin_time != ''">
+        ` and create_time between #{begin_time} and #{end_time} `
+      </if>
+    </where>
+  </select>
 </mapper>
