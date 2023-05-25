@@ -1,6 +1,7 @@
 use salvo::oapi::{ToParameters, ToSchema};
 use serde::{Serialize,Deserialize};
 use rbatis::rbdc::datetime::DateTime;
+use crate::entity::sys_menu_entity::SysMenu;
 
 #[derive(Debug,Serialize,ToSchema,Clone)]
 #[schema(rename_all="camelCase")]
@@ -62,4 +63,118 @@ pub struct SysMenuPage{
 pub struct SysMenuPagePayload{
   pub menu_name:Option<String>,
   pub status:Option<String>,
+}
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[schema(rename_all="camelCase")]
+#[serde(rename_all(deserialize="camelCase"))]
+pub struct SysMenuAddPayload{
+  pub component:Option<String>,
+  pub query:Option<String>,
+  pub perms:Option<String>,
+  pub icon:String,
+  pub is_cache:String,
+  pub is_frame:String,
+  pub menu_name:String,
+  pub menu_type:String,
+  pub order_num:i64,
+  pub parent_id:i64,
+  pub path:Option<String>,
+  pub status:String,
+  pub visible:String,
+}
+
+impl From<SysMenuAddPayload> for SysMenu{
+  fn from(p: SysMenuAddPayload) -> Self {
+    if p.menu_type.eq("F"){
+      Self{
+        menu_id:0,
+        menu_name:p.menu_name,
+        menu_type:p.menu_type,
+        parent_id:p.parent_id,
+        order_num:p.order_num,
+        path:String::from(""),
+        component:None,
+        query:None,
+        is_frame:p.is_frame.parse::<i8>().unwrap(),
+        visible:p.visible,
+        status:p.status,
+        perms:p.perms,
+        icon:p.icon,
+        create_by:String::from(""),
+        create_time:DateTime::now(),
+        update_by:String::from(""),
+        update_time:None,
+        remark:String::from(""),
+        is_cache: p.is_cache.parse::<i8>().unwrap(),
+      }
+    }else if p.menu_type.eq("C"){
+      Self{
+        menu_id:0,
+        menu_name:p.menu_name,
+        menu_type:p.menu_type,
+        parent_id:p.parent_id,
+        order_num:p.order_num,
+        path:p.path.map_or(String::from(""),|v|v),
+        component:p.component,
+        query:p.query,
+        is_frame:p.is_frame.parse::<i8>().unwrap(),
+        visible:p.visible,
+        status:p.status,
+        perms:p.perms,
+        icon:p.icon,
+        create_by:String::from(""),
+        create_time:DateTime::now(),
+        update_by:String::from(""),
+        update_time:None,
+        remark:String::from(""),
+        is_cache: p.is_cache.parse::<i8>().unwrap(),
+      }
+    }else if p.menu_type.eq("M"){
+      Self{
+        menu_id:0,
+        menu_name:p.menu_name,
+        menu_type:p.menu_type,
+        parent_id:p.parent_id,
+        order_num:p.order_num,
+        path:p.path.map_or(String::from(""),|v|v),
+        component:None,
+        query:p.query,
+        is_frame:p.is_frame.parse::<i8>().unwrap(),
+        visible:p.visible,
+        status:p.status,
+        perms:None,
+        icon:p.icon,
+        create_by:String::from(""),
+        create_time:DateTime::now(),
+        update_by:String::from(""),
+        update_time:None,
+        remark:String::from(""),
+        is_cache: p.is_cache.parse::<i8>().unwrap(),
+      }
+    }else{
+      Self{
+        menu_id:0,
+        menu_name:p.menu_name,
+        menu_type:p.menu_type,
+        parent_id:p.parent_id,
+        order_num:p.order_num,
+        path:p.path.map_or(String::from(""),|v|v),
+        component:p.component,
+        query:p.query,
+        is_frame:p.is_frame.parse::<i8>().unwrap(),
+        visible:p.visible,
+        status:p.status,
+        perms:p.perms,
+        icon:p.icon,
+        create_by:String::from(""),
+        create_time:DateTime::now(),
+        update_by:String::from(""),
+        update_time:None,
+        remark:String::from(""),
+        is_cache: p.is_cache.parse::<i8>().unwrap(),
+      }
+    }
+
+  }
 }

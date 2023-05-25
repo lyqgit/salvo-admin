@@ -106,6 +106,12 @@ async fn main() {
             .push(
                 Router::with_path("/system/menu/list").get(menu_controller::get_menu_list)
             )
+            .push(
+                Router::with_path("/system/menu").post(menu_controller::add_menu)
+            )
+            .push(
+                Router::with_path("/system/menu/<id:num>").delete(menu_controller::del_menu_by_id).get(menu_controller::get_menu_by_id)
+            )
         );
 
 

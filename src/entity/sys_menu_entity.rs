@@ -6,7 +6,7 @@ pub struct SysMenu{
   pub menu_id:i64,
   pub menu_name:String,
   pub parent_id:i64,
-  pub order_num:i8,
+  pub order_num:i64,
   pub path:String,
   pub component:Option<String>,
   pub query:Option<String>,

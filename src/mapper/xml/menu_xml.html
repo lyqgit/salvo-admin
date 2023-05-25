@@ -29,4 +29,11 @@
       </if>
     </where>
   </select>
+
+  <select id="select_menus_by_id">
+    `select * from sys_menu`
+    <where>
+      ` and menu_id = #{menu_id}`
+    </where>
+  </select>
 </mapper>
