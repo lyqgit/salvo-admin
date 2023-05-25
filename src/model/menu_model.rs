@@ -1,7 +1,6 @@
-use salvo::oapi::ToSchema;
-use serde::{Serialize};
+use salvo::oapi::{ToParameters, ToSchema};
+use serde::{Serialize,Deserialize};
 use rbatis::rbdc::datetime::DateTime;
-use crate::entity::sys_menu_entity::SysMenu;
 
 #[derive(Debug,Serialize,ToSchema,Clone)]
 #[schema(rename_all="camelCase")]
@@ -32,7 +31,8 @@ pub struct Meta{
 
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all(serialize="camelCase"))]
+#[schema(rename_all="camelCase")]
+#[serde(rename_all(serialize="camelCase"))]
 pub struct SysMenuPage{
   pub menu_id:i64,
   pub menu_name:String,
@@ -53,4 +53,13 @@ pub struct SysMenuPage{
   pub update_by:String,
   pub update_time:Option<DateTime>,
   pub remark:String,
+}
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
+#[parameters(rename_all="camelCase")]
+#[serde(rename_all(deserialize="camelCase"))]
+#[parameters(parameter_in = Query)]
+pub struct SysMenuPagePayload{
+  pub menu_name:Option<String>,
+  pub status:Option<String>,
 }

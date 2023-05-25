@@ -1,4 +1,4 @@
-use salvo::oapi::extract::{JsonBody, QueryParam};
+use salvo::oapi::extract::{JsonBody};
 use salvo::Depot;
 use salvo::{oapi::endpoint, Request};
 use crate::entity::sys_dict_data_entity::SysDictData;

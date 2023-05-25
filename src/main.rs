@@ -1,6 +1,5 @@
 use rbatis::Rbatis;
 use once_cell::sync::Lazy;
-use rbdc_mysql::driver::MysqlDriver;
 use salvo::catcher::Catcher;
 use salvo::prelude::CatchPanic;
 use salvo::{Server, Listener,Router, Service};
@@ -19,7 +18,7 @@ mod model;
 mod entity;
 mod utils;
 
-use controller::{user_controller,common_controller,dict_controller};
+use controller::{user_controller,common_controller,dict_controller,menu_controller};
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
 
@@ -103,6 +102,9 @@ async fn main() {
             )
             .push(
                 Router::with_path("/system/dict/type").post(dict_controller::add_dict_type).put(dict_controller::edit_dict_type)
+            )
+            .push(
+                Router::with_path("/system/menu/list").get(menu_controller::get_menu_list)
             )
         );
 

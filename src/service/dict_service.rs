@@ -7,7 +7,7 @@ use crate::entity::sys_dict_type_entity::{SysDictType,ModifySysDictType};
 use crate::model::common_model::Page;
 use crate::utils::func;
 use rbatis::rbdc::datetime::DateTime;
-use crate::model::dict_model::{DictTypeDataPagePayload, AddSysDictDataVo, EditSysDictData};
+use crate::model::dict_model::{AddSysDictDataVo, EditSysDictData};
 
 pub async fn get_dict_by_page(page_num:u64,page_size:u64,dict_name:&str,dict_type:&str,status:&str,begin_time:&str,end_time:&str)->rbatis::Result<Page<SysDictType>>{
 
