@@ -68,7 +68,7 @@ pub struct SysMenuPagePayload{
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
 #[schema(rename_all="camelCase")]
 #[serde(rename_all(deserialize="camelCase"))]
-pub struct SysMenuAddPayload{
+pub struct SysMenuModifyPayload{
   pub component:Option<String>,
   pub query:Option<String>,
   pub perms:Option<String>,
@@ -76,19 +76,22 @@ pub struct SysMenuAddPayload{
   pub is_cache:String,
   pub is_frame:String,
   pub menu_name:String,
+  pub menu_id:Option<i64>,
   pub menu_type:String,
   pub order_num:i64,
   pub parent_id:i64,
   pub path:Option<String>,
   pub status:String,
   pub visible:String,
+  pub create_by:Option<String>,
+  pub create_time:Option<DateTime>,
 }
 
-impl From<SysMenuAddPayload> for SysMenu{
-  fn from(p: SysMenuAddPayload) -> Self {
+impl From<SysMenuModifyPayload> for SysMenu{
+  fn from(p: SysMenuModifyPayload) -> Self {
     if p.menu_type.eq("F"){
       Self{
-        menu_id:0,
+        menu_id:p.menu_id.map_or(0,|v|v),
         menu_name:p.menu_name,
         menu_type:p.menu_type,
         parent_id:p.parent_id,
@@ -101,8 +104,8 @@ impl From<SysMenuAddPayload> for SysMenu{
         status:p.status,
         perms:p.perms,
         icon:p.icon,
-        create_by:String::from(""),
-        create_time:DateTime::now(),
+        create_by:p.create_by.map_or(String::from(""),|v|v),
+        create_time:p.create_time.map_or(DateTime::now(),|v|v),
         update_by:String::from(""),
         update_time:None,
         remark:String::from(""),
@@ -110,7 +113,7 @@ impl From<SysMenuAddPayload> for SysMenu{
       }
     }else if p.menu_type.eq("C"){
       Self{
-        menu_id:0,
+        menu_id:p.menu_id.map_or(0,|v|v),
         menu_name:p.menu_name,
         menu_type:p.menu_type,
         parent_id:p.parent_id,
@@ -123,8 +126,8 @@ impl From<SysMenuAddPayload> for SysMenu{
         status:p.status,
         perms:p.perms,
         icon:p.icon,
-        create_by:String::from(""),
-        create_time:DateTime::now(),
+        create_by:p.create_by.map_or(String::from(""),|v|v),
+        create_time:p.create_time.map_or(DateTime::now(),|v|v),
         update_by:String::from(""),
         update_time:None,
         remark:String::from(""),
@@ -132,7 +135,7 @@ impl From<SysMenuAddPayload> for SysMenu{
       }
     }else if p.menu_type.eq("M"){
       Self{
-        menu_id:0,
+        menu_id:p.menu_id.map_or(0,|v|v),
         menu_name:p.menu_name,
         menu_type:p.menu_type,
         parent_id:p.parent_id,
@@ -145,8 +148,8 @@ impl From<SysMenuAddPayload> for SysMenu{
         status:p.status,
         perms:None,
         icon:p.icon,
-        create_by:String::from(""),
-        create_time:DateTime::now(),
+        create_by:p.create_by.map_or(String::from(""),|v|v),
+        create_time:p.create_time.map_or(DateTime::now(),|v|v),
         update_by:String::from(""),
         update_time:None,
         remark:String::from(""),
@@ -154,7 +157,7 @@ impl From<SysMenuAddPayload> for SysMenu{
       }
     }else{
       Self{
-        menu_id:0,
+        menu_id:p.menu_id.map_or(0,|v|v),
         menu_name:p.menu_name,
         menu_type:p.menu_type,
         parent_id:p.parent_id,
@@ -167,8 +170,8 @@ impl From<SysMenuAddPayload> for SysMenu{
         status:p.status,
         perms:p.perms,
         icon:p.icon,
-        create_by:String::from(""),
-        create_time:DateTime::now(),
+        create_by:p.create_by.map_or(String::from(""),|v|v),
+        create_time:p.create_time.map_or(DateTime::now(),|v|v),
         update_by:String::from(""),
         update_time:None,
         remark:String::from(""),

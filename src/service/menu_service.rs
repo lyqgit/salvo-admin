@@ -1,8 +1,9 @@
+use rbatis::rbdc::datetime::DateTime;
 use crate::mapper::menu_mapper;
 use crate::GLOBAL_DB;
 use crate::entity::sys_menu_entity::SysMenu;
 use crate::entity::sys_user_entity::SysUser;
-use crate::model::menu_model::{Router, SysMenuAddPayload, SysMenuPage};
+use crate::model::menu_model::{Router, SysMenuModifyPayload, SysMenuPage};
 use crate::utils::func;
 
 pub async fn get_menu_by_role_id(is_admin:bool,id:String)->rbatis::Result<Vec<String>>{
@@ -29,7 +30,7 @@ pub async fn get_menu_list(menu_name:Option<String>,status:Option<String>)->rbat
   Ok(list)
 }
 
-pub async fn add_menu(user_id:i32,payload:SysMenuAddPayload)->rbatis::Result<bool>{
+pub async fn add_menu(user_id:i32,payload:SysMenuModifyPayload)->rbatis::Result<bool>{
   let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", user_id).await?;
   let user = user.get(0).unwrap();
   let mut sys_menu_entity:SysMenu = payload.into();
@@ -47,4 +48,14 @@ pub async fn get_menu_detail_by_id(menu_id:i64)->rbatis::Result<Option<SysMenuPa
   let list:Vec<SysMenuPage> = menu_mapper::select_menus_by_id(&mut GLOBAL_DB.clone(),menu_id).await?;
   let one = list.get(0).cloned();
   Ok(one)
+}
+
+pub async fn edit_menu(user_id:i32,payload:SysMenuModifyPayload)->rbatis::Result<bool>{
+  let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", user_id).await?;
+  let user = user.get(0).unwrap();
+  let mut sys_menu_entity:SysMenu = payload.into();
+  sys_menu_entity.update_by = user.user_name.clone();
+  sys_menu_entity.update_time = Some(DateTime::now());
+  let rows = SysMenu::update_by_column(&mut GLOBAL_DB.clone(),&sys_menu_entity,"menu_id").await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
 }
