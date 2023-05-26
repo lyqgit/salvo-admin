@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+    <select id="get_dept_list">
+        `select * from sys_dept`
+        <where>
+            1 = 1
+            <if test="dept_name != ''">
+                ` and dept_name = #{dept_name}`
+            </if>
+            <if test="status != ''">
+                ` and status = #{status}`
+            </if>
+        </where>
+    </select>
+
+</mapper>

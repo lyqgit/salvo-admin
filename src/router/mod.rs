@@ -12,6 +12,8 @@ pub mod user_router;
 pub mod dict_router;
 pub mod menu_router;
 pub mod role_router;
+pub mod dept_router;
+
 
 pub fn init_router()->Router{
     let static_dir = Router::with_path("/static").get(
@@ -38,8 +40,12 @@ pub fn init_router()->Router{
                 )
                 .push(
                     menu_router::init_router()
-                ).push(
+                )
+                .push(
                 role_router::init_router()
+                )
+                .push(
+                    dept_router::init_router()
                 )
 
         );
