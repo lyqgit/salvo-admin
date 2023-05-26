@@ -118,7 +118,7 @@ pub async fn edit_role_and_bind_menu(
   let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", user_id).await?;
   let user = user.get(0).unwrap();
   let sys_role = SysRole{
-    role_id:0,
+    role_id,
     role_name,
     role_key,
     role_sort,
@@ -140,7 +140,7 @@ pub async fn edit_role_and_bind_menu(
     let mut sys_role_user_entity = Vec::<SysRoleMenuEntity>::new();
     for (_,it) in menu_ids.iter().enumerate(){
       let temp = SysRoleMenuEntity{
-        role_id: i64::from(row.last_insert_id.clone()),
+        role_id,
         menu_id: it.clone(),
       };
       sys_role_user_entity.push(temp);

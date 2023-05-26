@@ -118,11 +118,10 @@ pub async fn get_menu_tree()->Res<Vec<MenuTree>>{
         (status = 200,body=ResObj<RoleMenuTree>,description ="菜单树和根据用户获取已选菜单id")
     ),
 )]
-pub async fn get_role_menu_tree_by_user_id(req:&mut Request)->Res<RoleMenuTree>{
-    let id = req.param::<i32>("id").unwrap();
+pub async fn get_role_menu_tree_by_user_id(id:PathParam<i32>)->Res<RoleMenuTree>{
     match menu_service::get_menu_tree().await{
         Ok(v1)=>{
-            match menu_service::get_menu_id_by_role_id(id).await {
+            match menu_service::get_menu_id_by_role_id(id.into_inner()).await {
                 Ok(v2)=>{
                     let role_menu_tree = RoleMenuTree{
                         menus:v1,

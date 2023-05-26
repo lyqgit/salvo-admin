@@ -57,7 +57,7 @@ pub async fn del_role_by_id(id:PathParam<String>)->Res<()>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<Option<SysRoleList>>,description ="删除角色")
+        (status = 200,body=ResObj<Option<SysRoleList>>,description ="获取角色详情")
     ),
 )]
 pub async fn get_role_by_id(id:PathParam<String>)->Res<Option<SysRoleList>>{

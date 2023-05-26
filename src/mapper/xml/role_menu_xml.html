@@ -9,13 +9,9 @@
   </delete>
 
   <select id="get_menu_id_by_role_id">
-    `select srm.* from sys_role_menu srm
-      inner join sys_role sr on sr.role_id = srm.role_id
-      inner join sys_user_role sur on sur.role_id = sr.role_id
-      inner join sys_user su on su.user_id = sur.user_id
-    `
+    `select * from sys_role_menu`
     <where>
-      `su.user_id = #{user_id}`
+      `role_id = #{role_id}`
     </where>
   </select>
 
