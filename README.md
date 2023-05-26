@@ -2,7 +2,7 @@
 	<img alt="Savlo" width="132" style="max-width:40%;min-width:60px;" src="https://salvo.rs/images/logo-text.svg" />
 </p>
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">salvo-admin</h1>
-<h4 align="center">基于salvo和Ruoyi-Vue3前后端分离版的rust快速开发框架</h4>
+<h4 align="center">基于salvo和Ruoyi-Vue3的rust快速开发框架</h4>
 
 ## 简介
 
