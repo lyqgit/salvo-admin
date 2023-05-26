@@ -1,5 +1,5 @@
 use rbatis::rbdc::datetime::DateTime;
-use crate::mapper::role_mapper;
+use crate::mapper::{role_mapper, role_menu_mapper};
 use crate::GLOBAL_DB;
 use crate::entity::sys_role_entity::SysRole;
 use crate::entity::sys_role_menu_entity::SysRoleUserEntity;
@@ -7,6 +7,7 @@ use crate::entity::sys_user_entity::SysUser;
 use crate::model::role_model::SysRoleList;
 use crate::utils::func;
 use crate::model::common_model::Page;
+use crate::utils::func::is_modify_ok;
 
 pub async fn get_roles_by_user_id(id:i32)->rbatis::Result<Vec<String>>{
   let list:Vec<SysRole> = role_mapper::select_roles_by_user_id(&mut GLOBAL_DB.clone(),id).await?;
@@ -64,4 +65,24 @@ pub async fn add_role_and_bind_menu(
   }
   let row = SysRoleUserEntity::insert_batch(&mut GLOBAL_DB.clone(), &sys_role_user_entity, sys_role_user_entity.len() as u64).await?;
   Ok(func::is_modify_ok(row.rows_affected))
+}
+
+pub async fn update_role_status_by_id(role_id:i64,status:String)->rbatis::Result<bool>{
+  let rows = role_mapper::update_role_status_by_id(&mut GLOBAL_DB.clone(),role_id,status).await?;
+  Ok(is_modify_ok(rows.rows_affected))
+}
+
+pub async fn del_role_by_id(role_id:String)->rbatis::Result<bool>{
+  let mut tx = GLOBAL_DB.acquire_begin().await.unwrap();
+  role_mapper::del_role_by_id(&mut GLOBAL_DB.clone(),role_id.clone()).await?;
+  let rows = role_menu_mapper::del_role_menu_by_role_id(&mut GLOBAL_DB.clone(),role_id).await?;
+  tx.commit().await.unwrap();
+  tx.rollback().await.unwrap();
+  Ok(is_modify_ok(rows.rows_affected))
+}
+
+pub async fn get_role_by_id(role_id:String)->rbatis::Result<Option<SysRoleList>>{
+  let list = role_mapper::get_role_by_id(&mut GLOBAL_DB.clone(),role_id).await?;
+  let one = list.get(0).cloned();
+  Ok(one)
 }

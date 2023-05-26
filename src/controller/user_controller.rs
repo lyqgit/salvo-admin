@@ -52,8 +52,7 @@ pub async fn login(login_body:JsonBody<LoginReq>)->Res<LoginRes>{
                     redis::set_ex(&token,user.user_id,3600).unwrap();
                     Ok(res_json_ok(Some(LoginRes{token})))
                   },
-                  Err(err)=>{
-                    tracing::error!("{}", err.to_string());
+                  Err(_err)=>{
                     Err(res_json_custom(400,"token生成失败".to_string()))
                   }
               }

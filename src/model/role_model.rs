@@ -57,3 +57,11 @@ pub struct SysRoleModifyPayload{
     pub role_sort:i64,
     pub role_id:Option<i64>,
 }
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[serde(rename_all(deserialize ="camelCase"))]
+#[schema(rename_all="camelCase")]
+pub struct SysRoleStatusPayload{
+    pub role_id:i64,
+    pub status:String,
+}

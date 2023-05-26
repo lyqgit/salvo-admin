@@ -1,13 +1,7 @@
 use rbatis::Rbatis;
 use once_cell::sync::Lazy;
-use salvo::catcher::Catcher;
-use salvo::prelude::CatchPanic;
-use salvo::{Server, Listener,Router, Service};
+use salvo::{Server, Listener};
 use salvo::conn::TcpListener;
-use salvo::serve_static::StaticDir;
-use salvo::oapi::swagger_ui::SwaggerUi;
-use salvo::oapi::{Info, OpenApi};
-use salvo::logging::Logger;
 use redis::{Client};
 
 
@@ -17,11 +11,7 @@ mod mapper;
 mod model;
 mod entity;
 mod utils;
-
-use controller::{user_controller,common_controller,dict_controller,menu_controller};
-use tracing::Level;
-use tracing_subscriber::FmtSubscriber;
-use crate::controller::role_controller;
+mod router;
 
 pub static GLOBAL_DB: Lazy<Rbatis> = Lazy::new(|| Rbatis::new());
 
@@ -34,103 +24,10 @@ pub static GLOBAL_REDIS:Lazy<Client> = Lazy::new(||{
 #[tokio::main]
 async fn main() {
 
-    // let subscriber = FmtSubscriber::builder()
-        // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
-        // will be written to stdout.
-        // .with_max_level(Level::INFO)
-        // completes the builder.
-        // .finish();
-
-    
-    // tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
     // 连接数据库
     utils::mysql::init_db().await;
 
-    // tracing::warn!("Listening on http://127.0.0.1:8080");
-
-
-    let static_dir = Router::with_path("/static").get(
-        StaticDir::new([
-            "static/",
-        ])
-        .listing(true),
-    );
-
-    let router = Router::new().hoop(Logger::new())
-        .hoop(CatchPanic::new())
-        .push(static_dir)
-        .push(
-            Router::new().push(
-                
-                // Router::with_path("/captchaImage").hoop(common_controller::auth_token).get(user_controller::get_captcha)
-                Router::with_path("/captchaImage").get(user_controller::get_captcha)
-            ).push(
-                Router::with_path("/login").post(user_controller::login)
-            ).push(
-                Router::with_path("/logout").post(user_controller::log_out)
-            )
-        )
-        .push(
-            // 需要验证的api
-            Router::new().hoop(common_controller::auth_token)
-            .push(
-                Router::with_path("/getInfo").get(user_controller::get_info)
-            )
-            .push(
-                Router::with_path("/getRouters").get(user_controller::get_routers)
-            )
-
-            .push(
-                Router::with_path("/system/dict/type/list").get(dict_controller::get_dict_list)
-            )
-            .push(
-                Router::with_path("/system/dict/data/list").get(dict_controller::get_dict_data_list)
-            )
-            .push(
-                Router::with_path("/system/dict/data").post(dict_controller::post_add_dict_data).put(dict_controller::put_edit_dict_data)
-            )
-            .push(
-                Router::with_path("/system/dict/data/<id>").delete(dict_controller::del_dict_type_data).get(dict_controller::get_dict_type_data_by_id)
-            )
-            .push(
-                Router::with_path("/system/dict/data/type/<type>").get(dict_controller::get_dict_list_by_type)
-            )
-            .push(
-                Router::with_path("/system/dict/type/optionselect").get(dict_controller::get_all_dict_type)
-            )
-            .push(
-                Router::with_path("/system/dict/type/<id>").get(dict_controller::get_dict_by_id).delete(dict_controller::del_dict_type)
-            )
-            .push(
-                Router::with_path("/system/dict/type").post(dict_controller::add_dict_type).put(dict_controller::edit_dict_type)
-            )
-            .push(
-                Router::with_path("/system/menu/list").get(menu_controller::get_menu_list)
-            )
-            .push(
-                Router::with_path("/system/menu").post(menu_controller::add_menu).put(menu_controller::put_edit_menu)
-            )
-            .push(
-                Router::with_path("/system/menu/<id:num>").delete(menu_controller::del_menu_by_id).get(menu_controller::get_menu_by_id)
-            )
-            .push(
-                Router::with_path("/system/role/list").get(role_controller::get_roles_by_page)
-            )
-            .push(
-                Router::with_path("/system/menu/treeselect").get(menu_controller::get_menu_tree)
-            )
-            .push(
-                Router::with_path("/system/role").post(role_controller::post_add_role)
-            )
-        );
-
-
-    let doc = OpenApi::new(Info::new("后台接口文档", "0.0.1")).merge_router(&router);
-    let router = router
-    .push(doc.into_router("/api-doc/openapi.json"))
-    .push(SwaggerUi::new("/api-doc/openapi.json").into_router("swagger-ui"));
-
-    let service = Service::new(router).catcher(Catcher::default().hoop(common_controller::catcher_err));
+    let service = router::init_service();
 
     Server::new(
         TcpListener::new("0.0.0.0:8080").bind().await

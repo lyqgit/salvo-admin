@@ -37,4 +37,27 @@
       </if>
     </where>
   </select>
+
+
+  <update id="update_role_status_by_id">
+    `update sys_role set status=#{status}`
+    <where>
+      `role_id = #{role_id}`
+    </where>
+  </update>
+
+  <delete id="del_role_by_id">
+    `delete from sys_role
+    <where>
+      `role_id in ( ${role_id} )`
+    </where>
+  </delete>
+
+  <select id="get_role_by_id">
+    `select * from sys_role
+    <where>
+      `role_id in ( ${role_id} )`
+    </where>
+  </select>
+
 </mapper>
