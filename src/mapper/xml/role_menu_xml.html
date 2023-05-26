@@ -1,9 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
+
   <delete id="del_role_menu_by_role_id">
-    `delete from sys_role_menu
+    `delete from sys_role_menu`
     <where>
       `role_id in ( ${role_id} )`
     </where>
   </delete>
+
+  <select id="get_menu_id_by_role_id">
+    `select srm.* from sys_role_menu srm
+      inner join sys_role sr on sr.role_id = srm.role_id
+      inner join sys_user_role sur on sur.role_id = sr.role_id
+      inner join sys_user su on su.user_id = sur.user_id
+    `
+    <where>
+      `su.user_id = #{user_id}`
+    </where>
+  </select>
+
 </mapper>

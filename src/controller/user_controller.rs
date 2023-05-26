@@ -2,7 +2,7 @@ use crate::utils::captcha;
 use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::JsonBody;
-use salvo::{oapi::endpoint,handler};
+use salvo::{oapi::endpoint};
 use crate::model::user_model::{CaptchaRes,LoginReq,LoginRes,UserInfo};
 use crate::utils::res::{Res,res_json_ok,res_json_err,ResObj,res_json_custom};
 use uuid::Uuid;
@@ -107,7 +107,11 @@ pub async fn get_info(depot: &mut Depot)->Res<UserInfo>{
   }
 }
 
-#[handler]
+#[endpoint(
+  responses(
+    (status = 200,body=ResObj<Vec<Router>>,description ="获取用户路由")
+  ),
+)]
 pub async fn get_routers(depot: &mut Depot)->Res<Vec<Router>>{
   let user_id = depot.get::<i32>("userId").copied().unwrap();
   // Ok(res_json_ok(Some(user_id)))

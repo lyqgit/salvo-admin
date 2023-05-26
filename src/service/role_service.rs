@@ -2,7 +2,7 @@ use rbatis::rbdc::datetime::DateTime;
 use crate::mapper::{role_mapper, role_menu_mapper};
 use crate::GLOBAL_DB;
 use crate::entity::sys_role_entity::SysRole;
-use crate::entity::sys_role_menu_entity::SysRoleUserEntity;
+use crate::entity::sys_role_menu_entity::SysRoleMenuEntity;
 use crate::entity::sys_user_entity::SysUser;
 use crate::model::role_model::SysRoleList;
 use crate::utils::func;
@@ -54,17 +54,27 @@ pub async fn add_role_and_bind_menu(
     update_time:None,
     del_flag: "0".to_string(),
   };
+  let mut tx = GLOBAL_DB.acquire_begin().await.unwrap();
   let row = SysRole::insert(&mut GLOBAL_DB.clone(),&sys_role).await?;
-  let mut sys_role_user_entity = Vec::<SysRoleUserEntity>::new();
-  for (_,it) in menu_ids.iter().enumerate(){
-    let temp = SysRoleUserEntity{
-      role_id: i64::from(row.last_insert_id.clone()),
-      menu_id: it.clone(),
-    };
-    sys_role_user_entity.push(temp);
+  if menu_ids.len()>0{
+    let mut sys_role_user_entity = Vec::<SysRoleMenuEntity>::new();
+    for (_,it) in menu_ids.iter().enumerate(){
+      let temp = SysRoleMenuEntity{
+        role_id: i64::from(row.last_insert_id.clone()),
+        menu_id: it.clone(),
+      };
+      sys_role_user_entity.push(temp);
+    }
+    let row = SysRoleMenuEntity::insert_batch(&mut GLOBAL_DB.clone(), &sys_role_user_entity, sys_role_user_entity.len() as u64).await?;
+    tx.commit().await.unwrap();
+    tx.rollback().await.unwrap();
+    Ok(func::is_modify_ok(row.rows_affected))
+  }else{
+    tx.commit().await.unwrap();
+    tx.rollback().await.unwrap();
+    Ok(func::is_modify_ok(row.rows_affected))
   }
-  let row = SysRoleUserEntity::insert_batch(&mut GLOBAL_DB.clone(), &sys_role_user_entity, sys_role_user_entity.len() as u64).await?;
-  Ok(func::is_modify_ok(row.rows_affected))
+
 }
 
 pub async fn update_role_status_by_id(role_id:i64,status:String)->rbatis::Result<bool>{
@@ -85,4 +95,64 @@ pub async fn get_role_by_id(role_id:String)->rbatis::Result<Option<SysRoleList>>
   let list = role_mapper::get_role_by_id(&mut GLOBAL_DB.clone(),role_id).await?;
   let one = list.get(0).cloned();
   Ok(one)
+}
+
+
+
+pub async fn edit_role_and_bind_menu(
+  user_id:i32,
+  menu_check_strictly:bool,
+  dept_check_strictly:bool,
+  menu_ids:Vec<i64>,
+  role_key:String,
+  role_name:String,
+  status:String,
+  data_scope:String,
+  del_flag:String,
+  create_by:String,
+  create_time:DateTime,
+  role_sort:i64,
+  remark:Option<String>,
+  role_id:i64,
+) ->rbatis::Result<bool>{
+  let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", user_id).await?;
+  let user = user.get(0).unwrap();
+  let sys_role = SysRole{
+    role_id:0,
+    role_name,
+    role_key,
+    role_sort,
+    data_scope,
+    menu_check_strictly: menu_check_strictly.into(),
+    dept_check_strictly: dept_check_strictly.into(),
+    status,
+    remark,
+    create_by:create_by,
+    create_time,
+    update_by:Some(user.user_name.clone()),
+    update_time:Some(DateTime::now()),
+    del_flag,
+  };
+  let mut tx = GLOBAL_DB.acquire_begin().await.unwrap();
+  let row = SysRole::update_by_column(&mut GLOBAL_DB.clone(),&sys_role,"role_id").await?;
+  if menu_ids.len()>0{
+    SysRoleMenuEntity::delete_by_column(&mut GLOBAL_DB.clone(),"role_id",role_id).await?;
+    let mut sys_role_user_entity = Vec::<SysRoleMenuEntity>::new();
+    for (_,it) in menu_ids.iter().enumerate(){
+      let temp = SysRoleMenuEntity{
+        role_id: i64::from(row.last_insert_id.clone()),
+        menu_id: it.clone(),
+      };
+      sys_role_user_entity.push(temp);
+    }
+    let row = SysRoleMenuEntity::insert_batch(&mut GLOBAL_DB.clone(), &sys_role_user_entity, sys_role_user_entity.len() as u64).await?;
+    tx.commit().await.unwrap();
+    tx.rollback().await.unwrap();
+    Ok(func::is_modify_ok(row.rows_affected))
+  }else{
+    tx.commit().await.unwrap();
+    tx.rollback().await.unwrap();
+    Ok(func::is_modify_ok(row.rows_affected))
+  }
+
 }

@@ -48,7 +48,7 @@ pub struct SysRolePagePayload{
 pub struct SysRoleModifyPayload{
     pub dept_check_strictly:bool,
     pub menu_check_strictly:bool,
-    pub dept_ids:Vec<i64>,
+    pub dept_ids:Option<Vec<i64>>,
     pub menu_ids:Vec<i64>,
     pub remark:Option<String>,
     pub role_key:String,
@@ -56,6 +56,10 @@ pub struct SysRoleModifyPayload{
     pub status:String,
     pub role_sort:i64,
     pub role_id:Option<i64>,
+    pub data_scope:Option<String>,
+    pub del_flag:Option<String>,
+    pub create_by:Option<String>,
+    pub create_time:Option<DateTime>,
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]

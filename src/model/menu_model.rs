@@ -10,6 +10,7 @@ pub struct Router{
   #[serde(skip_serializing_if = "Option::is_none")]
   pub always_show:Option<bool>,
   #[serde(skip_serializing_if = "Option::is_none")]
+  #[schema(value_type=Option<Vec<Object>>)]
   pub children:Option<Vec<Router>>,
   pub component:String,
   pub hidden:bool,
@@ -186,7 +187,18 @@ impl From<SysMenuModifyPayload> for SysMenu{
 #[derive(Debug,Serialize,ToSchema,Clone)]
 pub struct MenuTree{
   #[serde(skip_serializing_if = "Option::is_none")]
+  #[schema(value_type=Option<Vec<Object>>)]
   pub children:Option<Vec<MenuTree>>,
   pub id:i64,
   pub label:String,
 }
+
+#[derive(Debug,Serialize,ToSchema,Clone)]
+#[serde(rename_all(serialize="camelCase"))]
+#[schema(rename_all="camelCase")]
+pub struct RoleMenuTree{
+  pub checked_keys:Vec<i64>,
+  pub menus:Vec<MenuTree>,
+}
+
+

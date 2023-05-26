@@ -1,6 +1,6 @@
-use salvo::{Depot, handler, oapi::endpoint, Request};
-use salvo::oapi::extract::{JsonBody,PathParam};
-use crate::model::menu_model::{MenuTree, SysMenuModifyPayload, SysMenuPage, SysMenuPagePayload};
+use salvo::{Depot, oapi::endpoint, Request};
+use salvo::oapi::extract::{JsonBody, PathParam};
+use crate::model::menu_model::{MenuTree, RoleMenuTree, SysMenuModifyPayload, SysMenuPage, SysMenuPagePayload};
 use crate::service::menu_service;
 use crate::utils::res::{match_ok, Res, res_json_custom, res_json_ok, ResObj};
 
@@ -104,7 +104,39 @@ pub async fn put_edit_menu(payload:JsonBody<SysMenuModifyPayload>,depot:&mut Dep
 }
 
 
-#[handler]
+#[endpoint(
+    responses(
+        (status = 200,body=ResObj<Vec<MenuTree>>,description ="菜单树")
+    ),
+)]
 pub async fn get_menu_tree()->Res<Vec<MenuTree>>{
     match_ok(menu_service::get_menu_tree().await)
+}
+
+#[endpoint(
+    responses(
+        (status = 200,body=ResObj<RoleMenuTree>,description ="菜单树和根据用户获取已选菜单id")
+    ),
+)]
+pub async fn get_role_menu_tree_by_user_id(req:&mut Request)->Res<RoleMenuTree>{
+    let id = req.param::<i32>("id").unwrap();
+    match menu_service::get_menu_tree().await{
+        Ok(v1)=>{
+            match menu_service::get_menu_id_by_role_id(id).await {
+                Ok(v2)=>{
+                    let role_menu_tree = RoleMenuTree{
+                        menus:v1,
+                        checked_keys:v2
+                    };
+                    Ok(res_json_ok(Some(role_menu_tree)))
+                },
+                Err(err)=>{
+                    Err(res_json_custom(400,err.to_string()))
+                }
+            }
+        },
+        Err(err)=>{
+            Err(res_json_custom(400,err.to_string()))
+        }
+    }
 }

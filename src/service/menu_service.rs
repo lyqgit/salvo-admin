@@ -1,5 +1,5 @@
 use rbatis::rbdc::datetime::DateTime;
-use crate::mapper::menu_mapper;
+use crate::mapper::{menu_mapper, role_menu_mapper};
 use crate::GLOBAL_DB;
 use crate::entity::sys_menu_entity::SysMenu;
 use crate::entity::sys_user_entity::SysUser;
@@ -65,4 +65,10 @@ pub async fn edit_menu(user_id:i32,payload:SysMenuModifyPayload)->rbatis::Result
   sys_menu_entity.update_time = Some(DateTime::now());
   let rows = SysMenu::update_by_column(&mut GLOBAL_DB.clone(),&sys_menu_entity,"menu_id").await?;
   Ok(func::is_modify_ok(rows.rows_affected))
+}
+
+pub async fn get_menu_id_by_role_id(user_id:i32)->rbatis::Result<Vec<i64>>{
+  let list = role_menu_mapper::get_menu_id_by_role_id(&mut GLOBAL_DB.clone(),user_id).await?;
+  let list = list.into_iter().map(|v|v.menu_id).collect();
+  Ok(list)
 }

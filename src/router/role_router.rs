@@ -7,7 +7,7 @@ pub fn init_router()->Router{
         Router::with_path("/system/role/list").get(role_controller::get_roles_by_page)
     )
         .push(
-            Router::with_path("/system/role").post(role_controller::post_add_role)
+            Router::with_path("/system/role").post(role_controller::post_add_role).put(role_controller::put_edit_role)
         )
         .push(
             Router::with_path("/system/role/changeStatus").put(role_controller::put_edit_role_status)

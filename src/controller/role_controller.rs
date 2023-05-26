@@ -4,7 +4,7 @@ use salvo::{Depot, Request};
 use crate::model::common_model::Page;
 use crate::model::role_model::{SysRoleList, SysRoleModifyPayload, SysRolePagePayload, SysRoleStatusPayload};
 use crate::service::role_service;
-use crate::utils::res::{Res,match_ok,ResObj};
+use crate::utils::res::{Res, match_ok, ResObj, match_no_res_ok};
 
 #[endpoint(
     parameters(
@@ -28,31 +28,31 @@ pub async fn get_roles_by_page(req:&mut Request)->Res<Page<SysRoleList>>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<bool>,description ="添加角色")
+        (status = 200,body=ResObj<()>,description ="添加角色")
     ),
 )]
-pub async fn post_add_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut Depot) -> Res<bool> {
+pub async fn post_add_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut Depot) -> Res<()> {
     let user_id = depot.get::<i32>("userId").copied().unwrap();
     let payload = payload.into_inner();
-    match_ok(role_service::add_role_and_bind_menu(user_id,payload.dept_check_strictly,payload.menu_check_strictly,payload.menu_ids,payload.role_key,payload.role_name,payload.status,payload.role_sort,payload.remark).await)
+    match_no_res_ok(role_service::add_role_and_bind_menu(user_id,payload.dept_check_strictly,payload.menu_check_strictly,payload.menu_ids,payload.role_key,payload.role_name,payload.status,payload.role_sort,payload.remark).await)
 }
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<bool>,description ="更改角色状态")
+        (status = 200,body=ResObj<()>,description ="更改角色状态")
     ),
 )]
-pub async fn put_edit_role_status(payload:JsonBody<SysRoleStatusPayload>)->Res<bool>{
-    match_ok(role_service::update_role_status_by_id(payload.role_id,payload.status.clone()).await)
+pub async fn put_edit_role_status(payload:JsonBody<SysRoleStatusPayload>)->Res<()>{
+    match_no_res_ok(role_service::update_role_status_by_id(payload.role_id,payload.status.clone()).await)
 }
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<bool>,description ="删除角色")
+        (status = 200,body=ResObj<()>,description ="删除角色")
     ),
 )]
-pub async fn del_role_by_id(id:PathParam<String>)->Res<bool>{
-    match_ok(role_service::del_role_by_id(id.into_inner()).await)
+pub async fn del_role_by_id(id:PathParam<String>)->Res<()>{
+    match_no_res_ok(role_service::del_role_by_id(id.into_inner()).await)
 }
 
 #[endpoint(
@@ -62,4 +62,30 @@ pub async fn del_role_by_id(id:PathParam<String>)->Res<bool>{
 )]
 pub async fn get_role_by_id(id:PathParam<String>)->Res<Option<SysRoleList>>{
     match_ok(role_service::get_role_by_id(id.into_inner()).await)
+}
+
+#[endpoint(
+    responses(
+        (status = 200,body=ResObj<()>,description ="修改角色")
+    ),
+)]
+pub async fn put_edit_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut Depot) -> Res<()> {
+    let user_id = depot.get::<i32>("userId").copied().unwrap();
+    let payload = payload.into_inner();
+    match_no_res_ok(role_service::edit_role_and_bind_menu(
+        user_id,
+        payload.dept_check_strictly,
+        payload.menu_check_strictly,
+        payload.menu_ids,
+        payload.role_key,
+        payload.role_name,
+        payload.status,
+        payload.data_scope.unwrap(),
+        payload.del_flag.unwrap(),
+        payload.create_by.unwrap(),
+        payload.create_time.unwrap(),
+        payload.role_sort,
+        payload.remark,
+        payload.role_id.unwrap()
+    ).await)
 }

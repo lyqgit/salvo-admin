@@ -85,3 +85,19 @@ pub fn match_custom_ok<T:ToSchema>(res:rbatis::Result<T>, resolve: Box<dyn FnOnc
         }
     }
 }
+
+#[allow(dead_code)]
+pub fn match_no_res_ok(res:rbatis::Result<bool>)->Res<()>{
+    match res {
+        Ok(v)=>{
+            if v{
+                Ok(res_json_ok(Some(())))
+            }else{
+                Err(res_json_custom(400,"发生错误".to_string()))
+            }
+        },
+        Err(err)=>{
+            Err(res_json_custom(400,err.to_string()))
+        }
+    }
+}

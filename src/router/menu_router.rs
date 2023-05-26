@@ -15,4 +15,7 @@ pub fn init_router()->Router{
         .push(
         Router::with_path("/system/menu/treeselect").get(menu_controller::get_menu_tree)
         )
+        .push(
+        Router::with_path("/system/menu/roleMenuTreeselect/<id:num>").get(menu_controller::get_role_menu_tree_by_user_id)
+        )
 }
