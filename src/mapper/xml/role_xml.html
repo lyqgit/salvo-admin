@@ -16,6 +16,9 @@
       <if test="role_key != ''">
         ` and role_key = #{role_key} `
       </if>
+      <if test="status != ''">
+        ` and status = #{status} `
+      </if>
       <if test="begin_time != ''">
         ` and create_time between #{begin_time} and #{end_time} `
       </if>
@@ -31,6 +34,9 @@
       </if>
       <if test="role_key != ''">
         ` and role_key = #{role_key} `
+      </if>
+      <if test="status != ''">
+        ` and status = #{status} `
       </if>
       <if test="begin_time != ''">
         ` and create_time between #{begin_time} and #{end_time} `

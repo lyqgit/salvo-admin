@@ -31,6 +31,7 @@ pub struct SysRolePagePayload{
     pub page_size:Option<u64>,
     pub role_name:Option<String>,
     pub role_key:Option<String>,
+    pub status:Option<String>,
     #[serde(rename(deserialize ="params[beginTime]"))]
     #[parameter(rename="params[beginTime]")]
     #[parameter(value_type = Option<String>)]

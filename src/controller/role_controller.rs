@@ -21,6 +21,7 @@ pub async fn get_roles_by_page(req:&mut Request)->Res<Page<SysRoleList>>{
         payload.page_size.map_or(10,|v|v),
         payload.role_name,
         payload.role_key,
+        payload.status,
         payload.begin_time,
         payload.end_time,
     ).await)

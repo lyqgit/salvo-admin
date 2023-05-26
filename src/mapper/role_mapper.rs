@@ -10,12 +10,12 @@ pub async fn select_roles_by_user_id(rb: &mut dyn Executor,id:i32)->rbatis::Resu
 }
 
 #[html_sql("src/mapper/xml/role_xml.html")]
-pub async fn select_roles_by_page(rb: &mut dyn Executor,page_num:u64,page_size:u64,role_name:Option<String>,role_key:Option<String>,begin_time:Option<DateTime>,end_time:Option<DateTime>)->rbatis::Result<Vec<SysRoleList>>{
+pub async fn select_roles_by_page(rb: &mut dyn Executor,page_num:u64,page_size:u64,role_name:Option<String>,role_key:Option<String>,status:Option<String>,begin_time:Option<DateTime>,end_time:Option<DateTime>)->rbatis::Result<Vec<SysRoleList>>{
   impled!()
 }
 
 #[html_sql("src/mapper/xml/role_xml.html")]
-pub async fn select_roles_count(rb: &mut dyn Executor,role_name:Option<String>,role_key:Option<String>,begin_time:Option<DateTime>,end_time:Option<DateTime>)->rbatis::Result<u64>{
+pub async fn select_roles_count(rb: &mut dyn Executor,role_name:Option<String>,role_key:Option<String>,status:Option<String>,begin_time:Option<DateTime>,end_time:Option<DateTime>)->rbatis::Result<u64>{
   impled!()
 }
 
