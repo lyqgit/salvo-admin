@@ -1,5 +1,6 @@
 use rbatis::executor::Executor;
 use rbatis::{crud, html_sql};
+use rbatis::rbdc::db::ExecResult;
 use crate::entity::sys_post_entity::SysPostEntity;
 use crate::model::post_model::SysPostList;
 
@@ -15,6 +16,11 @@ pub async fn get_post_count(rb: &mut dyn Executor,post_code:Option<String>,post_
 
 #[html_sql("src/mapper/xml/post_xml.html")]
 pub async fn get_post_by_id(rb: &mut dyn Executor,post_id:i64)->rbatis::Result<Vec<SysPostList>>{
+    impled!()
+}
+
+#[html_sql("src/mapper/xml/post_xml.html")]
+pub async fn del_post_by_id(rb: &mut dyn Executor,post_id:String)->rbatis::Result<ExecResult>{
     impled!()
 }
 

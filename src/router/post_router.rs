@@ -8,6 +8,6 @@ pub fn init_router() ->Router{
     ).push(
         Router::with_path("/system/post").post(post_controller::post_add_post).put(post_controller::put_edit_post)
     ).push(
-        Router::with_path("/system/post/<id>").get(post_controller::get_post_by_id)
+        Router::with_path("/system/post/<id>").get(post_controller::get_post_by_id).delete(post_controller::del_post_by_id)
     )
 }

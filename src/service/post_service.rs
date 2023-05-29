@@ -58,3 +58,9 @@ pub async fn post_edit_post(user_id:i32,post_id:Option<i64>,post_code:Option<Str
     let rows = SysPostEntity::update_by_column(&mut GLOBAL_DB.clone(),&sys_post,"post_id").await?;
     Ok(is_modify_ok(rows.rows_affected))
 }
+
+pub async fn del_post_by_id(post_id:String)->rbatis::Result<bool>{
+    let rows = post_mapper::del_post_by_id(&mut GLOBAL_DB.clone(),post_id).await?;
+    Ok(is_modify_ok(rows.rows_affected))
+}
+

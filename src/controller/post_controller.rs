@@ -47,3 +47,12 @@ pub async fn put_edit_post(payload:JsonBody<SysPostModifyPayload>,depot:&mut Dep
 pub async fn get_post_by_id(id:PathParam<i64>)->Res<Option<SysPostList>>{
     match_ok(post_service::get_post_by_id(id.into_inner()).await)
 }
+
+#[endpoint(
+    responses(
+        (status = 200,body=ResObj<()>,description ="删除岗位")
+    ),
+)]
+pub async fn del_post_by_id(id:PathParam<String>)->Res<()>{
+    match_no_res_ok(post_service::del_post_by_id(id.into_inner()).await)
+}
