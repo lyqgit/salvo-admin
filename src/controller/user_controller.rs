@@ -1,9 +1,9 @@
 use crate::utils::captcha;
 use salvo::Depot;
 use salvo::Request;
-use salvo::oapi::extract::JsonBody;
+use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{oapi::endpoint};
-use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserList, SysUserListPayload, UserInfo};
+use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserDetail, SysUserList, SysUserListPayload, UserInfo};
 use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok};
 use uuid::Uuid;
 use crate::model::common_model::Page;
@@ -159,10 +159,19 @@ pub async fn log_out(req:&mut Request)->Res<()>{
     SysUserListPayload
   ),
   responses(
-    (status = 200,body=ResObj<Page<SysUserList>>,description ="退出登录")
+    (status = 200,body=ResObj<Page<SysUserList>>,description ="用户列表")
   ),
 )]
 pub async fn get_user_page(req:&mut Request)->Res<Page<SysUserList>>{
   let payload = req.parse_queries().map_or(SysUserListPayload{ page_num: 1, page_size: 10, user_name: None, phone_number: None, status: None, dept_id: None, begin_time:None,end_time:None }, |v|v);
   match_ok(user_service::get_user_page(payload.page_num,payload.page_size,payload.user_name.clone(),payload.phone_number.clone(),payload.status.clone(),payload.begin_time,payload.end_time,payload.dept_id).await)
+}
+
+#[endpoint(
+  responses(
+    (status = 200,body=ResObj<SysUserDetail>,description ="用户详情")
+  ),
+)]
+pub async fn get_user_detail(id:PathParam<Option<i64>>)->Res<SysUserDetail>{
+  match_ok(user_service::get_detail_by_id(id.into_inner()).await)
 }

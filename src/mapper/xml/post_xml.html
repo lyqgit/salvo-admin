@@ -43,4 +43,7 @@
             `1 = 1 and post_id in ( ${post_id} )`
         </where>
     </delete>
+    <select id="get_post_list">
+        `select * from sys_post`
+    </select>
 </mapper>

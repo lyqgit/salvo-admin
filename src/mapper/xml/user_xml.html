@@ -19,6 +19,7 @@
             <if test="dept_id != null">
                 ` AND (su.dept_id = #{dept_id} OR su.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(#{dept_id}, ancestors) ))`
             </if>
+            ` and su.del_flag = 0`
             ` limit #{page_num},#{page_size}`
         </where>
     </select>
@@ -41,6 +42,13 @@
             <if test="dept_id != null">
                 ` AND (su.dept_id = #{dept_id} OR su.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(#{dept_id}, ancestors) ))`
             </if>
+            ` and su.del_flag = 0`
+        </where>
+    </select>
+    <select id="get_user_by_id">
+        `select * from sys_user`
+        <where>
+            `user_id = #{user_id}`
         </where>
     </select>
 </mapper>

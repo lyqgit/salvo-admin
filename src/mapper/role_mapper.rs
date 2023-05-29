@@ -34,4 +34,9 @@ pub async fn get_role_by_id(rb: &mut dyn Executor,role_id:String)->rbatis::Resul
   impled!()
 }
 
+#[html_sql("src/mapper/xml/role_xml.html")]
+pub async fn select_roles_list(rb: &mut dyn Executor)->rbatis::Result<Vec<SysRoleList>>{
+  impled!()
+}
+
 crud!(SysRole{});

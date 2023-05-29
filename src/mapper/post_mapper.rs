@@ -24,4 +24,9 @@ pub async fn del_post_by_id(rb: &mut dyn Executor,post_id:String)->rbatis::Resul
     impled!()
 }
 
+#[html_sql("src/mapper/xml/post_xml.html")]
+pub async fn get_post_list(rb: &mut dyn Executor)->rbatis::Result<Vec<SysPostList>>{
+    impled!()
+}
+
 crud!(SysPostEntity{},"sys_post");

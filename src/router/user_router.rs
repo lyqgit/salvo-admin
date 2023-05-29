@@ -24,7 +24,11 @@ pub fn init_router_no_token()->Router{
     )
     .push(
         Router::with_path("/system/user/deptTree").get(dept_controller::get_dept_tree)
-    ).push(
+    )
+    .push(
         Router::with_path("/system/user/list").get(user_controller::get_user_page)
+    )
+    .push(
+        Router::with_path("/system/user/<id>").get(user_controller::get_user_detail)
     )
 }

@@ -571,11 +571,11 @@ function handleUpdate(row) {
   reset();
   const userId = row.userId || ids.value;
   getUser(userId).then(response => {
-    form.value = response.data;
-    postOptions.value = response.posts;
-    roleOptions.value = response.roles;
-    form.value.postIds = response.postIds;
-    form.value.roleIds = response.roleIds;
+    form.value = response.data.user;
+    postOptions.value = response.data.posts;
+    roleOptions.value = response.data.roles;
+    form.value.postIds = response.data.postIds;
+    form.value.roleIds = response.data.roleIds;
     open.value = true;
     title.value = "修改用户";
     form.password = "";

@@ -4,6 +4,8 @@ use salvo::oapi::ToParameters;
 use serde::{Serialize,Deserialize};
 use crate::entity::sys_user_entity::SysUser;
 use crate::model::dept_model::DeptList;
+use crate::model::post_model::SysPostList;
+use crate::model::role_model::SysRoleList;
 
 // 验证码返回
 #[derive(Serialize, Deserialize, Clone, Debug, ToSchema)]
@@ -89,4 +91,15 @@ pub struct SysUserListPayload{
   #[parameter(rename="params[endTime]")]
   #[parameter(value_type = Option<String>)]
   pub end_time:Option<DateTime>,
+}
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[schema(rename_all="camelCase")]
+#[serde(rename_all(serialize = "camelCase"))]
+pub struct SysUserDetail{
+  pub posts:Vec<SysPostList>,
+  pub roles:Vec<SysRoleList>,
+  pub post_ids:Option<Vec<i64>>,
+  pub role_ids:Option<Vec<i64>>,
+  pub user:Option<SysUserList>
 }

@@ -65,5 +65,7 @@
       `role_id in ( ${role_id} )`
     </where>
   </select>
-
+  <select id="select_roles_list">
+    `select * from sys_role where del_flag = 0`
+  </select>
 </mapper>

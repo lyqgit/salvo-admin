@@ -7,3 +7,5 @@ pub mod sys_dict_type_entity;
 pub mod sys_role_menu_entity;
 pub mod sys_dept_entity;
 pub mod sys_post_entity;
+pub mod sys_user_role_entity;
+pub mod sys_user_post_entity;
