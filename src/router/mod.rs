@@ -13,6 +13,7 @@ pub mod dict_router;
 pub mod menu_router;
 pub mod role_router;
 pub mod dept_router;
+pub mod post_router;
 
 
 pub fn init_router()->Router{
@@ -46,6 +47,9 @@ pub fn init_router()->Router{
                 )
                 .push(
                     dept_router::init_router()
+                )
+                .push(
+                    post_router::init_router()
                 )
 
         );

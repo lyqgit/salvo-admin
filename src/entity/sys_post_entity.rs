@@ -12,4 +12,5 @@ pub struct SysPostEntity{
     pub create_time:Option<DateTime>,
     pub update_by:Option<String>,
     pub update_time:Option<DateTime>,
+    pub remark:Option<String>,
 }

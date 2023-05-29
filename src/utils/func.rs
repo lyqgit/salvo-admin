@@ -1,5 +1,7 @@
+use salvo::oapi::ToSchema;
 use crate::model::menu_model::{Router, Meta, MenuTree, SysMenuPage};
 use crate::entity::sys_menu_entity::SysMenu;
+use crate::model::common_model::Page;
 
 // 路由数组转树
 pub fn router_arr_to_tree(re_list:&mut Vec<Router>,ori_arr:Vec<SysMenu>,pid:i64){
@@ -115,5 +117,12 @@ pub fn is_modify_ok(affected:u64)->bool{
     true
   }else{
     false
+  }
+}
+
+pub fn create_page_list<T:ToSchema>(rows:Vec<T>,total:u64)->Page<T>{
+  Page{
+    rows,
+    total
   }
 }
