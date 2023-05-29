@@ -32,3 +32,29 @@ pub async fn post_add_post(user_id:i32,post_code:Option<String>,post_name:Option
     let rows = SysPostEntity::insert(&mut GLOBAL_DB.clone(),&sys_post).await?;
     Ok(is_modify_ok(rows.rows_affected))
 }
+
+pub async fn get_post_by_id(id:i64)->rbatis::Result<Option<SysPostList>>{
+    let list = post_mapper::get_post_by_id(&mut GLOBAL_DB.clone(),id).await?;
+    let one = list.get(0).cloned();
+    Ok(one)
+}
+
+
+pub async fn post_edit_post(user_id:i32,post_id:Option<i64>,post_code:Option<String>,post_name:Option<String>,post_sort:Option<i8>,status:Option<String>,remark:Option<String>)->rbatis::Result<bool>{
+    let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", user_id).await?;
+    let user = user.get(0).unwrap();
+    let sys_post = SysPostEntity{
+        post_id,
+        post_code,
+        post_name,
+        post_sort,
+        status,
+        create_by: None,
+        create_time: None,
+        update_by: Some(user.user_name.clone()),
+        update_time: Some(DateTime::now()),
+        remark
+    };
+    let rows = SysPostEntity::update_by_column(&mut GLOBAL_DB.clone(),&sys_post,"post_id").await?;
+    Ok(is_modify_ok(rows.rows_affected))
+}

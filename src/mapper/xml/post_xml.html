@@ -16,6 +16,12 @@
             ` limit #{page_num},#{page_size}`
         </where>
     </select>
+    <select id="get_post_by_id">
+        `select * from sys_post`
+        <where>
+            `post_id = #{post_id}`
+        </where>
+    </select>
     <select id="get_post_count">
         `select count(*) from sys_post`
         <where>

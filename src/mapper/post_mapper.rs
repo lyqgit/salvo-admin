@@ -13,4 +13,9 @@ pub async fn get_post_count(rb: &mut dyn Executor,post_code:Option<String>,post_
     impled!()
 }
 
+#[html_sql("src/mapper/xml/post_xml.html")]
+pub async fn get_post_by_id(rb: &mut dyn Executor,post_id:i64)->rbatis::Result<Vec<SysPostList>>{
+    impled!()
+}
+
 crud!(SysPostEntity{},"sys_post");
