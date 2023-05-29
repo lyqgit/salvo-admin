@@ -1,5 +1,5 @@
 use salvo::Router;
-use crate::controller::user_controller;
+use crate::controller::{dept_controller, user_controller};
 
 pub fn init_router()->Router{
     let router = Router::new();
@@ -21,5 +21,8 @@ pub fn init_router_no_token()->Router{
     ).push(
                 // 退出登录
         Router::with_path("/logout").post(user_controller::log_out)
+    )
+    .push(
+        Router::with_path("/system/user/deptTree").get(dept_controller::get_dept_tree)
     )
 }

@@ -3,7 +3,8 @@ use crate::entity::sys_dept_entity::SysDeptEntity;
 use crate::entity::sys_user_entity::SysUser;
 use crate::GLOBAL_DB;
 use crate::mapper::dept_mapper;
-use crate::model::dept_model::DeptList;
+use crate::model::dept_model::{DeptList, DeptTree};
+use crate::utils::func;
 use crate::utils::func::is_modify_ok;
 
 pub async fn get_dept_list(dept_name:Option<String>,status:Option<String>) ->rbatis::Result<Vec<DeptList>>{
@@ -86,4 +87,11 @@ pub async fn edit_dept(user_id:i32,dept_id:Option<i64>,dept_name:String,order_nu
 pub async fn del_dept_by_id(dept_id:String)->rbatis::Result<bool>{
     let rows = dept_mapper::del_dept_by_id(&mut GLOBAL_DB.clone(),dept_id).await?;
     Ok(is_modify_ok(rows.rows_affected))
+}
+
+pub async fn get_dept_tree()->rbatis::Result<Vec<DeptTree>>{
+    let list = dept_mapper::get_dept_list(&mut GLOBAL_DB.clone(),None,None).await?;
+    let mut tree = Vec::<DeptTree>::new();
+    func::dept_arr_to_tree(&mut tree,list,0);
+    Ok(tree)
 }

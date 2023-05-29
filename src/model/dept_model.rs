@@ -44,3 +44,12 @@ pub struct DeptModifyPayload{
     pub email:Option<String>,
     pub status:Option<String>,
 }
+
+#[derive(Debug,Serialize,ToSchema,Clone)]
+pub struct DeptTree{
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[schema(value_type=Option<Vec<Object>>)]
+    pub children:Option<Vec<DeptTree>>,
+    pub id:i64,
+    pub label:String,
+}

@@ -2,6 +2,7 @@ use salvo::oapi::ToSchema;
 use crate::model::menu_model::{Router, Meta, MenuTree, SysMenuPage};
 use crate::entity::sys_menu_entity::SysMenu;
 use crate::model::common_model::Page;
+use crate::model::dept_model::{DeptList, DeptTree};
 
 // 路由数组转树
 pub fn router_arr_to_tree(re_list:&mut Vec<Router>,ori_arr:Vec<SysMenu>,pid:i64){
@@ -93,6 +94,32 @@ pub fn menu_arr_to_tree(re_list:&mut Vec<MenuTree>,ori_arr:Vec<SysMenuPage>,pid:
         })(),
         id:it.menu_id,
         label:it.menu_name.clone()
+      };
+      re_list.push(temp_router)
+    }
+  }
+}
+
+
+// 岗位数组转树
+pub fn dept_arr_to_tree(re_list:&mut Vec<DeptTree>,ori_arr:Vec<DeptList>,pid:i64){
+  for (_,it) in ori_arr.iter().enumerate(){
+    if pid == it.parent_id.unwrap(){
+
+
+      let mut children = Vec::<DeptTree>::new();
+      dept_arr_to_tree(&mut children,ori_arr.clone(),it.dept_id.clone().unwrap());
+
+      let temp_router = DeptTree{
+        children:(||->Option<Vec<DeptTree>>{
+          if children.len()>0{
+            Some(children)
+          }else{
+            None
+          }
+        })(),
+        id:it.dept_id.clone().unwrap(),
+        label:it.dept_name.clone().unwrap()
       };
       re_list.push(temp_router)
     }

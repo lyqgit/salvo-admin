@@ -4,12 +4,6 @@ use crate::GLOBAL_DB;
 use rbatis::rbdc::Error;
 
 pub async fn get_user_by_up(username:String,password:String)->rbatis::Result<Option<SysUser>>{
-  // match SysUserEntity::select_user_by_up(&mut GLOBAL_DB.clone(), username, password).await{
-  //   Ok(list)=>{
-  //     Ok(list.get(0).cloned())
-  //   },
-  //   Err(err)=>Err(err)
-  // }
   let list = SysUser::select_user_by_up(&mut GLOBAL_DB.clone(), username, password).await?;
   let one = list.get(0).cloned();
   Ok(one)

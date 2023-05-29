@@ -1,7 +1,7 @@
 use salvo::oapi::endpoint;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{Depot, Request};
-use crate::model::dept_model::{DeptList, DeptListPayload, DeptModifyPayload};
+use crate::model::dept_model::{DeptList, DeptListPayload, DeptModifyPayload, DeptTree};
 use crate::service::dept_service;
 use crate::utils::res::{match_no_res_ok, match_ok, Res, ResObj};
 
@@ -82,4 +82,13 @@ pub async fn del_dept_by_id(id:PathParam<String>)->Res<()>{
 )]
 pub async fn get_dept_by_id(id:PathParam<i64>)->Res<Option<DeptList>>{
     match_ok(dept_service::get_dept_by_id(id.into_inner()).await)
+}
+
+#[endpoint(
+    responses(
+        (status = 200,body=ResObj<Vec<DeptTree>>,description ="部门树")
+    ),
+)]
+pub async fn get_dept_tree()->Res<Vec<DeptTree>>{
+    match_ok(dept_service::get_dept_tree().await)
 }
