@@ -1,4 +1,5 @@
-use serde::{Serialize,Deserialize};
+use rbatis::rbdc::datetime::DateTime;
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug,Serialize,Deserialize,Clone)]
 pub struct SysDeptEntity{
@@ -13,7 +14,7 @@ pub struct SysDeptEntity{
     pub status:Option<String>,
     pub del_flag:Option<String>,
     pub create_by:Option<String>,
-    pub create_time:Option<String>,
+    pub create_time:Option<DateTime>,
     pub update_by:Option<String>,
-    pub update_time:Option<String>,
+    pub update_time:Option<DateTime>,
 }

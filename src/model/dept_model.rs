@@ -29,3 +29,17 @@ pub struct DeptListPayload{
     pub dept_name:Option<String>,
     pub status:Option<String>,
 }
+
+#[derive(Debug,Serialize,ToSchema,Deserialize,Clone)]
+#[schema(rename_all="camelCase")]
+#[serde(rename_all(deserialize="camelCase"))]
+pub struct DeptModifyPayload{
+    pub dept_id:Option<i64>,
+    pub parent_id:i64,
+    pub dept_name:String,
+    pub order_num:i8,
+    pub leader:Option<String>,
+    pub phone:Option<String>,
+    pub email:Option<String>,
+    pub status:Option<String>,
+}

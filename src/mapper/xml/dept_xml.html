@@ -12,5 +12,29 @@
             </if>
         </where>
     </select>
-
+    <select id="get_dept_list_exclude_id">
+        `select * from sys_dept`
+        <where>
+            1 = 1
+            <if test="dept_id != ''">
+                ` and dept_id != #{dept_id}`
+            </if>
+        </where>
+    </select>
+    <select id="get_dept_tree_by_id">
+        select T2.* from (
+        select @R as rid,
+        (select @R := parent_id from sys_dept where dept_id = rid) as parent_id,
+        @L := @L+1 as LVL
+        from (select @R := #{dept_id},@L :=0) vars,
+        sys_dept h where @R>=0)T1
+        inner join sys_dept T2 on T1.rid = T2.dept_id
+        order by T1.LVL desc
+    </select>
+    <select id="get_dept_by_id">
+        `select * from sys_dept`
+        <where>
+            `dept_id = #{dept_id}`
+        </where>
+    </select>
 </mapper>
