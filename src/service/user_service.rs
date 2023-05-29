@@ -1,7 +1,13 @@
+use rbatis::rbdc::datetime::DateTime;
 use crate::entity::sys_user_entity::SysUser;
 use crate::entity::sys_captcha_entity::SysCaptcha;
 use crate::GLOBAL_DB;
 use rbatis::rbdc::Error;
+use crate::mapper::user_mapper;
+use crate::model::common_model::Page;
+use crate::model::user_model::SysUserList;
+use crate::service::dept_service;
+use crate::utils::func::{create_page, create_page_list};
 
 pub async fn get_user_by_up(username:String,password:String)->rbatis::Result<Option<SysUser>>{
   let list = SysUser::select_user_by_up(&mut GLOBAL_DB.clone(), username, password).await?;
@@ -21,4 +27,16 @@ pub async fn get_user_by_id(id:i32)->Result<Option<SysUser>,Error>{
   let list = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", id).await?;
   let one = list.get(0).cloned();
   Ok(one)
+}
+
+pub async fn get_user_page(page_num:u64,page_size:u64,user_name:Option<String>,phone_number:Option<String>,status:Option<String>,begin_time:Option<DateTime>,end_time:Option<DateTime>,dept_id:Option<i64>)->rbatis::Result<Page<SysUserList>>{
+  let (num,size) = create_page(page_num,page_size);
+  let mut list = user_mapper::get_user_page(&mut GLOBAL_DB.clone(),num,size,user_name.clone(),phone_number.clone(),status.clone(),begin_time.clone(),end_time.clone(),dept_id.clone()).await?;
+  let length = list.len();
+  for i in 0..length{
+    let temp_dept = dept_service::get_dept_by_id(list[i].dept_id.unwrap()).await?;
+    list[i].dept = temp_dept
+  }
+  let total = user_mapper::get_user_count(&mut GLOBAL_DB.clone(),user_name.clone(),phone_number.clone(),status.clone(),begin_time.clone(),end_time.clone(),dept_id.clone()).await?;
+  Ok(create_page_list(list,total))
 }

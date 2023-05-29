@@ -3,11 +3,12 @@ use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::JsonBody;
 use salvo::{oapi::endpoint};
-use crate::model::user_model::{CaptchaRes,LoginReq,LoginRes,UserInfo};
-use crate::utils::res::{Res,res_json_ok,res_json_err,ResObj,res_json_custom};
+use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserList, SysUserListPayload, UserInfo};
+use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok};
 use uuid::Uuid;
+use crate::model::common_model::Page;
 use crate::service::user_service::{get_user_by_up,get_user_by_id};
-use crate::service::role_service;
+use crate::service::{role_service, user_service};
 use crate::service::menu_service;
 use crate::utils::webtoken::create_token;
 use crate::utils::md5::create_md5;
@@ -151,4 +152,17 @@ pub async fn log_out(req:&mut Request)->Res<()>{
   }else{
     Ok(res_json_custom(401,"用户无权限".to_string()))
   }
+}
+
+#[endpoint(
+  parameters(
+    SysUserListPayload
+  ),
+  responses(
+    (status = 200,body=ResObj<Page<SysUserList>>,description ="退出登录")
+  ),
+)]
+pub async fn get_user_page(req:&mut Request)->Res<Page<SysUserList>>{
+  let payload = req.parse_queries().map_or(SysUserListPayload{ page_num: 1, page_size: 10, user_name: None, phone_number: None, status: None, dept_id: None, begin_time:None,end_time:None }, |v|v);
+  match_ok(user_service::get_user_page(payload.page_num,payload.page_size,payload.user_name.clone(),payload.phone_number.clone(),payload.status.clone(),payload.begin_time,payload.end_time,payload.dept_id).await)
 }
