@@ -82,3 +82,8 @@ pub async fn edit_dept(user_id:i32,dept_id:Option<i64>,dept_name:String,order_nu
     let rows = SysDeptEntity::update_by_column(&mut GLOBAL_DB.clone(),&sys_dept,"dept_id").await?;
     Ok(is_modify_ok(rows.rows_affected))
 }
+
+pub async fn del_dept_by_id(dept_id:String)->rbatis::Result<bool>{
+    let rows = dept_mapper::del_dept_by_id(&mut GLOBAL_DB.clone(),dept_id).await?;
+    Ok(is_modify_ok(rows.rows_affected))
+}

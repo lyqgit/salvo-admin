@@ -20,7 +20,7 @@ pub async fn get_dept_list(req:&mut Request)->Res<Vec<DeptList>>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<Vec<DeptList>>,description ="去除传入id的部门列表")
+        (status = 200,body=ResObj<Vec<DeptList>>,description ="去除传入id部门的部门列表")
     ),
 )]
 pub async fn get_dept_list_exclude_id(id:PathParam<i64>)->Res<Vec<DeptList>>{
@@ -66,7 +66,18 @@ pub async fn put_edit_dept(payload:JsonBody<DeptModifyPayload>,depot:&mut Depot)
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<Option<DeptList>>,description ="修改部门")
+        (status = 200,body=ResObj<()>,description ="删除部门")
+    ),
+)]
+pub async fn del_dept_by_id(id:PathParam<String>)->Res<()>{
+    match_no_res_ok(dept_service::del_dept_by_id(
+        id.into_inner()
+    ).await)
+}
+
+#[endpoint(
+    responses(
+        (status = 200,body=ResObj<Option<DeptList>>,description ="部门详情")
     ),
 )]
 pub async fn get_dept_by_id(id:PathParam<i64>)->Res<Option<DeptList>>{

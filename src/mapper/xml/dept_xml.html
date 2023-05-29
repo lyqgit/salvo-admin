@@ -37,4 +37,10 @@
             `dept_id = #{dept_id}`
         </where>
     </select>
+    <delete id="del_dept_by_id">
+        `delete from sys_dept`
+        <where>
+            `dept_id = ( ${dept_id} )`
+        </where>
+    </delete>
 </mapper>
