@@ -16,7 +16,7 @@ pub fn init_router()->Router{
             Router::with_path("/system/dict/data/<id>").delete(dict_controller::del_dict_type_data).get(dict_controller::get_dict_type_data_by_id)
         )
         .push(
-            Router::with_path("/system/dict/data/type/<type>").get(dict_controller::get_dict_list_by_type)
+            Router::with_path("/system/dict/data/type/<type_id>").get(dict_controller::get_dict_list_by_type)
         )
         .push(
             Router::with_path("/system/dict/type/optionselect").get(dict_controller::get_all_dict_type)

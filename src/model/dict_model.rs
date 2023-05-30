@@ -145,6 +145,7 @@ impl From<AddSysDictDataVo> for SysDictDataEntity{
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
+#[parameters(rename_all="camelCase")]
 pub struct DictDataDetail{
   pub id:i64,
 }

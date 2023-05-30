@@ -1,4 +1,4 @@
-use salvo::oapi::extract::{JsonBody};
+use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::Depot;
 use salvo::{oapi::endpoint, Request};
 use crate::entity::sys_dict_data_entity::SysDictData;
@@ -38,8 +38,8 @@ pub async fn get_dict_list(req:&mut Request)->Res<Page<SysDictType>>{
     (status = 200,body=ResObj<Vec<SysDictData>>,description ="根据类型获取字典数据列表")
   ),
 )]
-pub async fn get_dict_list_by_type(req:&mut Request)->Res<Vec<SysDictData>>{
-  let code = req.param::<&str>("type").map_or("", |v|v);
+pub async fn get_dict_list_by_type(type_id:PathParam<Option<&str>>)->Res<Vec<SysDictData>>{
+  let code = type_id.into_inner().map_or("", |v|v);
   match dict_service::get_dict_data_by_type(code).await {
     Ok(v)=>{
       Ok(res_json_ok(Some(v)))
@@ -55,8 +55,8 @@ pub async fn get_dict_list_by_type(req:&mut Request)->Res<Vec<SysDictData>>{
     (status = 200,body=ResObj<Option<SysDictType>>,description ="根据id获取字典类型数据")
   ),
 )]
-pub async fn get_dict_by_id(req:&mut Request)->Res<Option<SysDictType>>{
-  let code = req.param::<i64>("id").map_or(0, |v|v);
+pub async fn get_dict_by_id(id:PathParam<Option<i64>>)->Res<Option<SysDictType>>{
+  let code = id.into_inner().map_or(0, |v|v);
   println!("获取参数{}",code);
   match dict_service::get_dict_by_id(code).await {
     Ok(v)=>{
@@ -142,8 +142,8 @@ pub async fn edit_dict_type(dict:JsonBody<ModifySysDictType>,depot:&mut Depot)->
     (status = 200,body=ResObj<()>,description ="删除字典类型")
   )
 )]
-pub async fn del_dict_type(req:&mut Request)->Res<()>{
-  let code = req.param::<&str>("id").map_or("", |v|v);
+pub async fn del_dict_type(id:PathParam<Option<&str>>)->Res<()>{
+  let code = id.into_inner().map_or("", |v|v);
   let code = code.split(",").collect::<Vec<&str>>();
   if code.len() == 0{
     return Err(res_json_custom(400,"缺少参数".to_string()));
@@ -209,8 +209,8 @@ pub async fn post_add_dict_data(payload:JsonBody<AddSysDictDataVo>,depot:&mut De
     (status = 200,body=ResObj<()>,description ="删除字典类型数据")
   )
 )]
-pub async fn del_dict_type_data(req:&mut Request)->Res<()>{
-  let code = req.param::<&str>("id").map_or("", |v|v);
+pub async fn del_dict_type_data(id:PathParam<Option<&str>>)->Res<()>{
+  let code = id.into_inner().map_or("", |v|v);
   let code = code.split(",").collect::<Vec<&str>>();
   if code.len() == 0{
     return Err(res_json_custom(400,"缺少参数".to_string()));
