@@ -99,7 +99,10 @@ pub struct SysUserListPayload{
 pub struct SysUserDetail{
   pub posts:Vec<SysPostList>,
   pub roles:Vec<SysRoleList>,
+  #[serde(skip_serializing_if = "Option::is_none")]
   pub post_ids:Option<Vec<i64>>,
+  #[serde(skip_serializing_if = "Option::is_none")]
   pub role_ids:Option<Vec<i64>>,
+  #[serde(skip_serializing_if = "Option::is_none")]
   pub user:Option<SysUserList>
 }

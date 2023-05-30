@@ -175,3 +175,12 @@ pub async fn get_user_page(req:&mut Request)->Res<Page<SysUserList>>{
 pub async fn get_user_detail(id:PathParam<Option<i64>>)->Res<SysUserDetail>{
   match_ok(user_service::get_detail_by_id(id.into_inner()).await)
 }
+
+#[endpoint(
+  responses(
+    (status = 200,body=ResObj<SysUserDetail>,description ="获取部门和角色列表")
+  ),
+)]
+pub async fn get_dept_and_role()->Res<SysUserDetail>{
+  match_ok(user_service::get_detail_by_id(None).await)
+}

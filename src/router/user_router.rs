@@ -31,4 +31,7 @@ pub fn init_router_no_token()->Router{
     .push(
         Router::with_path("/system/user/<id>").get(user_controller::get_user_detail)
     )
+    .push(
+        Router::with_path("/system/user/").get(user_controller::get_dept_and_role)
+    )
 }

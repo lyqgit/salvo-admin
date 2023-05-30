@@ -559,8 +559,8 @@ function cancel() {
 function handleAdd() {
   reset();
   getUser().then(response => {
-    postOptions.value = response.posts;
-    roleOptions.value = response.roles;
+    postOptions.value = response.data.posts;
+    roleOptions.value = response.data.roles;
     open.value = true;
     title.value = "添加用户";
     form.value.password = initPassword.value;
