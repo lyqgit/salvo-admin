@@ -3,8 +3,8 @@ use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{oapi::endpoint};
-use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserDetail, SysUserList, SysUserListPayload, UserInfo};
-use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok};
+use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserChangeStatusPayload, SysUserDetail, SysUserList, SysUserListPayload, UserInfo};
+use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok, match_no_res_ok};
 use uuid::Uuid;
 use crate::model::common_model::Page;
 use crate::service::user_service::{get_user_by_up,get_user_by_id};
@@ -183,4 +183,13 @@ pub async fn get_user_detail(id:PathParam<Option<i64>>)->Res<SysUserDetail>{
 )]
 pub async fn get_dept_and_role()->Res<SysUserDetail>{
   match_ok(user_service::get_detail_by_id(None).await)
+}
+
+#[endpoint(
+  responses(
+    (status = 200,body=ResObj<()>,description ="修改用户状态")
+  ),
+)]
+pub async fn put_change_status_by_id(payload:JsonBody<SysUserChangeStatusPayload>)->Res<()>{
+  match_no_res_ok(user_service::update_user_status_by_id(payload.status.clone(),payload.user_id).await)
 }

@@ -2,6 +2,7 @@ use crate::entity::sys_user_entity::SysUser;
 use rbatis::{crud, html_sql, impl_select};
 use rbatis::executor::Executor;
 use rbatis::rbdc::datetime::DateTime;
+use rbatis::rbdc::db::ExecResult;
 use crate::model::user_model::SysUserList;
 
 crud!(SysUser{},"sys_user");
@@ -20,5 +21,10 @@ pub async fn get_user_count(rb: &mut dyn Executor,user_name:Option<String>,phone
 
 #[html_sql("src/mapper/xml/user_xml.html")]
 pub async fn get_user_by_id(rb: &mut dyn Executor,user_id:Option<i64>)->rbatis::Result<Vec<SysUserList>>{
+    impled!()
+}
+
+#[html_sql("src/mapper/xml/user_xml.html")]
+pub async fn update_user_status_by_id(rb: &mut dyn Executor,status:String,user_id:i64)->rbatis::Result<ExecResult>{
     impled!()
 }

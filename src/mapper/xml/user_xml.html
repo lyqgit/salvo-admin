@@ -51,4 +51,7 @@
             `user_id = #{user_id}`
         </where>
     </select>
+    <update id="update_user_status_by_id">
+        `update sys_user set status = #{status} where user_id = #{user_id}`
+    </update>
 </mapper>

@@ -9,6 +9,7 @@ use crate::mapper::{post_mapper, role_mapper, user_mapper};
 use crate::model::common_model::Page;
 use crate::model::user_model::{SysUserDetail, SysUserList};
 use crate::service::dept_service;
+use crate::utils::func;
 use crate::utils::func::{create_page, create_page_list};
 
 pub async fn get_user_by_up(username:String,password:String)->rbatis::Result<Option<SysUser>>{
@@ -44,7 +45,7 @@ pub async fn get_user_page(page_num:u64,page_size:u64,user_name:Option<String>,p
 }
 
 pub async fn get_detail_by_id(user_id:Option<i64>)->rbatis::Result<SysUserDetail>{
-  let role_list = role_mapper::select_roles_list(&mut GLOBAL_DB.clone()).await?;
+  let role_list = role_mapper::select_roles_list_flag_and_status(&mut GLOBAL_DB.clone()).await?;
   let post_list = post_mapper::get_post_list(&mut GLOBAL_DB.clone()).await?;
   if user_id.is_some(){
     let user = user_mapper::get_user_by_id(&mut GLOBAL_DB.clone(),user_id).await?;
@@ -75,4 +76,9 @@ pub async fn get_detail_by_id(user_id:Option<i64>)->rbatis::Result<SysUserDetail
       user:None,
     })
   }
+}
+
+pub async fn update_user_status_by_id(status:String,user_id:i64)->rbatis::Result<bool>{
+  let rows = user_mapper::update_user_status_by_id(&mut GLOBAL_DB.clone(),status,user_id).await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
 }

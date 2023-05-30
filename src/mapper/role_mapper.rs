@@ -39,4 +39,9 @@ pub async fn select_roles_list(rb: &mut dyn Executor)->rbatis::Result<Vec<SysRol
   impled!()
 }
 
+#[html_sql("src/mapper/xml/role_xml.html")]
+pub async fn select_roles_list_flag_and_status(rb: &mut dyn Executor)->rbatis::Result<Vec<SysRoleList>>{
+  impled!()
+}
+
 crud!(SysRole{});

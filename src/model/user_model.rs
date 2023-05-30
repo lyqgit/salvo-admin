@@ -106,3 +106,11 @@ pub struct SysUserDetail{
   #[serde(skip_serializing_if = "Option::is_none")]
   pub user:Option<SysUserList>
 }
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[schema(rename_all="camelCase")]
+#[serde(rename_all(deserialize = "camelCase"))]
+pub struct SysUserChangeStatusPayload{
+  pub status:String,
+  pub user_id:i64,
+}
