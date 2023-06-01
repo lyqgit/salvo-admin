@@ -1,5 +1,5 @@
 use rbatis::rbdc::datetime::DateTime;
-use crate::entity::sys_user_entity::SysUser;
+use crate::entity::sys_user_entity::{SysUser, SysUserEntity};
 use crate::entity::sys_captcha_entity::SysCaptcha;
 use crate::GLOBAL_DB;
 use rbatis::rbdc::Error;
@@ -80,5 +80,71 @@ pub async fn get_detail_by_id(user_id:Option<i64>)->rbatis::Result<SysUserDetail
 
 pub async fn update_user_status_by_id(status:String,user_id:i64)->rbatis::Result<bool>{
   let rows = user_mapper::update_user_status_by_id(&mut GLOBAL_DB.clone(),status,user_id).await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
+}
+
+pub async fn add_user(
+  user_id:i32,
+  dept_id:Option<i64>,
+  email:Option<String>,
+  nick_name:String,
+  user_name:String,
+  password:String,
+  status:Option<String>,
+  sex:Option<String>,
+  phone_number:Option<String>,
+  post_ids:Vec<i64>,
+  role_ids:Vec<i64>,
+)->rbatis::Result<bool>{
+  let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", user_id).await?;
+  let user = user.get(0).unwrap();
+  let user_entity = SysUserEntity{
+    user_id: None,
+    dept_id,
+    user_name: Some(user_name),
+    nick_name: Some(nick_name),
+    user_type: None,
+    email,
+    phone_number,
+    sex,
+    avatar: None,
+    password: Some(password),
+    status,
+    del_flag: Some("0".to_string()),
+    login_ip: None,
+    login_date: None,
+    create_by: Some(user.user_name.clone()),
+    create_time: Some(DateTime::now()),
+    update_by: None,
+    update_time: None,
+    remark: None,
+    real_name: None,
+    expire_time: None,
+  };
+  let mut tx = GLOBAL_DB.acquire_begin().await?;
+
+  let mut rows = SysUserEntity::insert(&mut GLOBAL_DB.clone(),&user_entity).await?;
+  let new_user_id = rows.last_insert_id.as_i64().unwrap();
+  let mut user_post_arr:Vec<SysUserPostEntity> = Vec::new();
+  for(_,it) in post_ids.iter().enumerate(){
+    user_post_arr.push(
+      SysUserPostEntity{ user_id: new_user_id, post_id: it.clone() }
+    )
+  }
+  if user_post_arr.len()>0{
+    rows = SysUserPostEntity::insert_batch(&mut GLOBAL_DB.clone(), &user_post_arr, user_post_arr.len() as u64).await?;
+  }
+  let mut user_role_arr:Vec<SysUserRoleEntity> = Vec::new();
+  for(_,it) in role_ids.iter().enumerate(){
+    user_role_arr.push(
+      SysUserRoleEntity{ user_id: new_user_id, role_id: it.clone() }
+    )
+  }
+  if user_role_arr.len()>0{
+    rows = SysUserRoleEntity::insert_batch(&mut GLOBAL_DB.clone(), &user_role_arr, user_role_arr.len() as u64).await?;
+  }
+
+  tx.commit().await?;
+  tx.rollback().await?;
   Ok(func::is_modify_ok(rows.rows_affected))
 }

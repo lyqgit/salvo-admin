@@ -114,3 +114,20 @@ pub struct SysUserChangeStatusPayload{
   pub status:String,
   pub user_id:i64,
 }
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[schema(rename_all="camelCase")]
+#[serde(rename_all(deserialize = "camelCase"))]
+pub struct SysUserModifyPayload{
+  pub dept_id:Option<i64>,
+  pub email:Option<String>,
+  #[serde(rename(deserialize = "phonenumber"))]
+  pub phone_number:Option<String>,
+  pub nick_name:String,
+  pub user_name:String,
+  pub password:String,
+  pub post_ids:Vec<i64>,
+  pub role_ids:Vec<i64>,
+  pub sex:Option<String>,
+  pub status:Option<String>,
+}

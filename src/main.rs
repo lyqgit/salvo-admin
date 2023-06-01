@@ -30,6 +30,6 @@ async fn main() {
     let service = router::init_service();
 
     Server::new(
-        TcpListener::new("0.0.0.0:8080").bind().await
+        TcpListener::new("0.0.0.0:8090").bind().await
     ).serve(service).await;
 }

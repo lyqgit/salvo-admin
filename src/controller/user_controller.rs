@@ -3,7 +3,7 @@ use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{oapi::endpoint};
-use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserChangeStatusPayload, SysUserDetail, SysUserList, SysUserListPayload, UserInfo};
+use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserChangeStatusPayload, SysUserDetail, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
 use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok, match_no_res_ok};
 use uuid::Uuid;
 use crate::model::common_model::Page;
@@ -192,4 +192,27 @@ pub async fn get_dept_and_role()->Res<SysUserDetail>{
 )]
 pub async fn put_change_status_by_id(payload:JsonBody<SysUserChangeStatusPayload>)->Res<()>{
   match_no_res_ok(user_service::update_user_status_by_id(payload.status.clone(),payload.user_id).await)
+}
+
+#[endpoint(
+  responses(
+    (status = 200,body=ResObj<()>,description ="添加用户")
+  ),
+)]
+pub async fn post_add_user(payload:JsonBody<SysUserModifyPayload>,depot:&mut Depot)->Res<()>{
+  let user_id = depot.get::<i32>("userId").copied().unwrap();
+  match_no_res_ok(user_service::add_user(
+    user_id,
+    payload.dept_id,
+    payload.email.clone(),
+    payload.nick_name.clone(),
+    payload.user_name.clone(),
+    payload.password.clone(),
+    payload.status.clone(),
+    payload.sex.clone(),
+    payload.phone_number.clone(),
+    payload.post_ids.clone(),
+    payload.role_ids.clone()
+  ).await)
+
 }

@@ -12,6 +12,7 @@ pub async fn auth_token(req:&mut Request,res:&mut Response, ctrl: &mut FlowCtrl,
         res.render(res_json_custom::<()>(401,"token无效".to_string()));
       },
       Ok(user_id)=>{
+        println!("有token---{}",user_id);
         depot.insert("userId",user_id);
       }
     }

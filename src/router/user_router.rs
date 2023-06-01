@@ -8,20 +8,6 @@ pub fn init_router()->Router{
     ).push(
         Router::with_path("/getRouters").get(user_controller::get_routers)
     )
-}
-
-pub fn init_router_no_token()->Router{
-    let router = Router::new();
-    router.push(
-                // 验证码
-        Router::with_path("/captchaImage").get(user_controller::get_captcha)
-    ).push(
-                // 登录
-        Router::with_path("/login").post(user_controller::login)
-    ).push(
-                // 退出登录
-        Router::with_path("/logout").post(user_controller::log_out)
-    )
     .push(
         Router::with_path("/system/user/deptTree").get(dept_controller::get_dept_tree)
     )
@@ -37,4 +23,23 @@ pub fn init_router_no_token()->Router{
     .push(
         Router::with_path("/system/user/changeStatus").put(user_controller::put_change_status_by_id)
     )
+    .push(
+        Router::with_path("/system/user").post(user_controller::post_add_user)
+    )
+    .push(
+        // 退出登录
+        Router::with_path("/logout").post(user_controller::log_out)
+    )
+}
+
+pub fn init_router_no_token()->Router{
+    let router = Router::new();
+    router.push(
+                // 验证码
+        Router::with_path("/captchaImage").get(user_controller::get_captcha)
+    ).push(
+                // 登录
+        Router::with_path("/login").post(user_controller::login)
+    )
+
 }
