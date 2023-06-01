@@ -201,13 +201,15 @@ pub async fn put_change_status_by_id(payload:JsonBody<SysUserChangeStatusPayload
 )]
 pub async fn post_add_user(payload:JsonBody<SysUserModifyPayload>,depot:&mut Depot)->Res<()>{
   let user_id = depot.get::<i32>("userId").copied().unwrap();
+  let mut password = payload.password.clone();
+  password.push_str("salvo_admin");
   match_no_res_ok(user_service::add_user(
     user_id,
     payload.dept_id,
     payload.email.clone(),
     payload.nick_name.clone(),
     payload.user_name.clone(),
-    payload.password.clone(),
+    create_md5(password),
     payload.status.clone(),
     payload.sex.clone(),
     payload.phone_number.clone(),
