@@ -3,7 +3,7 @@ use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{oapi::endpoint};
-use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserChangeStatusPayload, SysUserDetail, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
+use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
 use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok, match_no_res_ok};
 use uuid::Uuid;
 use crate::model::common_model::Page;
@@ -178,6 +178,15 @@ pub async fn get_user_detail(id:PathParam<Option<i64>>)->Res<SysUserDetail>{
 
 #[endpoint(
   responses(
+    (status = 200,body=ResObj<()>,description ="删除")
+  ),
+)]
+pub async fn del_user(id:PathParam<i64>)->Res<()>{
+  match_no_res_ok(user_service::del_user(id.into_inner()).await)
+}
+
+#[endpoint(
+  responses(
     (status = 200,body=ResObj<SysUserDetail>,description ="获取部门和角色列表")
   ),
 )]
@@ -214,7 +223,29 @@ pub async fn post_add_user(payload:JsonBody<SysUserModifyPayload>,depot:&mut Dep
     payload.sex.clone(),
     payload.phone_number.clone(),
     payload.post_ids.clone(),
-    payload.role_ids.clone()
+    payload.role_ids.clone(),
+    payload.remark.clone()
   ).await)
+}
 
+#[endpoint(
+  responses(
+    (status = 200,body=ResObj<()>,description ="修改用户")
+  ),
+)]
+pub async fn put_edit_user(payload:JsonBody<SysUserEditPayload>,depot:&mut Depot)->Res<()>{
+  let user_id = depot.get::<i32>("userId").copied().unwrap();
+  match_no_res_ok(user_service::edit_user(
+    user_id,
+    payload.user_id,
+    payload.dept_id,
+    payload.email.clone(),
+    payload.nick_name.clone(),
+    payload.status.clone(),
+    payload.sex.clone(),
+    payload.phone_number.clone(),
+    payload.post_ids.clone(),
+    payload.role_ids.clone(),
+    payload.remark.clone()
+  ).await)
 }

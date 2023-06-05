@@ -15,7 +15,7 @@ pub fn init_router()->Router{
         Router::with_path("/system/user/list").get(user_controller::get_user_page)
     )
     .push(
-        Router::with_path("/system/user/<id>").get(user_controller::get_user_detail)
+        Router::with_path("/system/user/<id>").get(user_controller::get_user_detail).delete(user_controller::del_user)
     )
     .push(
         Router::with_path("/system/user/").get(user_controller::get_dept_and_role)
@@ -24,7 +24,7 @@ pub fn init_router()->Router{
         Router::with_path("/system/user/changeStatus").put(user_controller::put_change_status_by_id)
     )
     .push(
-        Router::with_path("/system/user").post(user_controller::post_add_user)
+        Router::with_path("/system/user").post(user_controller::post_add_user).put(user_controller::put_edit_user)
     )
     .push(
         // 退出登录

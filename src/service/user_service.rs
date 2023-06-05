@@ -95,6 +95,7 @@ pub async fn add_user(
   phone_number:Option<String>,
   post_ids:Vec<i64>,
   role_ids:Vec<i64>,
+  remark:Option<String>,
 )->rbatis::Result<bool>{
   let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", user_id).await?;
   let user = user.get(0).unwrap();
@@ -117,7 +118,7 @@ pub async fn add_user(
     create_time: Some(DateTime::now()),
     update_by: None,
     update_time: None,
-    remark: None,
+    remark,
     real_name: None,
     expire_time: None,
   };
@@ -146,5 +147,80 @@ pub async fn add_user(
 
   tx.commit().await?;
   tx.rollback().await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
+}
+
+
+
+pub async fn edit_user(
+  handle_user_id:i32,
+  user_id:Option<i64>,
+  dept_id:Option<i64>,
+  email:Option<String>,
+  nick_name:String,
+  status:Option<String>,
+  sex:Option<String>,
+  phone_number:Option<String>,
+  post_ids:Vec<i64>,
+  role_ids:Vec<i64>,
+  remark:Option<String>,
+)->rbatis::Result<bool>{
+  let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", handle_user_id).await?;
+  let user = user.get(0).unwrap();
+  let user_entity = SysUserEntity{
+    user_id,
+    dept_id,
+    user_name: None,
+    nick_name: Some(nick_name),
+    user_type: None,
+    email,
+    phone_number,
+    sex,
+    avatar: None,
+    password: None,
+    status,
+    del_flag: None,
+    login_ip: None,
+    login_date: None,
+    create_by: None,
+    create_time: None,
+    update_by: Some(user.user_name.clone()),
+    update_time: Some(DateTime::now()),
+    remark,
+    real_name: None,
+    expire_time: None,
+  };
+  let mut tx = GLOBAL_DB.acquire_begin().await?;
+
+  let mut rows = SysUserEntity::update_by_column(&mut GLOBAL_DB.clone(),&user_entity,"user_id").await?;
+  let new_user_id = rows.last_insert_id.as_i64().unwrap();
+  let mut user_post_arr:Vec<SysUserPostEntity> = Vec::new();
+  for(_,it) in post_ids.iter().enumerate(){
+    user_post_arr.push(
+      SysUserPostEntity{ user_id: new_user_id, post_id: it.clone() }
+    )
+  }
+  if user_post_arr.len()>0{
+    SysUserPostEntity::delete_by_column(&mut GLOBAL_DB.clone(),"user_id",user_id).await?;
+    rows = SysUserPostEntity::insert_batch(&mut GLOBAL_DB.clone(), &user_post_arr, user_post_arr.len() as u64).await?;
+  }
+  let mut user_role_arr:Vec<SysUserRoleEntity> = Vec::new();
+  for(_,it) in role_ids.iter().enumerate(){
+    user_role_arr.push(
+      SysUserRoleEntity{ user_id: new_user_id, role_id: it.clone() }
+    )
+  }
+  if user_role_arr.len()>0{
+    SysUserRoleEntity::delete_by_column(&mut GLOBAL_DB.clone(),"user_id",user_id).await?;
+    rows = SysUserRoleEntity::insert_batch(&mut GLOBAL_DB.clone(), &user_role_arr, user_role_arr.len() as u64).await?;
+  }
+
+  tx.commit().await?;
+  tx.rollback().await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
+}
+
+pub async fn del_user(user_id:i64)->rbatis::Result<bool>{
+  let rows = SysUserEntity::delete_by_column(&mut GLOBAL_DB.clone(),"user_id",user_id).await?;
   Ok(func::is_modify_ok(rows.rows_affected))
 }
