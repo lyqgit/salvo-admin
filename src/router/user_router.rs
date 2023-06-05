@@ -27,6 +27,9 @@ pub fn init_router()->Router{
         Router::with_path("/system/user").post(user_controller::post_add_user).put(user_controller::put_edit_user)
     )
     .push(
+        Router::with_path("/system/user/resetPwd").put(user_controller::update_user_pwd)
+    )
+    .push(
         // 退出登录
         Router::with_path("/logout").post(user_controller::log_out)
     )

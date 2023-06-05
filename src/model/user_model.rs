@@ -149,3 +149,11 @@ pub struct SysUserEditPayload{
   pub status:Option<String>,
   pub remark:Option<String>,
 }
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[schema(rename_all="camelCase")]
+#[serde(rename_all(deserialize = "camelCase"))]
+pub struct SysUserEditPwdPayload{
+  pub user_id:i64,
+  pub password:String,
+}

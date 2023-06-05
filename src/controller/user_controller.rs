@@ -3,7 +3,7 @@ use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{oapi::endpoint};
-use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
+use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserEditPwdPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
 use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok, match_no_res_ok};
 use uuid::Uuid;
 use crate::model::common_model::Page;
@@ -178,11 +178,23 @@ pub async fn get_user_detail(id:PathParam<Option<i64>>)->Res<SysUserDetail>{
 
 #[endpoint(
   responses(
-    (status = 200,body=ResObj<()>,description ="删除")
+    (status = 200,body=ResObj<()>,description ="删除用户")
   ),
 )]
 pub async fn del_user(id:PathParam<i64>)->Res<()>{
   match_no_res_ok(user_service::del_user(id.into_inner()).await)
+}
+
+#[endpoint(
+  responses(
+    (status = 200,body=ResObj<()>,description ="修改用户密码")
+  ),
+)]
+pub async fn update_user_pwd(payload:JsonBody<SysUserEditPwdPayload>)->Res<()>{
+  match_no_res_ok(user_service::update_user_pwd(
+    payload.user_id,
+    create_md5(payload.password.clone())
+  ).await)
 }
 
 #[endpoint(

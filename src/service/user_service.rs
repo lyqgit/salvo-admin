@@ -224,3 +224,31 @@ pub async fn del_user(user_id:i64)->rbatis::Result<bool>{
   let rows = SysUserEntity::delete_by_column(&mut GLOBAL_DB.clone(),"user_id",user_id).await?;
   Ok(func::is_modify_ok(rows.rows_affected))
 }
+
+pub async fn update_user_pwd(user_id:i64,password:String)->rbatis::Result<bool>{
+  let sys_user_entity = SysUserEntity{
+    user_id: Some(user_id),
+    dept_id: None,
+    user_name: None,
+    nick_name: None,
+    user_type: None,
+    email: None,
+    phone_number: None,
+    sex: None,
+    avatar: None,
+    password: Some(password),
+    status: None,
+    del_flag: None,
+    login_ip: None,
+    login_date: None,
+    create_by: None,
+    create_time: None,
+    update_by: None,
+    update_time: None,
+    remark: None,
+    real_name: None,
+    expire_time: None,
+  };
+  let rows = SysUserEntity::update_by_column(&mut GLOBAL_DB.clone(),&sys_user_entity,"user_id").await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
+}
