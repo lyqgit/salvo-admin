@@ -3,7 +3,7 @@ use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{oapi::endpoint};
-use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserEditPwdPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
+use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserAuthRole, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserEditPwdPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
 use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok, match_no_res_ok};
 use uuid::Uuid;
 use crate::model::common_model::Page;
@@ -260,4 +260,13 @@ pub async fn put_edit_user(payload:JsonBody<SysUserEditPayload>,depot:&mut Depot
     payload.role_ids.clone(),
     payload.remark.clone()
   ).await)
+}
+
+#[endpoint(
+  responses(
+    (status = 200,body=ResObj<SysUserAuthRole>,description ="查询用户详情和角色列表")
+  ),
+)]
+pub async fn get_user_auth_role_by_id(id:PathParam<i64>)->Res<SysUserAuthRole>{
+  match_ok(user_service::get_user_auth_role_by_id(id.into_inner()).await)
 }

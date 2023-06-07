@@ -7,7 +7,7 @@ use crate::entity::sys_user_post_entity::SysUserPostEntity;
 use crate::entity::sys_user_role_entity::SysUserRoleEntity;
 use crate::mapper::{post_mapper, role_mapper, user_mapper};
 use crate::model::common_model::Page;
-use crate::model::user_model::{SysUserDetail, SysUserList};
+use crate::model::user_model::{SysUserAuthRole, SysUserDetail, SysUserList};
 use crate::service::dept_service;
 use crate::utils::func;
 use crate::utils::func::{create_page, create_page_list};
@@ -251,4 +251,15 @@ pub async fn update_user_pwd(user_id:i64,password:String)->rbatis::Result<bool>{
   };
   let rows = SysUserEntity::update_by_column(&mut GLOBAL_DB.clone(),&sys_user_entity,"user_id").await?;
   Ok(func::is_modify_ok(rows.rows_affected))
+}
+
+pub async fn get_user_auth_role_by_id(user_id:i64)->rbatis::Result<SysUserAuthRole>{
+  let user = user_mapper::get_user_by_id(&mut GLOBAL_DB.clone(),Some(user_id)).await?;
+  let user = user.get(0).cloned();
+  let roles = role_mapper::select_roles_list(&mut GLOBAL_DB.clone()).await?;
+  let sys_user_auth_role = SysUserAuthRole{
+    user,
+    roles
+  };
+  Ok(sys_user_auth_role)
 }
