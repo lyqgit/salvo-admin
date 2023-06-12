@@ -21,8 +21,8 @@ cd salvo-admin
 # 启动后端服务
 cargo run
 
-# 后端访问地址 http://localhost:8080
-# 后端文档访问地址 http://localhost:8080/swagger-ui
+# 后端访问地址 http://localhost:8090
+# 后端文档访问地址 http://localhost:8090/swagger-ui
 
 # 进入前台项目目录
 cd ui
