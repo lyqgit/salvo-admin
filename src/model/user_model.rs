@@ -5,7 +5,7 @@ use serde::{Serialize,Deserialize};
 use crate::entity::sys_user_entity::SysUser;
 use crate::model::dept_model::DeptList;
 use crate::model::post_model::SysPostList;
-use crate::model::role_model::SysRoleList;
+use crate::model::role_model::{SysRoleList, SysRoleListFlag};
 
 // 验证码返回
 #[derive(Serialize, Deserialize, Clone, Debug, ToSchema)]
@@ -163,5 +163,5 @@ pub struct SysUserEditPwdPayload{
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct SysUserAuthRole{
   pub user:Option<SysUserList>,
-  pub roles:Vec<SysRoleList>,
+  pub roles:Vec<SysRoleListFlag>,
 }

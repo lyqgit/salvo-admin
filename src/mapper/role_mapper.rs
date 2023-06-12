@@ -2,7 +2,7 @@ use rbatis::{html_sql, executor::Executor,crud};
 use rbatis::rbdc::datetime::DateTime;
 use rbatis::rbdc::db::ExecResult;
 use crate::entity::sys_role_entity::SysRole;
-use crate::model::role_model::SysRoleList;
+use crate::model::role_model::{SysRoleList, SysRoleListFlag};
 
 #[html_sql("src/mapper/xml/role_xml.html")]
 pub async fn select_roles_by_user_id(rb: &mut dyn Executor,id:i32)->rbatis::Result<Vec<SysRole>>{
@@ -41,6 +41,11 @@ pub async fn select_roles_list(rb: &mut dyn Executor)->rbatis::Result<Vec<SysRol
 
 #[html_sql("src/mapper/xml/role_xml.html")]
 pub async fn select_roles_list_flag_and_status(rb: &mut dyn Executor)->rbatis::Result<Vec<SysRoleList>>{
+  impled!()
+}
+
+#[html_sql("src/mapper/xml/role_xml.html")]
+pub async fn select_roles_list_and_is_flag(rb: &mut dyn Executor)->rbatis::Result<Vec<SysRoleListFlag>>{
   impled!()
 }
 

@@ -256,7 +256,16 @@ pub async fn update_user_pwd(user_id:i64,password:String)->rbatis::Result<bool>{
 pub async fn get_user_auth_role_by_id(user_id:i64)->rbatis::Result<SysUserAuthRole>{
   let user = user_mapper::get_user_by_id(&mut GLOBAL_DB.clone(),Some(user_id)).await?;
   let user = user.get(0).cloned();
-  let roles = role_mapper::select_roles_list(&mut GLOBAL_DB.clone()).await?;
+  let user_role_list = role_mapper::select_roles_by_user_id(&mut GLOBAL_DB.clone(), user_id as i32).await?;
+  let role_id_list:Vec<i64> = user_role_list.iter().map(|it|it.role_id).collect();
+  let mut roles = role_mapper::select_roles_list_and_is_flag(&mut GLOBAL_DB.clone()).await?;
+  for it in roles.iter_mut(){
+    if role_id_list.contains(&it.role_id.unwrap()){
+      it.flag = Some(true);
+    }
+
+  }
+
   let sys_user_auth_role = SysUserAuthRole{
     user,
     roles
