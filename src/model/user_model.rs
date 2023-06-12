@@ -165,3 +165,13 @@ pub struct SysUserAuthRole{
   pub user:Option<SysUserList>,
   pub roles:Vec<SysRoleListFlag>,
 }
+
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
+#[parameters(rename_all="camelCase")]
+#[serde(rename_all(deserialize = "camelCase"))]
+pub struct SysAuthPayload{
+  pub user_id:i64,
+  #[parameter(value_type = Option<String>)]
+  pub role_ids:Option<String>,
+}

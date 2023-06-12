@@ -35,6 +35,10 @@ pub fn init_router()->Router{
     )
     .push(
         // 退出登录
+        Router::with_path("/system/user/authRole").put(user_controller::add_user_and_role)
+    )
+    .push(
+        // 退出登录
         Router::with_path("/logout").post(user_controller::log_out)
     )
 }

@@ -272,3 +272,27 @@ pub async fn get_user_auth_role_by_id(user_id:i64)->rbatis::Result<SysUserAuthRo
   };
   Ok(sys_user_auth_role)
 }
+
+pub async fn add_user_and_role(user_id:i64,role_id:Option<Vec<i64>>)->rbatis::Result<bool>{
+  if role_id.is_some(){
+    let role_arr = role_id.unwrap();
+    let mut user_role_arr = Vec::<SysUserRoleEntity>::new();
+    for it in role_arr.iter(){
+      let user_role = SysUserRoleEntity{
+        user_id,
+        role_id:it.clone()
+      };
+      user_role_arr.push(user_role);
+    }
+    let mut tx = GLOBAL_DB.acquire_begin().await?;
+    SysUserRoleEntity::delete_by_column(&mut GLOBAL_DB.clone(),"user_id",user_id).await?;
+    let rows = SysUserRoleEntity::insert_batch(&mut GLOBAL_DB.clone(), &user_role_arr, user_role_arr.len() as u64).await?;
+    tx.commit().await.unwrap();
+    tx.rollback().await.unwrap();
+    Ok(func::is_modify_ok(rows.rows_affected))
+  }else{
+    let rows = SysUserRoleEntity::delete_by_column(&mut GLOBAL_DB.clone(),"user_id",user_id).await?;
+    Ok(func::is_modify_ok(rows.rows_affected))
+  }
+
+}

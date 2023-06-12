@@ -3,7 +3,7 @@ use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{oapi::endpoint};
-use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysUserAuthRole, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserEditPwdPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
+use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysAuthPayload, SysUserAuthRole, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserEditPwdPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
 use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok, match_no_res_ok};
 use uuid::Uuid;
 use crate::model::common_model::Page;
@@ -269,4 +269,28 @@ pub async fn put_edit_user(payload:JsonBody<SysUserEditPayload>,depot:&mut Depot
 )]
 pub async fn get_user_auth_role_by_id(id:PathParam<i64>)->Res<SysUserAuthRole>{
   match_ok(user_service::get_user_auth_role_by_id(id.into_inner()).await)
+}
+
+#[endpoint(
+  parameters(
+    SysAuthPayload
+  ),
+  responses(
+    (status = 200,body=ResObj<()>,description ="修改用户权限")
+  ),
+)]
+pub async fn add_user_and_role(req:&mut Request)->Res<()>{
+  let user_role:SysAuthPayload = req.parse_queries().unwrap();
+  let user_id = user_role.user_id;
+  match user_role.role_ids {
+    Some(v)=>{
+      let role_ids_str:Vec<&str> = v.split(",").collect::<Vec<&str>>();
+      let role_ids = role_ids_str.into_iter().map(|it|it.parse::<i64>().unwrap()).collect::<Vec<i64>>();
+          match_no_res_ok(user_service::add_user_and_role(user_id,Some(role_ids)).await)
+    },
+    None=>{
+      match_no_res_ok(user_service::add_user_and_role(user_id,None).await)
+    }
+  }
+
 }
