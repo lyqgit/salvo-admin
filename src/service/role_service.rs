@@ -165,7 +165,7 @@ pub async fn select_users_by_role_id(user_name:Option<String>,phone_number:Optio
   Ok(Page{rows:list,total})
 }
 
-pub async fn del_user_role_bind(user_id:i64,role_id:String)->rbatis::Result<bool>{
+pub async fn del_user_role_bind(user_id:String,role_id:i64)->rbatis::Result<bool>{
   let rows = user_role_mapper::del_by_role_and_user_id(&mut GLOBAL_DB.clone(),user_id,role_id).await?;
   Ok(func::is_modify_ok(rows.rows_affected))
 }

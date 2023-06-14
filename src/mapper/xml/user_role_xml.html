@@ -9,7 +9,7 @@
   <delete id="del_by_role_and_user_id">
     `delete from sys_user_role`
     <where>
-      `user_id = #{user_id} and role_id in ( ${role_id} )`
+      `user_id in ( ${user_id} ) and role_id = #{role_id}`
     </where>
   </delete>
 </mapper>

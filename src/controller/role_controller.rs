@@ -2,7 +2,7 @@ use salvo::oapi::endpoint;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{Depot, Request};
 use crate::model::common_model::Page;
-use crate::model::role_model::{SysRoleCancelUserPayload, SysRoleList, SysRoleModifyPayload, SysRolePagePayload, SysRoleStatusPayload, SysUserRolePagePayload};
+use crate::model::role_model::{SysRoleCancelUserPayload, SysRoleList, SysRoleModifyPayload, SysRolePagePayload, SysRoleStatusPayload, SysUserRoleCancelPayload, SysUserRolePagePayload};
 use crate::model::user_model::SysUserList;
 use crate::service::role_service;
 use crate::utils::res::{Res, match_ok, ResObj, match_no_res_ok};
@@ -114,7 +114,20 @@ pub async fn get_users_by_role_id_page(req:&mut Request)->Res<Page<SysUserList>>
 )]
 pub async fn del_user_role(payload:JsonBody<SysRoleCancelUserPayload>) -> Res<()> {
     match_no_res_ok(role_service::del_user_role_bind(
-        payload.user_id,
-        payload.role_id.clone()
+        payload.user_id.clone(),
+        payload.role_id
+    ).await)
+}
+
+#[endpoint(
+    responses(
+        (status = 200,body=ResObj<()>,description ="删除多个角色和用户绑定关系")
+    ),
+)]
+pub async fn del_user_role_all(req:&mut Request) -> Res<()> {
+    let payload:SysUserRoleCancelPayload = req.parse_queries().unwrap();
+    match_no_res_ok(role_service::del_user_role_bind(
+        payload.user_ids.clone(),
+        payload.role_id
     ).await)
 }
