@@ -107,3 +107,11 @@ pub struct SysUserRolePagePayload{
     pub page_num:Option<u64>,
     pub page_size:Option<u64>,
 }
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[serde(rename_all(deserialize ="camelCase"))]
+#[schema(rename_all="camelCase")]
+pub struct SysRoleCancelUserPayload{
+    pub role_id:String,
+    pub user_id:i64,
+}

@@ -1,5 +1,5 @@
 use rbatis::rbdc::datetime::DateTime;
-use crate::mapper::{role_mapper, role_menu_mapper};
+use crate::mapper::{role_mapper, role_menu_mapper, user_role_mapper};
 use crate::GLOBAL_DB;
 use crate::entity::sys_role_entity::SysRole;
 use crate::entity::sys_role_menu_entity::SysRoleMenuEntity;
@@ -163,4 +163,9 @@ pub async fn select_users_by_role_id(user_name:Option<String>,phone_number:Optio
   let list = role_mapper::select_roles_list_by_auth_id(&mut GLOBAL_DB.clone(),user_name.clone(),phone_number.clone(),role_id,num,size).await?;
   let total = role_mapper::select_count_roles_list_by_auth_id(&mut GLOBAL_DB.clone(),user_name,phone_number,role_id).await?;
   Ok(Page{rows:list,total})
+}
+
+pub async fn del_user_role_bind(user_id:i64,role_id:String)->rbatis::Result<bool>{
+  let rows = user_role_mapper::del_by_role_and_user_id(&mut GLOBAL_DB.clone(),user_id,role_id).await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
 }

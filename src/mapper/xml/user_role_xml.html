@@ -6,4 +6,10 @@
       `sr.del_flag = 0 and sr.status = 0 and sur.user_id = #{user_id}`
     </where>
   </select>
+  <delete id="del_by_role_and_user_id">
+    `delete from sys_user_role`
+    <where>
+      `user_id = #{user_id} and role_id in ( ${role_id} )`
+    </where>
+  </delete>
 </mapper>
