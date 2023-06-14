@@ -7,6 +7,7 @@ use crate::entity::sys_user_entity::SysUser;
 use crate::model::role_model::SysRoleList;
 use crate::utils::func;
 use crate::model::common_model::Page;
+use crate::model::user_model::SysUserList;
 use crate::utils::func::is_modify_ok;
 
 pub async fn get_roles_by_user_id(id:i32)->rbatis::Result<Vec<String>>{
@@ -155,4 +156,11 @@ pub async fn edit_role_and_bind_menu(
     Ok(func::is_modify_ok(row.rows_affected))
   }
 
+}
+
+pub async fn select_users_by_role_id(user_name:Option<String>,phone_number:Option<String>,role_id:i64,page_num:u64,page_size:u64)->rbatis::Result<Page<SysUserList>>{
+  let (num,size) = func::create_page(page_num,page_size);
+  let list = role_mapper::select_roles_list_by_auth_id(&mut GLOBAL_DB.clone(),user_name.clone(),phone_number.clone(),role_id,num,size).await?;
+  let total = role_mapper::select_count_roles_list_by_auth_id(&mut GLOBAL_DB.clone(),user_name,phone_number,role_id).await?;
+  Ok(Page{rows:list,total})
 }

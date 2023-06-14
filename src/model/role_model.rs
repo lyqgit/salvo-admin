@@ -91,3 +91,19 @@ pub struct SysRoleStatusPayload{
     pub role_id:i64,
     pub status:String,
 }
+
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
+#[parameters(rename_all="camelCase")]
+#[serde(rename_all(deserialize = "camelCase"))]
+#[parameters(parameter_in = Query)]
+pub struct SysUserRolePagePayload{
+    pub role_id:i64,
+    #[serde(rename(deserialize = "phonenumber"))]
+    #[parameters(value_type=Option<String>)]
+    pub phone_number:Option<String>,
+    #[parameters(value_type=Option<String>)]
+    pub user_name:Option<String>,
+    pub page_num:Option<u64>,
+    pub page_size:Option<u64>,
+}

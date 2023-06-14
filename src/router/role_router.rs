@@ -15,4 +15,7 @@ pub fn init_router()->Router{
         .push(
             Router::with_path("/system/role/<id>").delete(role_controller::del_role_by_id).get(role_controller::get_role_by_id)
         )
+        .push(
+            Router::with_path("/system/role/authUser/allocatedList").get(role_controller::get_users_by_role_id_page)
+        )
 }

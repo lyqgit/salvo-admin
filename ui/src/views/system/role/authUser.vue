@@ -118,8 +118,8 @@ const queryParams = reactive({
 function getList() {
   loading.value = true;
   allocatedUserList(queryParams).then(response => {
-    userList.value = response.rows;
-    total.value = response.total;
+    userList.value = response.data.rows;
+    total.value = response.data.total;
     loading.value = false;
   });
 }

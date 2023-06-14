@@ -2,7 +2,8 @@ use salvo::oapi::endpoint;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{Depot, Request};
 use crate::model::common_model::Page;
-use crate::model::role_model::{SysRoleList, SysRoleModifyPayload, SysRolePagePayload, SysRoleStatusPayload};
+use crate::model::role_model::{SysRoleList, SysRoleModifyPayload, SysRolePagePayload, SysRoleStatusPayload, SysUserRolePagePayload};
+use crate::model::user_model::SysUserList;
 use crate::service::role_service;
 use crate::utils::res::{Res, match_ok, ResObj, match_no_res_ok};
 
@@ -89,4 +90,18 @@ pub async fn put_edit_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut De
         payload.remark,
         payload.role_id.unwrap()
     ).await)
+}
+
+
+#[endpoint(
+    parameters(
+        SysUserRolePagePayload
+    ),
+    responses(
+        (status = 200,body=ResObj<Page<SysUserList>>,description ="根据角色id获取用户列表")
+    ),
+)]
+pub async fn get_users_by_role_id_page(req:&mut Request)->Res<Page<SysUserList>>{
+    let payload:SysUserRolePagePayload = req.parse_queries().unwrap();
+    match_ok(role_service::select_users_by_role_id(payload.user_name,payload.phone_number,payload.role_id,payload.page_num.map_or(1,|v|v),payload.page_size.map_or(10,|v|v),).await)
 }
