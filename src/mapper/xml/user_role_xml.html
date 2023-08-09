@@ -12,4 +12,10 @@
       `user_id in ( ${user_id} ) and role_id = #{role_id}`
     </where>
   </delete>
+  <delete id="del_by_role_and_user_id_more">
+    `delete from sys_user_role`
+    <where>
+      `user_id in ( ${user_id} ) and role_id = #{role_id}`
+    </where>
+  </delete>
 </mapper>

@@ -127,8 +127,8 @@ pub async fn get_users_by_not_in_role_id_page(req:&mut Request)->Res<Page<SysUse
 )]
 pub async fn del_user_role(payload:JsonBody<SysRoleCancelUserPayload>) -> Res<()> {
     match_no_res_ok(role_service::del_user_role_bind(
-        payload.user_id.clone(),
-        payload.role_id
+        payload.user_id,
+        payload.role_id.clone()
     ).await)
 }
 
@@ -139,7 +139,7 @@ pub async fn del_user_role(payload:JsonBody<SysRoleCancelUserPayload>) -> Res<()
 )]
 pub async fn del_user_role_all(req:&mut Request) -> Res<()> {
     let payload:SysUserRoleCancelPayload = req.parse_queries().unwrap();
-    match_no_res_ok(role_service::del_user_role_bind(
+    match_no_res_ok(role_service::del_user_role_bind_more(
         payload.user_ids.clone(),
         payload.role_id
     ).await)

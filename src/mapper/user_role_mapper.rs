@@ -11,6 +11,11 @@ pub async fn select_role_id_by_user_id(rb: &mut dyn Executor,user_id:i64)->rbati
 }
 
 #[html_sql("src/mapper/xml/user_role_xml.html")]
-pub async fn del_by_role_and_user_id(rb: &mut dyn Executor,user_id:String,role_id:i64)->rbatis::Result<ExecResult>{
+pub async fn del_by_role_and_user_id(rb: &mut dyn Executor,user_id:i64,role_id:String)->rbatis::Result<ExecResult>{
+    impled!()
+}
+
+#[html_sql("src/mapper/xml/user_role_xml.html")]
+pub async fn del_by_role_and_user_id_more(rb: &mut dyn Executor,user_id:String,role_id:i64)->rbatis::Result<ExecResult>{
     impled!()
 }

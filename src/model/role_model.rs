@@ -112,8 +112,8 @@ pub struct SysUserRolePagePayload{
 #[serde(rename_all(deserialize ="camelCase"))]
 #[schema(rename_all="camelCase")]
 pub struct SysRoleCancelUserPayload{
-    pub role_id:i64,
-    pub user_id:String,
+    pub role_id:String,
+    pub user_id:i64,
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
