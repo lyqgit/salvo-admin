@@ -106,6 +106,19 @@ pub async fn get_users_by_role_id_page(req:&mut Request)->Res<Page<SysUserList>>
     match_ok(role_service::select_users_by_role_id(payload.user_name,payload.phone_number,payload.role_id,payload.page_num.map_or(1,|v|v),payload.page_size.map_or(10,|v|v),).await)
 }
 
+#[endpoint(
+    parameters(
+        SysUserRolePagePayload
+    ),
+    responses(
+        (status = 200,body=ResObj<Page<SysUserList>>,description ="根据角色id获取非此角色的用户列表")
+    ),
+)]
+pub async fn get_users_by_not_in_role_id_page(req:&mut Request)->Res<Page<SysUserList>>{
+    let payload:SysUserRolePagePayload = req.parse_queries().unwrap();
+    match_ok(role_service::select_users_not_in_role_id(payload.user_name,payload.phone_number,payload.role_id,payload.page_num.map_or(1,|v|v),payload.page_size.map_or(10,|v|v),).await)
+}
+
 
 #[endpoint(
     responses(

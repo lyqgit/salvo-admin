@@ -165,6 +165,13 @@ pub async fn select_users_by_role_id(user_name:Option<String>,phone_number:Optio
   Ok(Page{rows:list,total})
 }
 
+pub async fn select_users_not_in_role_id(user_name:Option<String>,phone_number:Option<String>,role_id:i64,page_num:u64,page_size:u64)->rbatis::Result<Page<SysUserList>>{
+  let (num,size) = func::create_page(page_num,page_size);
+  let list = role_mapper::select_roles_list_not_in_role_id(&mut GLOBAL_DB.clone(),user_name.clone(),phone_number.clone(),role_id,num,size).await?;
+  let total = role_mapper::select_count_roles_list_not_in_role_id(&mut GLOBAL_DB.clone(),user_name,phone_number,role_id).await?;
+  Ok(Page{rows:list,total})
+}
+
 pub async fn del_user_role_bind(user_id:String,role_id:i64)->rbatis::Result<bool>{
   let rows = user_role_mapper::del_by_role_and_user_id(&mut GLOBAL_DB.clone(),user_id,role_id).await?;
   Ok(func::is_modify_ok(rows.rows_affected))

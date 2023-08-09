@@ -100,4 +100,30 @@
       </if>
     </where>
   </select>
+  <select id="select_roles_list_not_in_role_id">
+    `select su.* from sys_user su left join sys_user_role sur on su.user_id = sur.user_id`
+    <where>
+      `sur.role_id != #{role_id} or sur.role_id is null`
+
+      <if test="user_name != ''">
+        ` and su.user_name like '%${user_name}%'`
+      </if>
+      <if test="phone_number != ''">
+        ` and su.phonenumber like '%${phone_number}%'`
+      </if>
+      ` limit #{page_num},#{page_size}`
+    </where>
+  </select>
+  <select id="select_count_roles_list_not_in_role_id">
+    `select count(su.user_id) from sys_user su left join sys_user_role sur on su.user_id = sur.user_id
+    <where>
+      `sur.role_id != #{role_id} or sur.role_id is null`
+      <if test="user_name != ''">
+        ` and su.user_name like '%${user_name}%'`
+      </if>
+      <if test="phone_number != ''">
+        ` and su.phonenumber like '%${phone_number}%'`
+      </if>
+    </where>
+  </select>
 </mapper>

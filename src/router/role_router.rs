@@ -19,6 +19,9 @@ pub fn init_router()->Router{
             Router::with_path("/system/role/authUser/allocatedList").get(role_controller::get_users_by_role_id_page)
         )
         .push(
+            Router::with_path("/system/role/authUser/unallocatedList").get(role_controller::get_users_by_not_in_role_id_page)
+        )
+        .push(
             Router::with_path("/system/role/authUser/cancel").put(role_controller::del_user_role)
         )
         .push(

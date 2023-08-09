@@ -60,4 +60,14 @@ pub async fn select_count_roles_list_by_auth_id(rb: &mut dyn Executor,user_name:
   impled!()
 }
 
+#[html_sql("src/mapper/xml/role_xml.html")]
+pub async fn select_roles_list_not_in_role_id(rb: &mut dyn Executor,user_name:Option<String>,phone_number:Option<String>,role_id:i64,page_num:u64,page_size:u64)->rbatis::Result<Vec<SysUserList>>{
+  impled!()
+}
+
+#[html_sql("src/mapper/xml/role_xml.html")]
+pub async fn select_count_roles_list_not_in_role_id(rb: &mut dyn Executor,user_name:Option<String>,phone_number:Option<String>,role_id:i64)->rbatis::Result<u64>{
+  impled!()
+}
+
 crud!(SysRole{});

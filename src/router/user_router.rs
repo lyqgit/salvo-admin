@@ -30,11 +30,9 @@ pub fn init_router()->Router{
         Router::with_path("/system/user/resetPwd").put(user_controller::update_user_pwd)
     )
     .push(
-        // 退出登录
         Router::with_path("/system/user/authRole/<id>").get(user_controller::get_user_auth_role_by_id)
     )
     .push(
-        // 退出登录
         Router::with_path("/system/user/authRole").put(user_controller::add_user_and_role)
     )
     .push(
