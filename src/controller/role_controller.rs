@@ -133,6 +133,9 @@ pub async fn del_user_role(payload:JsonBody<SysRoleCancelUserPayload>) -> Res<()
 }
 
 #[endpoint(
+    parameters(
+        SysUserRoleCancelPayload
+    ),
     responses(
         (status = 200,body=ResObj<()>,description ="删除多个角色和用户绑定关系")
     ),
@@ -140,6 +143,22 @@ pub async fn del_user_role(payload:JsonBody<SysRoleCancelUserPayload>) -> Res<()
 pub async fn del_user_role_all(req:&mut Request) -> Res<()> {
     let payload:SysUserRoleCancelPayload = req.parse_queries().unwrap();
     match_no_res_ok(role_service::del_user_role_bind_more(
+        payload.user_ids.clone(),
+        payload.role_id
+    ).await)
+}
+
+#[endpoint(
+    parameters(
+        SysUserRoleCancelPayload
+    ),
+    responses(
+        (status = 200,body=ResObj<()>,description ="绑定多个用户和一个角色")
+    ),
+)]
+pub async fn put_bind_more_user_and_simple_role(req:&mut Request) -> Res<()> {
+    let payload:SysUserRoleCancelPayload = req.parse_queries().unwrap();
+    match_no_res_ok(role_service::bind_more_user_and_simple_role(
         payload.user_ids.clone(),
         payload.role_id
     ).await)

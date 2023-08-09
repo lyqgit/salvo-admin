@@ -127,7 +127,7 @@ function handleSelectUser() {
   }
   authUserSelectAll({ roleId: roleId, userIds: uIds }).then(res => {
     proxy.$modal.msgSuccess(res.msg);
-    if (res.code === 200) {
+    if (res.code === 0) {
       visible.value = false;
       emit("ok");
     }

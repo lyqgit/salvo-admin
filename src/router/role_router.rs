@@ -27,4 +27,7 @@ pub fn init_router()->Router{
         .push(
             Router::with_path("/system/role/authUser/cancelAll").put(role_controller::del_user_role_all)
         )
+        .push(
+            Router::with_path("/system/role/authUser/selectAll").put(role_controller::put_bind_more_user_and_simple_role)
+        )
 }

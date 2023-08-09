@@ -3,6 +3,7 @@ use crate::mapper::{role_mapper, role_menu_mapper, user_role_mapper};
 use crate::GLOBAL_DB;
 use crate::entity::sys_role_entity::SysRole;
 use crate::entity::sys_role_menu_entity::SysRoleMenuEntity;
+use crate::entity::sys_user_role_entity::SysUserRoleEntity;
 use crate::entity::sys_user_entity::SysUser;
 use crate::model::role_model::SysRoleList;
 use crate::utils::func;
@@ -179,5 +180,23 @@ pub async fn del_user_role_bind_more(user_id:String,role_id:i64)->rbatis::Result
 
 pub async fn del_user_role_bind(user_id:i64,role_id:String)->rbatis::Result<bool>{
   let rows = user_role_mapper::del_by_role_and_user_id(&mut GLOBAL_DB.clone(),user_id,role_id).await?;
+  Ok(func::is_modify_ok(rows.rows_affected))
+}
+
+pub async fn bind_more_user_and_simple_role(user_ids:String,role_id:i64)->rbatis::Result<bool>{
+  let user_arr_str:Vec<&str> = user_ids.split(",").collect::<Vec<&str>>();
+  let user_id_arr = user_arr_str.into_iter().map(|it|it.parse::<i64>().unwrap()).collect::<Vec<i64>>();
+  let mut user_role_arr = Vec::<SysUserRoleEntity>::new();
+  for it in user_id_arr.iter(){
+    let user_role = SysUserRoleEntity{
+      user_id:it.clone(),
+      role_id
+    };
+    user_role_arr.push(user_role);
+  }
+  let mut tx = GLOBAL_DB.acquire_begin().await?;
+  let rows = SysUserRoleEntity::insert_batch(&mut GLOBAL_DB.clone(), &user_role_arr, user_role_arr.len() as u64).await?;
+  tx.commit().await.unwrap();
+  tx.rollback().await.unwrap();
   Ok(func::is_modify_ok(rows.rows_affected))
 }
