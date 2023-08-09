@@ -103,7 +103,7 @@
   <select id="select_roles_list_not_in_role_id">
     `select su.* from sys_user su left join sys_user_role sur on su.user_id = sur.user_id`
     <where>
-      `sur.role_id != #{role_id} or sur.role_id is null`
+      `(sur.role_id != #{role_id} or sur.role_id is null) and su.user_id != 1`
 
       <if test="user_name != ''">
         ` and su.user_name like '%${user_name}%'`
@@ -117,7 +117,7 @@
   <select id="select_count_roles_list_not_in_role_id">
     `select count(su.user_id) from sys_user su left join sys_user_role sur on su.user_id = sur.user_id
     <where>
-      `sur.role_id != #{role_id} or sur.role_id is null`
+      `(sur.role_id != #{role_id} or sur.role_id is null) and su.user_id != 1`
       <if test="user_name != ''">
         ` and su.user_name like '%${user_name}%'`
       </if>
