@@ -67,3 +67,27 @@ pub struct SysUserEntity{
   pub real_name:Option<String>,
   pub expire_time:Option<i64>,
 }
+
+#[derive(Debug,Serialize,Deserialize,Clone)]
+pub struct AddSysUserEntity{
+  pub user_id:Option<i64>,
+  pub dept_id:Option<i64>,
+  pub user_name:Option<String>,
+  pub nick_name:Option<String>,
+  pub user_type:Option<String>,
+  pub email:Option<String>,
+  #[serde(rename(serialize = "phonenumber"))]
+  pub phone_number:Option<String>,
+  pub sex:Option<String>,
+  pub avatar:Option<String>,
+  pub password:Option<String>,
+  pub status:Option<String>,
+  pub del_flag:Option<String>,
+  pub login_ip:Option<String>,
+  pub login_date:Option<DateTime>,
+  pub create_by:Option<String>,
+  pub create_time:Option<DateTime>,
+  pub update_by:Option<String>,
+  pub update_time:Option<DateTime>,
+  pub remark:Option<String>,
+}

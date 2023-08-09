@@ -1,4 +1,4 @@
-use crate::entity::sys_user_entity::{SysUser, SysUserEntity};
+use crate::entity::sys_user_entity::{SysUser, SysUserEntity,AddSysUserEntity};
 use rbatis::{crud, html_sql, impl_select};
 use rbatis::executor::Executor;
 use rbatis::rbdc::datetime::DateTime;
@@ -30,3 +30,4 @@ pub async fn update_user_status_by_id(rb: &mut dyn Executor,status:String,user_i
 }
 
 crud!(SysUserEntity{},"sys_user");
+crud!(AddSysUserEntity{},"sys_user");

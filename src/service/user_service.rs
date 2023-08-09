@@ -1,5 +1,5 @@
 use rbatis::rbdc::datetime::DateTime;
-use crate::entity::sys_user_entity::{SysUser, SysUserEntity};
+use crate::entity::sys_user_entity::{SysUser, SysUserEntity,AddSysUserEntity};
 use crate::entity::sys_captcha_entity::SysCaptcha;
 use crate::GLOBAL_DB;
 use rbatis::rbdc::Error;
@@ -99,7 +99,7 @@ pub async fn add_user(
 )->rbatis::Result<bool>{
   let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", user_id).await?;
   let user = user.get(0).unwrap();
-  let user_entity = SysUserEntity{
+  let user_entity = AddSysUserEntity{
     user_id: None,
     dept_id,
     user_name: Some(user_name),
@@ -119,12 +119,10 @@ pub async fn add_user(
     update_by: None,
     update_time: None,
     remark,
-    real_name: None,
-    expire_time: None,
   };
   let mut tx = GLOBAL_DB.acquire_begin().await?;
 
-  let mut rows = SysUserEntity::insert(&mut GLOBAL_DB.clone(),&user_entity).await?;
+  let mut rows = AddSysUserEntity::insert(&mut GLOBAL_DB.clone(),&user_entity).await?;
   let new_user_id = rows.last_insert_id.as_i64().unwrap();
   let mut user_post_arr:Vec<SysUserPostEntity> = Vec::new();
   for(_,it) in post_ids.iter().enumerate(){
