@@ -6,6 +6,7 @@ use crate::service::dept_service;
 use crate::utils::res::{match_no_res_ok, match_ok, Res, ResObj};
 
 #[endpoint(
+    tags("部门"),
     parameters(
         DeptListPayload
     ),
@@ -19,6 +20,7 @@ pub async fn get_dept_list(req:&mut Request)->Res<Vec<DeptList>>{
 }
 
 #[endpoint(
+    tags("部门"),
     responses(
         (status_code = 200,body=ResObj<Vec<DeptList>>,description ="去除传入id部门的部门列表")
     ),
@@ -28,6 +30,7 @@ pub async fn get_dept_list_exclude_id(id:PathParam<i64>)->Res<Vec<DeptList>>{
 }
 
 #[endpoint(
+    tags("部门"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="添加部门")
     ),
@@ -46,6 +49,7 @@ pub async fn post_add_dept(payload:JsonBody<DeptModifyPayload>,depot:&mut Depot)
 }
 
 #[endpoint(
+    tags("部门"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="修改部门")
     ),
@@ -65,6 +69,7 @@ pub async fn put_edit_dept(payload:JsonBody<DeptModifyPayload>,depot:&mut Depot)
 }
 
 #[endpoint(
+    tags("部门"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="删除部门")
     ),
@@ -76,6 +81,7 @@ pub async fn del_dept_by_id(id:PathParam<String>)->Res<()>{
 }
 
 #[endpoint(
+    tags("部门"),
     responses(
         (status_code = 200,body=ResObj<Option<DeptList>>,description ="部门详情")
     ),
@@ -85,6 +91,7 @@ pub async fn get_dept_by_id(id:PathParam<i64>)->Res<Option<DeptList>>{
 }
 
 #[endpoint(
+    tags("部门"),
     responses(
         (status_code = 200,body=ResObj<Vec<DeptTree>>,description ="部门树")
     ),

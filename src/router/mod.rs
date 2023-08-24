@@ -55,7 +55,7 @@ pub fn init_router()->Router{
         );
 
 
-    let doc = OpenApi::new("后台接口文档", "0.0.1").merge_router(&router);
+    let doc = OpenApi::new("后台接口文档", "0.0.1").tags(["用户","路由","角色","菜单","部门","字典","岗位"]).merge_router(&router);
     let router = router
         .push(doc.into_router("/api-doc/openapi.json"))
         .push(SwaggerUi::new("/api-doc/openapi.json").into_router("swagger-ui"));

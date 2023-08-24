@@ -9,6 +9,7 @@ use crate::{service::dict_service, utils::res::Res, entity::sys_dict_type_entity
 
 
 #[endpoint(
+  tags("字典"),
   parameters(DictTypePagePayload),
   responses(
     (status_code = 200,body=ResObj<Page<SysDictType>>,description ="字典类型列表")
@@ -34,6 +35,7 @@ pub async fn get_dict_list(req:&mut Request)->Res<Page<SysDictType>>{
 }
 
 #[endpoint(
+  tags("字典"),
   responses(
     (status_code = 200,body=ResObj<Vec<SysDictData>>,description ="根据类型获取字典数据列表")
   ),
@@ -51,6 +53,7 @@ pub async fn get_dict_list_by_type(type_id:PathParam<Option<&str>>)->Res<Vec<Sys
 }
 
 #[endpoint(
+  tags("字典"),
   responses(
     (status_code = 200,body=ResObj<Option<SysDictType>>,description ="根据id获取字典类型数据")
   ),
@@ -69,6 +72,7 @@ pub async fn get_dict_by_id(id:PathParam<Option<i64>>)->Res<Option<SysDictType>>
 }
 
 #[endpoint(
+  tags("字典"),
   responses(
     (status_code = 200,body=ResObj<Vec<SysDictType>>,description ="获取所有字典类型")
   ),
@@ -86,6 +90,7 @@ pub async fn get_all_dict_type()->Res<Vec<SysDictType>>{
 
 
 #[endpoint(
+  tags("字典"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="创建字典")
   )
@@ -114,6 +119,7 @@ pub async fn add_dict_type(dict:JsonBody<AddDictType>,depot:&mut Depot)->Res<()>
 
 
 #[endpoint(
+  tags("字典"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="创建字典")
   )
@@ -138,6 +144,7 @@ pub async fn edit_dict_type(dict:JsonBody<ModifySysDictType>,depot:&mut Depot)->
 }
 
 #[endpoint(
+  tags("字典"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="删除字典类型")
   )
@@ -163,6 +170,7 @@ pub async fn del_dict_type(id:PathParam<Option<&str>>)->Res<()>{
 }
 
 #[endpoint(
+  tags("字典"),
   parameters(
     DictTypeDataPagePayload
   ),
@@ -183,6 +191,7 @@ pub async fn get_dict_data_list(req:&mut Request)->Res<Page<SysDictData>>{
 }
 
 #[endpoint(
+  tags("字典"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="创建字典数据")
   )
@@ -205,6 +214,7 @@ pub async fn post_add_dict_data(payload:JsonBody<AddSysDictDataVo>,depot:&mut De
 
 
 #[endpoint(
+  tags("字典"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="删除字典类型数据")
   )
@@ -231,6 +241,7 @@ pub async fn del_dict_type_data(id:PathParam<Option<&str>>)->Res<()>{
 
 
 #[endpoint(
+  tags("字典"),
   parameters(
     DictDataDetail
   ),
@@ -252,6 +263,7 @@ pub async fn get_dict_type_data_by_id(req:&mut Request)->Res<Option<SysDictData>
 
 
 #[endpoint(
+  tags("字典"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="修改字典数据")
   )

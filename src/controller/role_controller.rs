@@ -8,6 +8,7 @@ use crate::service::role_service;
 use crate::utils::res::{Res, match_ok, ResObj, match_no_res_ok};
 
 #[endpoint(
+    tags("角色"),
     parameters(
         SysRolePagePayload
     ),
@@ -29,6 +30,7 @@ pub async fn get_roles_by_page(req:&mut Request)->Res<Page<SysRoleList>>{
 }
 
 #[endpoint(
+    tags("角色"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="添加角色")
     ),
@@ -40,6 +42,7 @@ pub async fn post_add_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut De
 }
 
 #[endpoint(
+    tags("角色"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="更改角色状态")
     ),
@@ -49,6 +52,7 @@ pub async fn put_edit_role_status(payload:JsonBody<SysRoleStatusPayload>)->Res<(
 }
 
 #[endpoint(
+    tags("角色"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="删除角色")
     ),
@@ -58,6 +62,7 @@ pub async fn del_role_by_id(id:PathParam<String>)->Res<()>{
 }
 
 #[endpoint(
+    tags("角色"),
     responses(
         (status_code = 200,body=ResObj<Option<SysRoleList>>,description ="获取角色详情")
     ),
@@ -67,6 +72,7 @@ pub async fn get_role_by_id(id:PathParam<String>)->Res<Option<SysRoleList>>{
 }
 
 #[endpoint(
+    tags("角色"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="修改角色")
     ),
@@ -94,6 +100,7 @@ pub async fn put_edit_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut De
 
 
 #[endpoint(
+    tags("角色"),
     parameters(
         SysUserRolePagePayload
     ),
@@ -107,6 +114,7 @@ pub async fn get_users_by_role_id_page(req:&mut Request)->Res<Page<SysUserList>>
 }
 
 #[endpoint(
+    tags("角色"),
     parameters(
         SysUserRolePagePayload
     ),
@@ -121,6 +129,7 @@ pub async fn get_users_by_not_in_role_id_page(req:&mut Request)->Res<Page<SysUse
 
 
 #[endpoint(
+    tags("角色"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="删除角色和用户绑定关系")
     ),
@@ -133,6 +142,7 @@ pub async fn del_user_role(payload:JsonBody<SysRoleCancelUserPayload>) -> Res<()
 }
 
 #[endpoint(
+    tags("角色"),
     parameters(
         SysUserRoleCancelPayload
     ),
@@ -149,6 +159,7 @@ pub async fn del_user_role_all(req:&mut Request) -> Res<()> {
 }
 
 #[endpoint(
+    tags("角色"),
     parameters(
         SysUserRoleCancelPayload
     ),

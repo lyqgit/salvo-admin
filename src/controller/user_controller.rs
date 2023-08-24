@@ -16,6 +16,7 @@ use crate::utils::redis;
 use crate::model::menu_model::Router;
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<CaptchaRes>,description ="获取验证码")
   ),
@@ -32,6 +33,7 @@ pub async fn get_captcha()->Res<CaptchaRes>{
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<LoginRes>,description ="登录")
   ),
@@ -73,6 +75,7 @@ pub async fn login(login_body:JsonBody<LoginReq>)->Res<LoginRes>{
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<UserInfo>,description ="获取用户信息")
   ),
@@ -109,6 +112,7 @@ pub async fn get_info(depot: &mut Depot)->Res<UserInfo>{
 }
 
 #[endpoint(
+  tags("路由"),
   responses(
     (status_code = 200,body=ResObj<Vec<Router>>,description ="获取用户路由")
   ),
@@ -140,6 +144,7 @@ pub async fn get_routers(depot: &mut Depot)->Res<Vec<Router>>{
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="退出登录")
   ),
@@ -155,6 +160,7 @@ pub async fn log_out(req:&mut Request)->Res<()>{
 }
 
 #[endpoint(
+  tags("用户"),
   parameters(
     SysUserListPayload
   ),
@@ -168,6 +174,7 @@ pub async fn get_user_page(req:&mut Request)->Res<Page<SysUserList>>{
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<SysUserDetail>,description ="用户详情")
   ),
@@ -177,6 +184,7 @@ pub async fn get_user_detail(id:PathParam<Option<i64>>)->Res<SysUserDetail>{
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="删除用户")
   ),
@@ -186,6 +194,7 @@ pub async fn del_user(id:PathParam<i64>)->Res<()>{
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="修改用户密码")
   ),
@@ -198,6 +207,7 @@ pub async fn update_user_pwd(payload:JsonBody<SysUserEditPwdPayload>)->Res<()>{
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<SysUserDetail>,description ="获取部门和角色列表")
   ),
@@ -207,6 +217,7 @@ pub async fn get_dept_and_role()->Res<SysUserDetail>{
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="修改用户状态")
   ),
@@ -216,6 +227,7 @@ pub async fn put_change_status_by_id(payload:JsonBody<SysUserChangeStatusPayload
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="添加用户")
   ),
@@ -241,6 +253,7 @@ pub async fn post_add_user(payload:JsonBody<SysUserModifyPayload>,depot:&mut Dep
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<()>,description ="修改用户")
   ),
@@ -263,6 +276,7 @@ pub async fn put_edit_user(payload:JsonBody<SysUserEditPayload>,depot:&mut Depot
 }
 
 #[endpoint(
+  tags("用户"),
   responses(
     (status_code = 200,body=ResObj<SysUserAuthRole>,description ="查询用户详情和角色列表")
   ),
@@ -272,6 +286,7 @@ pub async fn get_user_auth_role_by_id(id:PathParam<i64>)->Res<SysUserAuthRole>{
 }
 
 #[endpoint(
+  tags("用户"),
   parameters(
     SysAuthPayload
   ),

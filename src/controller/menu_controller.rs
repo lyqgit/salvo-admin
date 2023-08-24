@@ -5,6 +5,7 @@ use crate::service::menu_service;
 use crate::utils::res::{match_ok, Res, res_json_custom, res_json_ok, ResObj};
 
 #[endpoint(
+    tags("菜单"),
     parameters(
         SysMenuPagePayload
     ),
@@ -25,6 +26,7 @@ pub async fn get_menu_list(req:&mut Request)->Res<Vec<SysMenuPage>>{
 }
 
 #[endpoint(
+    tags("菜单"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="添加菜单")
     ),
@@ -46,6 +48,7 @@ pub async fn add_menu(payload:JsonBody<SysMenuModifyPayload>,depot:&mut Depot)->
 }
 
 #[endpoint(
+    tags("菜单"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="删除菜单")
     ),
@@ -66,6 +69,7 @@ pub async fn del_menu_by_id(id:PathParam<i64>)->Res<()>{
 }
 
 #[endpoint(
+    tags("菜单"),
     responses(
         (status_code = 200,body=ResObj<SysMenuPage>,description ="菜单详情")
     ),
@@ -83,6 +87,7 @@ pub async fn get_menu_by_id(id:PathParam<i64>)->Res<SysMenuPage>{
 
 
 #[endpoint(
+    tags("菜单"),
     responses(
         (status_code = 200,body=ResObj<()>,description ="修改菜单")
     ),
@@ -105,6 +110,7 @@ pub async fn put_edit_menu(payload:JsonBody<SysMenuModifyPayload>,depot:&mut Dep
 
 
 #[endpoint(
+    tags("菜单"),
     responses(
         (status_code = 200,body=ResObj<Vec<MenuTree>>,description ="菜单树")
     ),
@@ -114,6 +120,7 @@ pub async fn get_menu_tree()->Res<Vec<MenuTree>>{
 }
 
 #[endpoint(
+    tags("菜单"),
     responses(
         (status_code = 200,body=ResObj<RoleMenuTree>,description ="菜单树和根据用户获取已选菜单id")
     ),
