@@ -10,7 +10,7 @@ use crate::utils::res::{match_no_res_ok, match_ok, Res, ResObj};
         DeptListPayload
     ),
     responses(
-        (status = 200,body=ResObj<Vec<DeptList>>,description ="部门列表")
+        (status_code = 200,body=ResObj<Vec<DeptList>>,description ="部门列表")
     ),
 )]
 pub async fn get_dept_list(req:&mut Request)->Res<Vec<DeptList>>{
@@ -20,7 +20,7 @@ pub async fn get_dept_list(req:&mut Request)->Res<Vec<DeptList>>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<Vec<DeptList>>,description ="去除传入id部门的部门列表")
+        (status_code = 200,body=ResObj<Vec<DeptList>>,description ="去除传入id部门的部门列表")
     ),
 )]
 pub async fn get_dept_list_exclude_id(id:PathParam<i64>)->Res<Vec<DeptList>>{
@@ -29,7 +29,7 @@ pub async fn get_dept_list_exclude_id(id:PathParam<i64>)->Res<Vec<DeptList>>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="添加部门")
+        (status_code = 200,body=ResObj<()>,description ="添加部门")
     ),
 )]
 pub async fn post_add_dept(payload:JsonBody<DeptModifyPayload>,depot:&mut Depot)->Res<()>{
@@ -47,7 +47,7 @@ pub async fn post_add_dept(payload:JsonBody<DeptModifyPayload>,depot:&mut Depot)
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="修改部门")
+        (status_code = 200,body=ResObj<()>,description ="修改部门")
     ),
 )]
 pub async fn put_edit_dept(payload:JsonBody<DeptModifyPayload>,depot:&mut Depot)->Res<()>{
@@ -66,7 +66,7 @@ pub async fn put_edit_dept(payload:JsonBody<DeptModifyPayload>,depot:&mut Depot)
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="删除部门")
+        (status_code = 200,body=ResObj<()>,description ="删除部门")
     ),
 )]
 pub async fn del_dept_by_id(id:PathParam<String>)->Res<()>{
@@ -77,7 +77,7 @@ pub async fn del_dept_by_id(id:PathParam<String>)->Res<()>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<Option<DeptList>>,description ="部门详情")
+        (status_code = 200,body=ResObj<Option<DeptList>>,description ="部门详情")
     ),
 )]
 pub async fn get_dept_by_id(id:PathParam<i64>)->Res<Option<DeptList>>{
@@ -86,7 +86,7 @@ pub async fn get_dept_by_id(id:PathParam<i64>)->Res<Option<DeptList>>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<Vec<DeptTree>>,description ="部门树")
+        (status_code = 200,body=ResObj<Vec<DeptTree>>,description ="部门树")
     ),
 )]
 pub async fn get_dept_tree()->Res<Vec<DeptTree>>{

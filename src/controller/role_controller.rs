@@ -12,7 +12,7 @@ use crate::utils::res::{Res, match_ok, ResObj, match_no_res_ok};
         SysRolePagePayload
     ),
     responses(
-        (status = 200,body=ResObj<Page<SysRoleList>>,description ="角色列表")
+        (status_code = 200,body=ResObj<Page<SysRoleList>>,description ="角色列表")
     ),
 )]
 pub async fn get_roles_by_page(req:&mut Request)->Res<Page<SysRoleList>>{
@@ -30,7 +30,7 @@ pub async fn get_roles_by_page(req:&mut Request)->Res<Page<SysRoleList>>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="添加角色")
+        (status_code = 200,body=ResObj<()>,description ="添加角色")
     ),
 )]
 pub async fn post_add_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut Depot) -> Res<()> {
@@ -41,7 +41,7 @@ pub async fn post_add_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut De
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="更改角色状态")
+        (status_code = 200,body=ResObj<()>,description ="更改角色状态")
     ),
 )]
 pub async fn put_edit_role_status(payload:JsonBody<SysRoleStatusPayload>)->Res<()>{
@@ -50,7 +50,7 @@ pub async fn put_edit_role_status(payload:JsonBody<SysRoleStatusPayload>)->Res<(
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="删除角色")
+        (status_code = 200,body=ResObj<()>,description ="删除角色")
     ),
 )]
 pub async fn del_role_by_id(id:PathParam<String>)->Res<()>{
@@ -59,7 +59,7 @@ pub async fn del_role_by_id(id:PathParam<String>)->Res<()>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<Option<SysRoleList>>,description ="获取角色详情")
+        (status_code = 200,body=ResObj<Option<SysRoleList>>,description ="获取角色详情")
     ),
 )]
 pub async fn get_role_by_id(id:PathParam<String>)->Res<Option<SysRoleList>>{
@@ -68,7 +68,7 @@ pub async fn get_role_by_id(id:PathParam<String>)->Res<Option<SysRoleList>>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="修改角色")
+        (status_code = 200,body=ResObj<()>,description ="修改角色")
     ),
 )]
 pub async fn put_edit_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut Depot) -> Res<()> {
@@ -98,7 +98,7 @@ pub async fn put_edit_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut De
         SysUserRolePagePayload
     ),
     responses(
-        (status = 200,body=ResObj<Page<SysUserList>>,description ="根据角色id获取用户列表")
+        (status_code = 200,body=ResObj<Page<SysUserList>>,description ="根据角色id获取用户列表")
     ),
 )]
 pub async fn get_users_by_role_id_page(req:&mut Request)->Res<Page<SysUserList>>{
@@ -111,7 +111,7 @@ pub async fn get_users_by_role_id_page(req:&mut Request)->Res<Page<SysUserList>>
         SysUserRolePagePayload
     ),
     responses(
-        (status = 200,body=ResObj<Page<SysUserList>>,description ="根据角色id获取非此角色的用户列表")
+        (status_code = 200,body=ResObj<Page<SysUserList>>,description ="根据角色id获取非此角色的用户列表")
     ),
 )]
 pub async fn get_users_by_not_in_role_id_page(req:&mut Request)->Res<Page<SysUserList>>{
@@ -122,7 +122,7 @@ pub async fn get_users_by_not_in_role_id_page(req:&mut Request)->Res<Page<SysUse
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="删除角色和用户绑定关系")
+        (status_code = 200,body=ResObj<()>,description ="删除角色和用户绑定关系")
     ),
 )]
 pub async fn del_user_role(payload:JsonBody<SysRoleCancelUserPayload>) -> Res<()> {
@@ -137,7 +137,7 @@ pub async fn del_user_role(payload:JsonBody<SysRoleCancelUserPayload>) -> Res<()
         SysUserRoleCancelPayload
     ),
     responses(
-        (status = 200,body=ResObj<()>,description ="删除多个角色和用户绑定关系")
+        (status_code = 200,body=ResObj<()>,description ="删除多个角色和用户绑定关系")
     ),
 )]
 pub async fn del_user_role_all(req:&mut Request) -> Res<()> {
@@ -153,7 +153,7 @@ pub async fn del_user_role_all(req:&mut Request) -> Res<()> {
         SysUserRoleCancelPayload
     ),
     responses(
-        (status = 200,body=ResObj<()>,description ="绑定多个用户和一个角色")
+        (status_code = 200,body=ResObj<()>,description ="绑定多个用户和一个角色")
     ),
 )]
 pub async fn put_bind_more_user_and_simple_role(req:&mut Request) -> Res<()> {

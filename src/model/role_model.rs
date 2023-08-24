@@ -4,7 +4,7 @@ use rbatis::rbdc::datetime::DateTime;
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
 #[serde(rename_all(serialize="camelCase"))]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct SysRoleList{
     pub role_id:Option<i64>,
     pub role_name:Option<String>,
@@ -24,7 +24,7 @@ pub struct SysRoleList{
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
 #[serde(rename_all(serialize="camelCase"))]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct SysRoleListFlag{
     pub role_id:Option<i64>,
     pub role_name:Option<String>,
@@ -45,8 +45,8 @@ pub struct SysRoleListFlag{
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
 #[serde(rename_all(deserialize ="camelCase"))]
-#[parameters(rename_all="camelCase")]
-#[parameters(parameter_in = Query)]
+#[salvo(parameters(rename_all="camelCase"))]
+#[salvo(parameters(parameter_in = Query))]
 pub struct SysRolePagePayload{
     pub page_num:Option<u64>,
     pub page_size:Option<u64>,
@@ -54,19 +54,19 @@ pub struct SysRolePagePayload{
     pub role_key:Option<String>,
     pub status:Option<String>,
     #[serde(rename(deserialize ="params[beginTime]"))]
-    #[parameter(rename="params[beginTime]")]
-    #[parameter(value_type = Option<String>)]
+    #[salvo(parameter(rename="params[beginTime]"))]
+    #[salvo(parameter(value_type = Option<String>))]
     pub begin_time:Option<DateTime>,
     #[serde(rename(deserialize ="params[endTime]"))]
-    #[parameter(rename="params[endTime]")]
-    #[parameter(value_type = Option<String>)]
+    #[salvo(parameter(rename="params[endTime]"))]
+    #[salvo(parameter(value_type = Option<String>))]
     pub end_time:Option<DateTime>,
 }
 
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
 #[serde(rename_all(deserialize ="camelCase"))]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct SysRoleModifyPayload{
     pub dept_check_strictly:bool,
     pub menu_check_strictly:bool,
@@ -86,7 +86,7 @@ pub struct SysRoleModifyPayload{
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
 #[serde(rename_all(deserialize ="camelCase"))]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct SysRoleStatusPayload{
     pub role_id:i64,
     pub status:String,
@@ -94,15 +94,15 @@ pub struct SysRoleStatusPayload{
 
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
-#[parameters(rename_all="camelCase")]
+#[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
-#[parameters(parameter_in = Query)]
+#[salvo(parameters(parameter_in = Query))]
 pub struct SysUserRolePagePayload{
     pub role_id:i64,
     #[serde(rename(deserialize = "phonenumber"))]
-    #[parameters(value_type=Option<String>)]
+    #[salvo(parameters(value_type=Option<String>))]
     pub phone_number:Option<String>,
-    #[parameters(value_type=Option<String>)]
+    #[salvo(parameters(value_type=Option<String>))]
     pub user_name:Option<String>,
     pub page_num:Option<u64>,
     pub page_size:Option<u64>,
@@ -110,16 +110,16 @@ pub struct SysUserRolePagePayload{
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
 #[serde(rename_all(deserialize ="camelCase"))]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct SysRoleCancelUserPayload{
     pub role_id:String,
     pub user_id:i64,
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
-#[parameters(rename_all="camelCase")]
+#[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
-#[parameters(parameter_in = Query)]
+#[salvo(parameters(parameter_in = Query))]
 pub struct SysUserRoleCancelPayload{
     pub role_id:i64,
     pub user_ids:String,

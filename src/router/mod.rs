@@ -2,7 +2,7 @@ use salvo::{Router,Service};
 use salvo::serve_static::StaticDir;
 use salvo::logging::Logger;
 use salvo::catcher::Catcher;
-use salvo::oapi::{Info, OpenApi};
+use salvo::oapi::{OpenApi};
 use salvo::prelude::CatchPanic;
 use salvo::oapi::swagger_ui::SwaggerUi;
 use crate::controller::common_controller;
@@ -55,7 +55,7 @@ pub fn init_router()->Router{
         );
 
 
-    let doc = OpenApi::new(Info::new("后台接口文档", "0.0.1")).merge_router(&router);
+    let doc = OpenApi::new("后台接口文档", "0.0.1").merge_router(&router);
     let router = router
         .push(doc.into_router("/api-doc/openapi.json"))
         .push(SwaggerUi::new("/api-doc/openapi.json").into_router("swagger-ui"));

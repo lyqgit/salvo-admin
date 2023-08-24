@@ -11,7 +11,7 @@ use crate::utils::res::{match_no_res_ok, match_ok, Res, ResObj};
         SysPostListPayload
     ),
     responses(
-        (status = 200,body=ResObj<Page<SysPostList>>,description ="岗位列表")
+        (status_code = 200,body=ResObj<Page<SysPostList>>,description ="岗位列表")
     ),
 )]
 pub async fn get_post_page(req:&mut Request)->Res<Page<SysPostList>>{
@@ -21,7 +21,7 @@ pub async fn get_post_page(req:&mut Request)->Res<Page<SysPostList>>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="添加岗位")
+        (status_code = 200,body=ResObj<()>,description ="添加岗位")
     ),
 )]
 pub async fn post_add_post(payload:JsonBody<SysPostModifyPayload>,depot:&mut Depot)->Res<()>{
@@ -31,7 +31,7 @@ pub async fn post_add_post(payload:JsonBody<SysPostModifyPayload>,depot:&mut Dep
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="修改岗位")
+        (status_code = 200,body=ResObj<()>,description ="修改岗位")
     ),
 )]
 pub async fn put_edit_post(payload:JsonBody<SysPostModifyPayload>,depot:&mut Depot)->Res<()>{
@@ -41,7 +41,7 @@ pub async fn put_edit_post(payload:JsonBody<SysPostModifyPayload>,depot:&mut Dep
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<Option<SysPostList>>,description ="岗位详情")
+        (status_code = 200,body=ResObj<Option<SysPostList>>,description ="岗位详情")
     ),
 )]
 pub async fn get_post_by_id(id:PathParam<i64>)->Res<Option<SysPostList>>{
@@ -50,7 +50,7 @@ pub async fn get_post_by_id(id:PathParam<i64>)->Res<Option<SysPostList>>{
 
 #[endpoint(
     responses(
-        (status = 200,body=ResObj<()>,description ="删除岗位")
+        (status_code = 200,body=ResObj<()>,description ="删除岗位")
     ),
 )]
 pub async fn del_post_by_id(id:PathParam<String>)->Res<()>{

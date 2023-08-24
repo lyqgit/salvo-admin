@@ -3,7 +3,7 @@ use salvo::oapi::ToParameters;
 use serde::{Serialize,Deserialize};
 
 #[derive(Debug,Serialize,ToSchema,Deserialize,Clone)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(serialize="camelCase"))]
 pub struct DeptList{
     pub dept_id:Option<i64>,
@@ -23,16 +23,16 @@ pub struct DeptList{
 }
 
 #[derive(Debug,Serialize,ToParameters,Deserialize,Clone)]
-#[parameters(rename_all="camelCase")]
+#[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize="camelCase"))]
-#[parameters(parameter_in = Query)]
+#[salvo(parameters(parameter_in = Query))]
 pub struct DeptListPayload{
     pub dept_name:Option<String>,
     pub status:Option<String>,
 }
 
 #[derive(Debug,Serialize,ToSchema,Deserialize,Clone)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(deserialize="camelCase"))]
 pub struct DeptModifyPayload{
     pub dept_id:Option<i64>,
@@ -48,7 +48,7 @@ pub struct DeptModifyPayload{
 #[derive(Debug,Serialize,ToSchema,Clone)]
 pub struct DeptTree{
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[schema(value_type=Option<Vec<Object>>)]
+    #[salvo(schema(value_type=Option<Vec<Object>>))]
     pub children:Option<Vec<DeptTree>>,
     pub id:i64,
     pub label:String,

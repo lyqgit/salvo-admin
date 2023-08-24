@@ -1,4 +1,5 @@
-use salvo::{writer::Json, oapi::{ToSchema}};
+use salvo::{oapi::{ToSchema}};
+use salvo::prelude::Json;
 
 pub use crate::model::common_model::ResObj;
 

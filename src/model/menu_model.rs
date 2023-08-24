@@ -4,13 +4,13 @@ use rbatis::rbdc::datetime::DateTime;
 use crate::entity::sys_menu_entity::SysMenu;
 
 #[derive(Debug,Serialize,ToSchema,Clone)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct Router{
   #[serde(rename(serialize = "alwaysShow"))]
   #[serde(skip_serializing_if = "Option::is_none")]
   pub always_show:Option<bool>,
   #[serde(skip_serializing_if = "Option::is_none")]
-  #[schema(value_type=Option<Vec<Object>>)]
+  #[salvo(schema(value_type=Option<Vec<z>>))]
   pub children:Option<Vec<Router>>,
   pub component:String,
   pub hidden:bool,
@@ -22,7 +22,7 @@ pub struct Router{
 }
 
 #[derive(Debug,Serialize,ToSchema,Clone)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct Meta{
   pub icon:String,
   pub link:Option<String>,
@@ -33,7 +33,7 @@ pub struct Meta{
 
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(serialize="camelCase"))]
 pub struct SysMenuPage{
   pub menu_id:i64,
@@ -58,16 +58,16 @@ pub struct SysMenuPage{
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
-#[parameters(rename_all="camelCase")]
+#[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize="camelCase"))]
-#[parameters(parameter_in = Query)]
+#[salvo(parameters(parameter_in = Query))]
 pub struct SysMenuPagePayload{
   pub menu_name:Option<String>,
   pub status:Option<String>,
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(deserialize="camelCase"))]
 pub struct SysMenuModifyPayload{
   pub component:Option<String>,
@@ -187,7 +187,7 @@ impl From<SysMenuModifyPayload> for SysMenu{
 #[derive(Debug,Serialize,ToSchema,Clone)]
 pub struct MenuTree{
   #[serde(skip_serializing_if = "Option::is_none")]
-  #[schema(value_type=Option<Vec<Object>>)]
+  #[salvo(schema(value_type=Option<Vec<Object>>))]
   pub children:Option<Vec<MenuTree>>,
   pub id:i64,
   pub label:String,
@@ -195,7 +195,7 @@ pub struct MenuTree{
 
 #[derive(Debug,Serialize,ToSchema,Clone)]
 #[serde(rename_all(serialize="camelCase"))]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct RoleMenuTree{
   pub checked_keys:Vec<i64>,
   pub menus:Vec<MenuTree>,

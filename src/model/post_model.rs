@@ -3,7 +3,7 @@ use rbatis::rbdc::datetime::DateTime;
 use salvo::oapi::{ToParameters, ToSchema};
 
 #[derive(Debug,Serialize,Deserialize,ToSchema,Clone)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(serialize="camelCase"))]
 pub struct SysPostList{
     pub post_id:Option<i64>,
@@ -18,9 +18,9 @@ pub struct SysPostList{
 }
 
 #[derive(Debug,Serialize,Deserialize,ToParameters,Clone)]
-#[parameters(rename_all="camelCase")]
+#[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize="camelCase"))]
-#[parameters(parameter_in = Query)]
+#[salvo(parameters(parameter_in = Query))]
 pub struct SysPostListPayload{
     pub page_num:u64,
     pub page_size:u64,
@@ -30,7 +30,7 @@ pub struct SysPostListPayload{
 }
 
 #[derive(Debug,Serialize,Deserialize,ToSchema,Clone)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(deserialize="camelCase"))]
 pub struct SysPostModifyPayload{
     pub post_id:Option<i64>,

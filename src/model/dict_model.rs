@@ -4,7 +4,7 @@ use crate::entity::sys_dict_data_entity::{SysDictDataEntity,SysDictData};
 use rbatis::rbdc::datetime::DateTime;
 
 #[derive(Debug,Serialize,ToSchema,Deserialize,Clone)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct AddDictType{
   #[serde(rename(deserialize="dictName"))]
   pub dict_name:String,
@@ -15,30 +15,30 @@ pub struct AddDictType{
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
-#[parameters(rename_all="camelCase")]
-#[parameters(parameter_in = Query)]
+#[salvo(parameters(rename_all="camelCase"))]
+#[salvo(parameters(parameter_in = Query))]
 pub struct DictTypePagePayload{
   pub page_num:u64,
   pub page_size:u64,
-  #[parameter(value_type = Option<String>)]
+  #[salvo(parameter(value_type = Option<String>))]
   pub dict_name:String,
-  #[parameter(value_type = Option<String>)]
+  #[salvo(parameter(value_type = Option<String>))]
   pub dict_type:String,
-  #[parameter(value_type = Option<String>)]
+  #[salvo(parameter(value_type = Option<String>))]
   pub status:Option<String>,
-  #[parameter(rename="params[beginTime]")]
+  #[salvo(parameter(rename="params[beginTime]"))]
   #[serde(rename(deserialize="params[beginTime]"))]
-  #[parameter(value_type = Option<String>)]
+  #[salvo(parameter(value_type = Option<String>))]
   pub begin_time:DateTime,
-  #[parameter(rename="params[endTime]")]
+  #[salvo(parameter(rename="params[endTime]"))]
   #[serde(rename(deserialize="params[endTime]"))]
-  #[parameter(value_type = Option<String>)]
+  #[salvo(parameter(value_type = Option<String>))]
   pub end_time:DateTime,
 }
 
 
 #[derive(Debug,Serialize,ToSchema,Deserialize,Clone,ToParameters)]
-#[parameters(rename_all="camelCase")]
+#[salvo(parameters(rename_all="camelCase"))]
 pub struct DictTypeDataPagePayload{
   #[serde(rename(deserialize="pageNum"))]
   pub page_num:u64,
@@ -53,7 +53,7 @@ pub struct DictTypeDataPagePayload{
 
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct SysDictDataVo{
   #[serde(rename(serialize="dictCode"))]
   pub dict_code:i64,
@@ -104,7 +104,7 @@ impl From<SysDictData> for SysDictDataVo{
 
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct AddSysDictDataVo{
   #[serde(rename(deserialize="dictSort"))]
   pub dict_sort:i8,
@@ -145,14 +145,14 @@ impl From<AddSysDictDataVo> for SysDictDataEntity{
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
-#[parameters(rename_all="camelCase")]
+#[salvo(parameters(rename_all="camelCase"))]
 pub struct DictDataDetail{
   pub id:i64,
 }
 
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all="camelCase")]
 pub struct EditSysDictData{
   pub dict_code:i64,

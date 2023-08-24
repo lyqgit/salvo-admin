@@ -3,7 +3,7 @@ use serde::{Serialize,Deserialize};
 use rbatis::rbdc::datetime::DateTime;
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct SysDictType{
   #[serde(rename(serialize="dictId"))]
   pub dict_id:i64,

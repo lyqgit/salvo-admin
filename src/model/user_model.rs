@@ -9,7 +9,7 @@ use crate::model::role_model::{SysRoleList, SysRoleListFlag};
 
 // 验证码返回
 #[derive(Serialize, Deserialize, Clone, Debug, ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 pub struct CaptchaRes{
   #[serde(rename="captchaEnabled")]
   pub captcha_enabled:Option<bool>,
@@ -43,7 +43,7 @@ pub struct UserInfo{
 
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(serialize = "camelCase"))]
 pub struct SysUserList{
   pub user_id:i64,
@@ -73,7 +73,7 @@ pub struct SysUserList{
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
-#[parameters(rename_all="camelCase")]
+#[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct SysUserListPayload{
   pub page_num:u64,
@@ -84,17 +84,17 @@ pub struct SysUserListPayload{
   pub status:Option<String>,
   pub dept_id:Option<i64>,
   #[serde(rename(deserialize ="params[beginTime]"))]
-  #[parameter(rename="params[beginTime]")]
-  #[parameter(value_type = Option<String>)]
+  #[salvo(parameter(rename="params[beginTime]"))]
+  #[salvo(parameter(value_type = Option<String>))]
   pub begin_time:Option<DateTime>,
   #[serde(rename(deserialize ="params[endTime]"))]
-  #[parameter(rename="params[endTime]")]
-  #[parameter(value_type = Option<String>)]
+  #[salvo(parameter(rename="params[endTime]"))]
+  #[salvo(parameter(value_type = Option<String>))]
   pub end_time:Option<DateTime>,
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(serialize = "camelCase"))]
 pub struct SysUserDetail{
   pub posts:Vec<SysPostList>,
@@ -108,7 +108,7 @@ pub struct SysUserDetail{
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct SysUserChangeStatusPayload{
   pub status:String,
@@ -116,7 +116,7 @@ pub struct SysUserChangeStatusPayload{
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct SysUserModifyPayload{
   pub dept_id:Option<i64>,
@@ -134,7 +134,7 @@ pub struct SysUserModifyPayload{
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct SysUserEditPayload{
   pub user_id:Option<i64>,
@@ -151,7 +151,7 @@ pub struct SysUserEditPayload{
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct SysUserEditPwdPayload{
   pub user_id:i64,
@@ -159,7 +159,7 @@ pub struct SysUserEditPwdPayload{
 }
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
-#[schema(rename_all="camelCase")]
+#[salvo(schema(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct SysUserAuthRole{
   pub user:Option<SysUserList>,
@@ -168,10 +168,10 @@ pub struct SysUserAuthRole{
 
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
-#[parameters(rename_all="camelCase")]
+#[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct SysAuthPayload{
   pub user_id:i64,
-  #[parameter(value_type = Option<String>)]
+  #[salvo(parameter(value_type = Option<String>))]
   pub role_ids:Option<String>,
 }
