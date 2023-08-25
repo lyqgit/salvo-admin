@@ -1,5 +1,5 @@
 use salvo::Router;
-use crate::controller::{dept_controller, user_controller};
+use crate::controller::{chat_controller, dept_controller, user_controller};
 
 pub fn init_router()->Router{
     let router = Router::new();
@@ -46,9 +46,14 @@ pub fn init_router_no_token()->Router{
     router.push(
                 // 验证码
         Router::with_path("/captchaImage").get(user_controller::get_captcha)
-    ).push(
-                // 登录
-        Router::with_path("/login").post(user_controller::login)
+    )
+    .push(
+            // 登录
+    Router::with_path("/login").post(user_controller::login)
+    )
+    .push(
+        // chat群聊
+        Router::with_path("/chat").handle(chat_controller::user_connected)
     )
 
 }

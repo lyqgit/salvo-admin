@@ -2038,6 +2038,7 @@ version = "0.1.0"
 dependencies = [
  "captcha",
  "fast_log",
+ "futures-util",
  "jsonwebtoken",
  "log",
  "md5",
@@ -2050,6 +2051,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio",
+ "tokio-stream",
  "uuid",
 ]
 
