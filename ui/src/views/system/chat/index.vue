@@ -10,18 +10,25 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col v-for="(item,index) in msgArr">
-        <div :style="index%2===0?'text-align:left':'text-align:right'">
-          <p>user:{{ item[0] }}</p>
-          <p>msg:{{ item[1] }}</p>
-        </div>
-      </el-col>
+      <TransitionGroup name="list">
+        <el-col v-for="(item,index) in msgArr" :key="index">
+          <div :style="userName!=='admin'?(item.name===userName?'text-align:left':'text-align:right'):(index%2===0?'text-align:left':'text-align:right')">
+            <p>user:{{ item.name }}</p>
+            <p>msg:{{ item.msg }}</p>
+          </div>
+        </el-col>
+      </TransitionGroup>
     </el-row>
   </div>
 </template>
 <script setup>
 import {ElMessage} from "element-plus";
-import {nextTick} from "vue";
+import {computed, nextTick} from "vue";
+import useUserStore from "@/store/modules/user";
+const userStore = useUserStore()
+
+const token = computed(()=>userStore.token)
+const userName = computed(()=>userStore.name)
 
 const ws = new WebSocket(`ws://localhost:8090/chat`);
 
@@ -29,13 +36,32 @@ const sendMsg = ref('')
 const msgArr = ref([])
 const connected = ref(false)
 
+function wsSendMsg(msg) {
+  ws.send(JSON.stringify(
+{
+        token:token.value,
+        name:userName.value,
+        msg
+      }
+  ))
+  msgArr.value.push({
+    name:userName.value,
+    msg
+  })
+
+}
+
 ws.onopen = function() {
   connected.value = true
 };
 
 ws.onmessage = function(msg) {
-  console.log('msg.data',msg.data);
-  msgArr.value.push(msg.data.split(':'))
+  const res = JSON.parse(msg.data);
+  if (res.code === 0) {
+    msgArr.value.push(res.data)
+  }else{
+    ElMessage({ message: res.msg, type: 'error' })
+  }
 };
 
 ws.onclose = function() {
@@ -47,7 +73,7 @@ const subSendMsgHandler = ()=>{
     ElMessage({ message: '发送内容不能为空', type: 'error' })
     return
   }
-  ws.send(sendMsg.value);
+  wsSendMsg(sendMsg.value);
   nextTick(()=>{
     sendMsg.value = ''
   })
@@ -55,5 +81,18 @@ const subSendMsgHandler = ()=>{
 </script>
 
 <style scoped lang="scss">
-
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+/* 确保将离开的元素从布局流中删除
+  以便能够正确地计算移动的动画。 */
+.list-leave-active {
+  position: absolute;
+}
 </style>

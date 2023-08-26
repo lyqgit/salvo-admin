@@ -8,6 +8,9 @@ use tokio_stream::wrappers::UnboundedReceiverStream;
 
 use salvo::prelude::*;
 use salvo::websocket::{Message, WebSocket, WebSocketUpgrade};
+use crate::model::chat_model::{ChatRxMsg, ChatTxMsg};
+use crate::utils::redis;
+use crate::utils::res::ResObj;
 
 type Users = RwLock<HashMap<usize, mpsc::UnboundedSender<Result<Message, salvo::Error>>>>;
 
@@ -58,13 +61,59 @@ async fn handle_socket(ws: WebSocket) {
 }
 
 async fn user_message(my_id: usize, msg: Message) {
-    let msg = if let Ok(s) = msg.to_str() {
+    let rx_str = if let Ok(s) = msg.to_str() {
         s
     } else {
         return;
     };
 
-    let new_msg = format!("<User#{my_id}>:{msg}");
+
+
+    let mut code = 0;
+
+    let mut rx_msg = ChatRxMsg{token:String::new(),name:String::new(),msg:String::new()};
+
+    match serde_json::from_str(rx_str) {
+        Ok(v)=>{
+            rx_msg = v;
+        },
+        Err(e)=>{
+            println!("websocket rx msg---{:?}",e);
+            code = 500
+        }
+    }
+
+
+    if let Ok(_) = redis::get::<i32,&str>(rx_msg.token.as_str()){
+        // token验证通过，可以发送消息
+    }else{
+        code = 401
+    }
+
+    let res:ResObj<ChatTxMsg> = ResObj{
+        code,
+        data:(||->Option<ChatTxMsg>{
+            if code == 0{
+                Some(ChatTxMsg{
+                    name:rx_msg.name.clone(),
+                    msg:rx_msg.msg.clone()
+                })
+            }else{
+                None
+            }
+        })(),
+        msg:(||->String{
+            if code == 0{
+                String::from("访问成功")
+            }else if code == 401{
+                String::from("拒绝访问")
+            }else{
+                String::from("服务器发生错误")
+            }
+        })()
+    };
+
+    let new_msg = serde_json::to_string(&res).unwrap();
 
     // New message from this user, send it to everyone else (except same uid)...
     for (&uid, tx) in ONLINE_USERS.read().await.iter() {
