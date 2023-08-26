@@ -106,7 +106,7 @@ async fn user_message(my_id: usize, msg: Message) {
             if code == 0{
                 String::from("访问成功")
             }else if code == 401{
-                String::from("拒绝访问")
+                String::from("拒绝通信")
             }else{
                 String::from("服务器发生错误")
             }
