@@ -17,7 +17,7 @@ pub mod post_router;
 
 
 pub fn init_router()->Router{
-    let static_dir = Router::with_path("/static").get(
+    let static_dir = Router::with_path("/static/<*path>").get(
         StaticDir::new([
             "static/",
         ])
