@@ -22,9 +22,9 @@ use crate::model::menu_model::Router;
   ),
 )]
 pub async fn get_captcha()->Res<CaptchaRes>{
-  if let (_,Some(base64)) = captcha::create_captcha(){
+  if let (captcha_str,Some(base64)) = captcha::create_captcha(){
     let uuid = Uuid::new_v4().to_string();
-    redis::set_ex(&uuid, &base64, 300).unwrap();
+    redis::set_ex(&uuid, captcha_str, 300).unwrap();
     Ok(res_json_ok(Some(CaptchaRes{img:base64,captcha_enabled:Some(true),uuid})))
   }else{
     Err(res_json_err("验证码生成失败".to_string()))
@@ -39,9 +39,9 @@ pub async fn get_captcha()->Res<CaptchaRes>{
   ),
 )]
 pub async fn login(login_body:JsonBody<LoginReq>)->Res<LoginRes>{
-  if let Some(_) = login_body.code.clone(){
+  if let Some(captcha_str) = login_body.code.clone(){
     let captcha:String = redis::get(login_body.uuid.clone()).unwrap();
-    if captcha.is_empty(){
+    if captcha.is_empty() || !captcha_str.eq(&captcha){
       Err(res_json_err("验证码错误".to_string()))
     }else{
       redis::del(login_body.uuid.clone()).unwrap();
