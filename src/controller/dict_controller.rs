@@ -7,7 +7,7 @@ use crate::model::dict_model::{AddDictType, DictTypeDataPagePayload, AddSysDictD
 use crate::utils::res::{res_json_ok,res_json_custom,ResObj};
 use crate::{service::dict_service, utils::res::Res, entity::sys_dict_type_entity::{SysDictType,ModifySysDictType}};
 
-
+/// 字典类型列表
 #[endpoint(
   tags("字典"),
   parameters(DictTypePagePayload),
@@ -34,6 +34,7 @@ pub async fn get_dict_list(req:&mut Request)->Res<Page<SysDictType>>{
   }
 }
 
+/// 根据类型获取字典数据列表
 #[endpoint(
   tags("字典"),
   responses(
@@ -52,6 +53,7 @@ pub async fn get_dict_list_by_type(type_id:PathParam<Option<&str>>)->Res<Vec<Sys
   }
 }
 
+/// 根据id获取字典类型数据
 #[endpoint(
   tags("字典"),
   responses(
@@ -71,6 +73,7 @@ pub async fn get_dict_by_id(id:PathParam<Option<i64>>)->Res<Option<SysDictType>>
   }
 }
 
+/// 获取所有字典类型
 #[endpoint(
   tags("字典"),
   responses(
@@ -88,11 +91,11 @@ pub async fn get_all_dict_type()->Res<Vec<SysDictType>>{
   }
 }
 
-
+/// 创建字典类型
 #[endpoint(
   tags("字典"),
   responses(
-    (status_code = 200,body=ResObj<()>,description ="创建字典")
+    (status_code = 200,body=ResObj<()>,description ="创建字典类型")
   )
 )]
 pub async fn add_dict_type(dict:JsonBody<AddDictType>,depot:&mut Depot)->Res<()>{
@@ -117,11 +120,11 @@ pub async fn add_dict_type(dict:JsonBody<AddDictType>,depot:&mut Depot)->Res<()>
   }
 }
 
-
+/// 修改字典类型
 #[endpoint(
   tags("字典"),
   responses(
-    (status_code = 200,body=ResObj<()>,description ="创建字典")
+    (status_code = 200,body=ResObj<()>,description ="修改字典类型")
   )
 )]
 pub async fn edit_dict_type(dict:JsonBody<ModifySysDictType>,depot:&mut Depot)->Res<()>{
@@ -143,6 +146,8 @@ pub async fn edit_dict_type(dict:JsonBody<ModifySysDictType>,depot:&mut Depot)->
   }
 }
 
+
+/// 删除字典类型
 #[endpoint(
   tags("字典"),
   responses(
@@ -169,6 +174,7 @@ pub async fn del_dict_type(id:PathParam<Option<&str>>)->Res<()>{
   }
 }
 
+/// 字典类型数据列表
 #[endpoint(
   tags("字典"),
   parameters(
@@ -190,6 +196,7 @@ pub async fn get_dict_data_list(req:&mut Request)->Res<Page<SysDictData>>{
   }
 }
 
+/// 创建字典数据
 #[endpoint(
   tags("字典"),
   responses(
@@ -212,7 +219,7 @@ pub async fn post_add_dict_data(payload:JsonBody<AddSysDictDataVo>,depot:&mut De
   }
 }
 
-
+/// 删除字典类型数据
 #[endpoint(
   tags("字典"),
   responses(
@@ -239,7 +246,7 @@ pub async fn del_dict_type_data(id:PathParam<Option<&str>>)->Res<()>{
   }
 }
 
-
+/// 字典类型数据详情
 #[endpoint(
   tags("字典"),
   parameters(
@@ -261,7 +268,7 @@ pub async fn get_dict_type_data_by_id(req:&mut Request)->Res<Option<SysDictData>
   }
 }
 
-
+/// 修改字典数据
 #[endpoint(
   tags("字典"),
   responses(

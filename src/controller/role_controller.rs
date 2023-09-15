@@ -7,6 +7,7 @@ use crate::model::user_model::SysUserList;
 use crate::service::role_service;
 use crate::utils::res::{Res, match_ok, ResObj, match_no_res_ok};
 
+/// 角色列表
 #[endpoint(
     tags("角色"),
     parameters(
@@ -29,6 +30,7 @@ pub async fn get_roles_by_page(req:&mut Request)->Res<Page<SysRoleList>>{
     ).await)
 }
 
+/// 添加角色
 #[endpoint(
     tags("角色"),
     responses(
@@ -41,6 +43,7 @@ pub async fn post_add_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut De
     match_no_res_ok(role_service::add_role_and_bind_menu(user_id,payload.dept_check_strictly,payload.menu_check_strictly,payload.menu_ids,payload.role_key,payload.role_name,payload.status,payload.role_sort,payload.remark).await)
 }
 
+/// 更改角色状态
 #[endpoint(
     tags("角色"),
     responses(
@@ -51,6 +54,7 @@ pub async fn put_edit_role_status(payload:JsonBody<SysRoleStatusPayload>)->Res<(
     match_no_res_ok(role_service::update_role_status_by_id(payload.role_id,payload.status.clone()).await)
 }
 
+/// 删除角色
 #[endpoint(
     tags("角色"),
     responses(
@@ -61,6 +65,7 @@ pub async fn del_role_by_id(id:PathParam<String>)->Res<()>{
     match_no_res_ok(role_service::del_role_by_id(id.into_inner()).await)
 }
 
+/// 获取角色详情
 #[endpoint(
     tags("角色"),
     responses(
@@ -71,6 +76,7 @@ pub async fn get_role_by_id(id:PathParam<String>)->Res<Option<SysRoleList>>{
     match_ok(role_service::get_role_by_id(id.into_inner()).await)
 }
 
+/// 修改角色
 #[endpoint(
     tags("角色"),
     responses(
@@ -98,7 +104,7 @@ pub async fn put_edit_role(payload:JsonBody<SysRoleModifyPayload>, depot:&mut De
     ).await)
 }
 
-
+/// 根据角色id获取用户列表
 #[endpoint(
     tags("角色"),
     parameters(
@@ -113,6 +119,7 @@ pub async fn get_users_by_role_id_page(req:&mut Request)->Res<Page<SysUserList>>
     match_ok(role_service::select_users_by_role_id(payload.user_name,payload.phone_number,payload.role_id,payload.page_num.map_or(1,|v|v),payload.page_size.map_or(10,|v|v),).await)
 }
 
+/// 根据角色id获取非此角色的用户列表
 #[endpoint(
     tags("角色"),
     parameters(
@@ -127,7 +134,7 @@ pub async fn get_users_by_not_in_role_id_page(req:&mut Request)->Res<Page<SysUse
     match_ok(role_service::select_users_not_in_role_id(payload.user_name,payload.phone_number,payload.role_id,payload.page_num.map_or(1,|v|v),payload.page_size.map_or(10,|v|v),).await)
 }
 
-
+/// 删除角色和用户绑定关系
 #[endpoint(
     tags("角色"),
     responses(
@@ -141,6 +148,7 @@ pub async fn del_user_role(payload:JsonBody<SysRoleCancelUserPayload>) -> Res<()
     ).await)
 }
 
+/// 删除多个角色和用户绑定关系
 #[endpoint(
     tags("角色"),
     parameters(
@@ -158,6 +166,7 @@ pub async fn del_user_role_all(req:&mut Request) -> Res<()> {
     ).await)
 }
 
+/// 绑定多个用户和一个角色
 #[endpoint(
     tags("角色"),
     parameters(

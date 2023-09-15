@@ -15,6 +15,7 @@ use crate::utils::md5::create_md5;
 use crate::utils::redis;
 use crate::model::menu_model::Router;
 
+/// 获取验证码
 #[endpoint(
   tags("用户"),
   responses(
@@ -32,6 +33,7 @@ pub async fn get_captcha()->Res<CaptchaRes>{
 
 }
 
+/// 登录
 #[endpoint(
   tags("用户"),
   responses(
@@ -74,6 +76,7 @@ pub async fn login(login_body:JsonBody<LoginReq>)->Res<LoginRes>{
   }
 }
 
+/// 获取用户信息
 #[endpoint(
   tags("用户"),
   responses(
@@ -111,6 +114,7 @@ pub async fn get_info(depot: &mut Depot)->Res<UserInfo>{
   }
 }
 
+/// 获取用户路由
 #[endpoint(
   tags("路由"),
   responses(
@@ -143,6 +147,7 @@ pub async fn get_routers(depot: &mut Depot)->Res<Vec<Router>>{
   }
 }
 
+/// 退出登录
 #[endpoint(
   tags("用户"),
   responses(
@@ -159,6 +164,7 @@ pub async fn log_out(req:&mut Request)->Res<()>{
   }
 }
 
+/// 用户列表
 #[endpoint(
   tags("用户"),
   parameters(
@@ -173,6 +179,8 @@ pub async fn get_user_page(req:&mut Request)->Res<Page<SysUserList>>{
   match_ok(user_service::get_user_page(payload.page_num,payload.page_size,payload.user_name.clone(),payload.phone_number.clone(),payload.status.clone(),payload.begin_time,payload.end_time,payload.dept_id).await)
 }
 
+
+/// 用户详情
 #[endpoint(
   tags("用户"),
   responses(
@@ -183,6 +191,8 @@ pub async fn get_user_detail(id:PathParam<Option<i64>>)->Res<SysUserDetail>{
   match_ok(user_service::get_detail_by_id(id.into_inner()).await)
 }
 
+
+/// 删除用户
 #[endpoint(
   tags("用户"),
   responses(
@@ -193,6 +203,7 @@ pub async fn del_user(id:PathParam<i64>)->Res<()>{
   match_no_res_ok(user_service::del_user(id.into_inner()).await)
 }
 
+/// 修改用户密码
 #[endpoint(
   tags("用户"),
   responses(
@@ -206,6 +217,8 @@ pub async fn update_user_pwd(payload:JsonBody<SysUserEditPwdPayload>)->Res<()>{
   ).await)
 }
 
+
+/// 获取部门和角色列表
 #[endpoint(
   tags("用户"),
   responses(
@@ -216,6 +229,8 @@ pub async fn get_dept_and_role()->Res<SysUserDetail>{
   match_ok(user_service::get_detail_by_id(None).await)
 }
 
+
+/// 修改用户状态
 #[endpoint(
   tags("用户"),
   responses(
@@ -226,6 +241,7 @@ pub async fn put_change_status_by_id(payload:JsonBody<SysUserChangeStatusPayload
   match_no_res_ok(user_service::update_user_status_by_id(payload.status.clone(),payload.user_id).await)
 }
 
+/// 添加用户
 #[endpoint(
   tags("用户"),
   responses(
@@ -252,6 +268,7 @@ pub async fn post_add_user(payload:JsonBody<SysUserModifyPayload>,depot:&mut Dep
   ).await)
 }
 
+/// 修改用户
 #[endpoint(
   tags("用户"),
   responses(
@@ -275,6 +292,8 @@ pub async fn put_edit_user(payload:JsonBody<SysUserEditPayload>,depot:&mut Depot
   ).await)
 }
 
+
+/// 查询用户详情和角色列表
 #[endpoint(
   tags("用户"),
   responses(
@@ -285,6 +304,7 @@ pub async fn get_user_auth_role_by_id(id:PathParam<i64>)->Res<SysUserAuthRole>{
   match_ok(user_service::get_user_auth_role_by_id(id.into_inner()).await)
 }
 
+/// 修改用户权限
 #[endpoint(
   tags("用户"),
   parameters(
