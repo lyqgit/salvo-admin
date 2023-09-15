@@ -83,6 +83,8 @@ pub async fn update_user_status_by_id(status:String,user_id:i64)->rbatis::Result
   Ok(func::is_modify_ok(rows.rows_affected))
 }
 
+// 如果没有填写部门，则默认为若依科技-100
+// 如果没有填写岗位，则默认为普通员工-4
 pub async fn add_user(
   user_id:i32,
   dept_id:Option<i64>,
@@ -101,7 +103,7 @@ pub async fn add_user(
   let user = user.get(0).unwrap();
   let user_entity = AddSysUserEntity{
     user_id: None,
-    dept_id,
+    dept_id: Option::from(dept_id.unwrap_or(100)),
     user_name: Some(user_name),
     nick_name: Some(nick_name),
     user_type: None,
@@ -125,11 +127,18 @@ pub async fn add_user(
   let mut rows = AddSysUserEntity::insert(&mut GLOBAL_DB.clone(),&user_entity).await?;
   let new_user_id = rows.last_insert_id.as_i64().unwrap();
   let mut user_post_arr:Vec<SysUserPostEntity> = Vec::new();
-  for(_,it) in post_ids.iter().enumerate(){
+  if post_ids.len()>0{
+    for(_,it) in post_ids.iter().enumerate(){
+      user_post_arr.push(
+        SysUserPostEntity{ user_id: new_user_id, post_id: it.clone() }
+      )
+    }
+  }else{
     user_post_arr.push(
-      SysUserPostEntity{ user_id: new_user_id, post_id: it.clone() }
+      SysUserPostEntity{ user_id: new_user_id, post_id: 4 }
     )
   }
+
   if user_post_arr.len()>0{
     rows = SysUserPostEntity::insert_batch(&mut GLOBAL_DB.clone(), &user_post_arr, user_post_arr.len() as u64).await?;
   }
