@@ -25,12 +25,12 @@ use crate::model::menu_model::Router;
 pub async fn get_captcha()->Res<CaptchaRes>{
   if let (captcha_str,Some(base64)) = captcha::create_captcha(){
     let uuid = Uuid::new_v4().to_string();
-    redis::set_ex(&uuid, captcha_str, 300).unwrap();
+    // 验证码转小写
+    redis::set_ex(&uuid, captcha_str.to_lowercase(), 300).unwrap();
     Ok(res_json_ok(Some(CaptchaRes{img:base64,captcha_enabled:Some(true),uuid})))
   }else{
     Err(res_json_err("验证码生成失败".to_string()))
   }
-
 }
 
 /// 登录
