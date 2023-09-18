@@ -85,6 +85,7 @@ pub async fn update_user_status_by_id(status:String,user_id:i64)->rbatis::Result
 
 // 如果没有填写部门，则默认为若依科技-100
 // 如果没有填写岗位，则默认为普通员工-4
+// 新建用户，查重用户名
 pub async fn add_user(
   user_id:i32,
   dept_id:Option<i64>,
@@ -99,6 +100,13 @@ pub async fn add_user(
   role_ids:Vec<i64>,
   remark:Option<String>,
 )->rbatis::Result<bool>{
+
+  // 查重用户名
+  let has_user = SysUserEntity::select_by_column(&mut GLOBAL_DB.clone(), "user_name",&user_name).await?;
+  if has_user.len() >0 {
+    return Err(Error::from("用户名不能重复"))
+  }
+
   let user = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", user_id).await?;
   let user = user.get(0).unwrap();
   let user_entity = AddSysUserEntity{
