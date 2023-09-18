@@ -5,6 +5,80 @@ use crate::model::common_model::Page;
 use crate::model::dept_model::{DeptList, DeptTree};
 
 // 路由数组转树
+pub fn router_arr_to_tree2(ori_arr:Vec<SysMenu>,pid:i64)->Vec<Router>{
+  let mut re_list = Vec::<Router>::new();
+  for (_,it) in ori_arr.iter().enumerate(){
+    if pid == it.parent_id && !it.menu_type.eq("F"){
+      let temp_meta = Meta{
+        title:it.menu_name.clone(),
+        icon:it.icon.clone(),
+        link:(||->Option<String>{
+          if it.is_frame == 0{
+            Some(it.path.clone())
+          }else{
+            None
+          }
+        })(),
+        no_cache:it.is_cache==1
+      };
+
+      let children = router_arr_to_tree2(ori_arr.clone(),it.menu_id);
+
+      let temp_router = Router{
+        always_show:(||->Option<bool>{
+          if it.visible.eq("0") && !it.menu_type.eq("C") && it.is_frame == 1{
+            Some(true)
+          }else{
+            None
+          }
+        })(),
+        children:(||->Option<Vec<Router>>{
+          if children.len()>0{
+            Some(children)
+          }else{
+            None
+          }
+        })(),
+        component:it.component.clone().map_or(String::from("Layout"), |v|{
+          if v.is_empty() && it.parent_id == 0 && it.menu_type.eq("M"){
+            String::from("Layout")
+          }else if it.parent_id != 0 && it.menu_type.eq("M"){
+            String::from("ParentView")
+          }else{
+            v
+          }
+
+        }
+        ),
+        hidden:it.status.eq("1"),
+        name:it.path.clone(),
+        path:(||->String{
+          if it.menu_type.eq("C") || it.is_frame == 0{
+            it.path.clone()
+          }else if it.menu_type.eq("M") && it.parent_id != 0{
+            it.path.clone()
+          }else{
+            "/".to_owned()+&it.path
+          }
+        })(),
+        redirect:(||->Option<String>{
+          if it.is_frame == 1 && it.menu_type.eq("M"){
+            Some(String::from("noRedirect"))
+          }else{
+            None
+          }
+        })(),
+        meta:temp_meta
+      };
+      re_list.push(temp_router);
+    }
+  }
+  re_list
+}
+
+// 路由数组转树
+#[allow(dead_code)]
+#[allow(unused_must_use)]
 pub fn router_arr_to_tree(re_list:&mut Vec<Router>,ori_arr:Vec<SysMenu>,pid:i64){
   for (_,it) in ori_arr.iter().enumerate(){
     if pid == it.parent_id && !it.menu_type.eq("F"){

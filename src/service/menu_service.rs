@@ -20,8 +20,7 @@ pub async fn get_menu_by_role_id(is_admin:bool,id:String)->rbatis::Result<Vec<St
 
 pub async fn get_router_tree(is_admin:bool,id:i32)->rbatis::Result<Vec<Router>>{
   let list:Vec<SysMenu> = menu_mapper::select_menus_by_user_id(&mut GLOBAL_DB.clone(),is_admin,id).await?;
-  let mut router_list = Vec::<Router>::new();
-  func::router_arr_to_tree(&mut router_list,list,0);
+  let router_list = func::router_arr_to_tree2(list,0);
   Ok(router_list)
 }
 
