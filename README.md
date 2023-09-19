@@ -22,7 +22,7 @@ cd salvo-admin
 cargo run
 
 # 后端访问地址 http://localhost:8090
-# 后端文档访问地址 http://localhost:8090/swagger-ui
+# 后端文档访问地址 http://localhost:8090/swagger-ui （加入了用户名和密码验证）
 
 # 进入前台项目目录
 cd ui
@@ -42,6 +42,10 @@ yarn dev
 
 ### admin admin123
 ### ry ry123
+
+## 接口文档账号
+
+### admin salvo-admin2023
 
 ## 问题
 
