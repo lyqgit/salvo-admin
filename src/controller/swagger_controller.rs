@@ -37,7 +37,7 @@ static LOGIN_HTML: &str = r#"<!DOCTYPE html>
         <form class="form" action="/swaggerLogin" method="post">
             <h1>swagger-ui</h1>
             <input type="text" name="username" placeholder="用户名" />
-            <input class="mt-20" type="text" name="password" placeholder="密码" />
+            <input class="mt-20" type="password" name="password" placeholder="密码" />
             <button class="mt-20" type="submit" id="submit">登录</button>
         </form>
     </body>
