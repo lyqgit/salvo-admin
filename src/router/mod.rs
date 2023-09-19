@@ -3,9 +3,11 @@ use salvo::serve_static::StaticDir;
 use salvo::logging::Logger;
 use salvo::catcher::Catcher;
 use salvo::oapi::{OpenApi};
-use salvo::prelude::CatchPanic;
+use salvo::prelude::{CatchPanic, SessionHandler};
 use salvo::oapi::swagger_ui::SwaggerUi;
+use salvo::session::CookieStore;
 use crate::controller::common_controller;
+use crate::controller::swagger_controller;
 
 
 pub mod user_router;
@@ -54,11 +56,25 @@ pub fn init_router()->Router{
 
         );
 
-
+    let session_handler = SessionHandler::builder(
+        CookieStore::new(),
+        b"salvo-adminsalvo-adminalvo-adminsalvo-admin2023salvo-admin2023salvo-admin2023",
+    )
+        .build()
+        .unwrap();
     let doc = OpenApi::new("后台接口文档", "0.0.1").tags(["用户","路由","角色","菜单","部门","字典","岗位"]).merge_router(&router);
     let router = router
-        .push(doc.into_router("/api-doc/openapi.json"))
-        .push(SwaggerUi::new("/api-doc/openapi.json").into_router("swagger-ui"));
+        .push(
+        Router::new().hoop(session_handler).push(
+            Router::new().hoop(swagger_controller::auth_token)
+                .push(doc.into_router("/api-doc/openapi.json"))
+                .push(SwaggerUi::new("/api-doc/openapi.json").into_router("swagger-ui"))
+            )
+                .push(
+                Router::with_path("/swaggerLogin").post(swagger_controller::swagger_login)
+            )
+        );
+
     router
 }
 

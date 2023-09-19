@@ -6,3 +6,4 @@ pub mod role_model;
 pub mod dept_model;
 pub mod post_model;
 pub mod chat_model;
+pub mod swagger_model;

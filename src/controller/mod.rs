@@ -6,3 +6,4 @@ pub mod role_controller;
 pub mod dept_controller;
 pub mod post_controller;
 pub mod chat_controller;
+pub mod swagger_controller;
