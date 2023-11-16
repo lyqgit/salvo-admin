@@ -16,16 +16,20 @@ mod router;
 pub static GLOBAL_DB: Lazy<Rbatis> = Lazy::new(|| Rbatis::new());
 
 pub static GLOBAL_REDIS:Lazy<Client> = Lazy::new(||{
-    let client = redis::Client::open("redis://127.0.0.1/").expect("连接redis失败");
-    client.get_connection().unwrap();
+    let client = Client::open("redis://127.0.0.1/").expect("连接redis失败");
     return client;
 });
 
 #[tokio::main]
 async fn main() {
 
+    tracing_subscriber::fmt().init();
+
     // 连接数据库
     utils::mysql::init_db().await;
+
+    // 连接redis
+    GLOBAL_REDIS.get_connection().unwrap();
 
     let service = router::init_service();
 
