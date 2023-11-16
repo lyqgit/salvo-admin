@@ -3,6 +3,7 @@ use once_cell::sync::Lazy;
 use salvo::{Server, Listener};
 use salvo::conn::TcpListener;
 use redis::{Client};
+use tracing;
 
 
 mod controller;
@@ -15,10 +16,7 @@ mod router;
 
 pub static GLOBAL_DB: Lazy<Rbatis> = Lazy::new(|| Rbatis::new());
 
-pub static GLOBAL_REDIS:Lazy<Client> = Lazy::new(||{
-    let client = Client::open("redis://127.0.0.1/").expect("连接redis失败");
-    return client;
-});
+pub static GLOBAL_REDIS:Lazy<Client> = Lazy::new(|| Client::open("redis://127.0.0.1/").expect("连接redis失败"));
 
 #[tokio::main]
 async fn main() {
@@ -27,9 +25,11 @@ async fn main() {
 
     // 连接数据库
     utils::mysql::init_db().await;
+    tracing::info!("数据库连接成功");
 
     // 连接redis
-    GLOBAL_REDIS.get_connection().unwrap();
+    GLOBAL_REDIS.get_connection().expect("连接redis失败");
+    tracing::info!("redis连接成功");
 
     let service = router::init_service();
 
