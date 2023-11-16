@@ -53,7 +53,7 @@ pub fn init_router_no_token()->Router{
     )
     .push(
         // chat群聊
-        Router::with_path("/chat").handle(chat_controller::user_connected)
+        Router::with_path("/chat").goal(chat_controller::user_connected)
     )
 
 }
