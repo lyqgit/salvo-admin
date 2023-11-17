@@ -6,5 +6,5 @@ pub async fn init_db() {
         rbdc_mysql::driver::MysqlDriver {},
         "mysql://root:123456@localhost/ry-vue",
     )
-        .unwrap();
+        .expect("数据库连接失败");
 }
