@@ -22,8 +22,7 @@ pub fn init_router()->Router{
     let static_dir = Router::with_path("/static/<*path>").get(
         StaticDir::new([
             "static/",
-        ])
-            .listing(true),
+        ]).auto_list(true),
     );
 
     let router = Router::new().hoop(Logger::new())

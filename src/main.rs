@@ -1,26 +1,25 @@
-use rbatis::Rbatis;
 use once_cell::sync::Lazy;
-use salvo::{Server, Listener};
+use rbatis::RBatis;
+use redis::Client;
 use salvo::conn::TcpListener;
-use redis::{Client};
+use salvo::{Listener, Server};
 use tracing;
 
-
 mod controller;
-mod service;
+mod entity;
 mod mapper;
 mod model;
-mod entity;
-mod utils;
 mod router;
+mod service;
+mod utils;
 
-pub static GLOBAL_DB: Lazy<Rbatis> = Lazy::new(|| Rbatis::new());
+pub static GLOBAL_DB: Lazy<RBatis> = Lazy::new(|| RBatis::new());
 
-pub static GLOBAL_REDIS:Lazy<Client> = Lazy::new(|| Client::open("redis://127.0.0.1/").expect("连接redis失败"));
+pub static GLOBAL_REDIS: Lazy<Client> =
+    Lazy::new(|| Client::open("redis://127.0.0.1/").expect("连接redis失败"));
 
 #[tokio::main]
 async fn main() {
-
     tracing_subscriber::fmt().init();
 
     // 连接数据库
@@ -33,7 +32,7 @@ async fn main() {
 
     let service = router::init_service();
 
-    Server::new(
-        TcpListener::new("0.0.0.0:8090").bind().await
-    ).serve(service).await;
+    Server::new(TcpListener::new("0.0.0.0:8090").bind().await)
+        .serve(service)
+        .await;
 }
