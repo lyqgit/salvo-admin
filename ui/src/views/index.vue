@@ -8,7 +8,7 @@
             前端使用 vue3
           </p>
           <p>
-            后端使用 rust salvo
+            后端使用 salvo
           </p>
         </p>
         <p>
@@ -35,6 +35,7 @@
               <li>serde</li>
               <li>tokio</li>
               <li>mysql</li>
+              <li>redis</li>
               <li>...</li>
             </ul>
           </el-col>
@@ -47,6 +48,7 @@
               <li>Axios</li>
               <li>Sass</li>
               <li>Quill</li>
+              <li>Vue-router</li>
               <li>...</li>
             </ul>
           </el-col>
@@ -58,7 +60,7 @@
 </template>
 
 <script setup name="Index">
-const version = ref('1.0.0')
+const version = ref('0.1.1')
 
 function goTarget(url) {
   window.open(url, '__blank')
