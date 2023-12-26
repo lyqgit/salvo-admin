@@ -16,6 +16,7 @@ pub mod menu_router;
 pub mod role_router;
 pub mod dept_router;
 pub mod post_router;
+pub mod monitor_router;
 
 
 pub fn init_router()->Router{
@@ -52,6 +53,9 @@ pub fn init_router()->Router{
                 .push(
                     post_router::init_router()
                 )
+                .push(
+                    monitor_router::init_router()
+                )
 
         );
 
@@ -61,7 +65,7 @@ pub fn init_router()->Router{
     )
         .build()
         .unwrap();
-    let doc = OpenApi::new("后台接口文档", "0.0.1").tags(["用户","路由","角色","菜单","部门","字典","岗位"]).merge_router(&router);
+    let doc = OpenApi::new("后台接口文档", "0.1.1").tags(["用户","路由","角色","菜单","部门","字典","岗位","系统"]).merge_router(&router);
     let router = router
         .push(
         Router::new().hoop(session_handler).push(

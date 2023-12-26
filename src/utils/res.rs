@@ -74,6 +74,18 @@ pub fn match_ok<T:ToSchema>(res:rbatis::Result<T>)->Res<T>{
     }
 }
 
+#[allow(dead_code)]
+pub fn match_ok_common_result_no_error<T:ToSchema>(res:Result<T,()>)->Res<T>{
+    match res {
+        Ok(v)=>{
+            Ok(res_json_ok(Some(v)))
+        },
+        Err(_)=>{
+            Err(res_json_custom(400,"服务器发生错误".to_string()))
+        }
+    }
+}
+
 
 #[allow(dead_code)]
 pub fn match_custom_ok<T:ToSchema>(res:rbatis::Result<T>, resolve: Box<dyn FnOnce(T) -> Json<ResObj<T>>>)->Res<T>{
