@@ -15,6 +15,14 @@
     excelData:null,
   })
 
+
+  function devTip() {
+    ElMessage({
+      type:'warning',
+      message:'功能开发中'
+    })
+  }
+
   function handleClose() {
     dialogVisible.value = false
   }
@@ -105,10 +113,10 @@
   <div class="excel-layout">
     <div class="left-side">
       <div>
-        <el-button @click="openDialog" type="primary">创新新文档</el-button>
+        <el-button @click="devTip" type="primary">创新新文档</el-button>
       </div>
       <ul class="excel-list-layout">
-        <li :class="curExcel.excelId === item.excelId?'selected':''" @click="getExcelDataById(item.excelId)" v-for="item in excelList" :key="item.excelId">{{item.excelName}}</li>
+        <li :class="curExcel.excelId === item.excelId?'selected':''" @click="devTip" v-for="item in excelList" :key="item.excelId">{{item.excelName}}</li>
       </ul>
     </div>
     <div class="right-content">

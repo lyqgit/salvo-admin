@@ -1,12 +1,9 @@
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
-
 use futures_util::{FutureExt, StreamExt};
 use once_cell::sync::Lazy;
 use tokio::sync::{mpsc, RwLock};
 use tokio_stream::wrappers::UnboundedReceiverStream;
-
-use salvo::prelude::*;
 use salvo::websocket::{Message, WebSocket};
 
 type Users = RwLock<HashMap<usize, mpsc::UnboundedSender<Result<Message, salvo::Error>>>>;
