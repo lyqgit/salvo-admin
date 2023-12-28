@@ -42,7 +42,7 @@ pub async fn get_captcha()->Res<CaptchaRes>{
 )]
 pub async fn login(login_body:JsonBody<LoginReq>)->Res<LoginRes>{
   if let Some(captcha_str) = login_body.code.clone(){
-    let captcha:String = redis::get(login_body.uuid.clone()).unwrap();
+    let captcha:String = redis::get(login_body.uuid.clone()).map_or(String::new(),|v|v);
     if captcha.is_empty() || !captcha_str.eq(&captcha){
       Err(res_json_err("验证码错误".to_string()))
     }else{
@@ -156,7 +156,7 @@ pub async fn get_routers(depot: &mut Depot)->Res<Vec<Router>>{
 )]
 pub async fn log_out(req:&mut Request)->Res<()>{
   if let Some(token) = req.headers().get("Authorization"){
-    match redis::del(token.to_str().unwrap().to_string().replace("Bearer ","")){
+    match redis::del(token.to_str().map_or("",|v|v).to_string().replace("Bearer ","")){
       _=>Ok(res_json_ok(None))
     }
   }else{

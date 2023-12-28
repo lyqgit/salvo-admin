@@ -8,3 +8,5 @@ pub mod post_controller;
 pub mod chat_controller;
 pub mod swagger_controller;
 pub mod monitor_controller;
+
+pub mod excel_controller;

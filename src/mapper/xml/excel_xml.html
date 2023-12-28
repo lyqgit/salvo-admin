@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<script src="../../../../../html/eview-sheet/src/core/index.js"></script>
+<mapper>
+    <select id="get_excel_list">
+        `select excel_id,excel_name from tool_excel`
+        <where>
+            `1 = 1
+        </where>
+    </select>
+    <select id="get_excel_list_by_id">
+        `select excel_id,excel_name from tool_excel`
+        <where>
+            `1 = 1 and user_id = #{user_id}`
+        </where>
+    </select>
+    <select id="get_excel_detail_by_id">
+        `select excel_id,excel_name,excel_data,create_time,update_time from tool_excel`
+        <where>
+            ` 1 = 1`
+            <if test="excel_id != ''">
+                ` and excel_id = #{excel_id}`
+            </if>
+        </where>
+    </select>
+</mapper>

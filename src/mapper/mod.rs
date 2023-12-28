@@ -8,3 +8,5 @@ pub mod dept_mapper;
 pub mod post_mapper;
 pub mod user_role_mapper;
 pub mod user_post_mapper;
+
+pub mod excel_mapper;

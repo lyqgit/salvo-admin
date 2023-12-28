@@ -9,3 +9,4 @@ pub mod sys_dept_entity;
 pub mod sys_post_entity;
 pub mod sys_user_role_entity;
 pub mod sys_user_post_entity;
+pub mod excel_entity;

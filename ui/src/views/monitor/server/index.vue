@@ -23,7 +23,7 @@
                 </tr>
                 <tr>
                   <td class="el-table__cell is-leaf"><div class="cell">品牌</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" v-if="server.cpu">{{ server.cpu.brand }}%</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" v-if="server.cpu">{{ server.cpu.brand }}</div></td>
                 </tr>
                 <tr>
                   <td class="el-table__cell is-leaf"><div class="cell">cpu频率</div></td>

@@ -1,5 +1,5 @@
 use salvo::Router;
-use crate::controller::{chat_controller, dept_controller, user_controller};
+use crate::controller::{chat_controller, dept_controller, user_controller, excel_controller};
 
 pub fn init_router()->Router{
     let router = Router::new();
@@ -54,6 +54,8 @@ pub fn init_router_no_token()->Router{
     .push(
         // chat群聊
         Router::with_path("/chat").goal(chat_controller::user_connected)
+    ).push(
+        Router::with_path("/tool/excel/connected").goal(excel_controller::excel_connected)
     )
 
 }
