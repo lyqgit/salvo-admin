@@ -83,7 +83,9 @@
         // const data = JSON.parse(res.data.excelData)
         // console.log('curExcel.excelData',data[0].sheet)
         // try {
+        // console.log('JSON.parse(res.data.excelData)',JSON.parse(res.data.excelData))
         res.data.excelData && excelPkg.drawExcel(JSON.parse(res.data.excelData))
+        console.log('excelPkg.sheetWidth',excelPkg.sheetWidth)
         // }catch (e) {
         //   console.log(' excelPkg.getCurrentSheet()', excelPkg.getCurrentSheet())
         // }
