@@ -62,7 +62,7 @@
     })
   })
 
-  function openDialog() {
+  function openAddDialog() {
     dialogVisible.value = true
   }
   
@@ -73,6 +73,7 @@
       handleClose()
       curExcel.excelId = res.data
       freshList()
+      excelPkg.drawExcel()
     })
   }
 
@@ -115,7 +116,7 @@
   <div class="excel-layout">
     <div class="left-side">
       <div>
-        <el-button @click="devTip" type="primary">创新新文档</el-button>
+        <el-button @click="openAddDialog" type="primary">创新新文档</el-button>
       </div>
       <ul class="excel-list-layout">
         <li :class="curExcel.excelId === item.excelId?'selected':''" @click="devTip" v-for="item in excelList" :key="item.excelId">{{item.excelName}}</li>
@@ -133,9 +134,9 @@
       <el-input v-model="excelName"></el-input>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handleClose">Cancel</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="creatNewExcel">
-            Confirm
+            创建
           </el-button>
         </span>
       </template>
