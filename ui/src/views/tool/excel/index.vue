@@ -3,6 +3,7 @@
   import eSheet from 'e-sheet'
   import 'e-sheet/dist/css/index.css'
   import {onMounted,ref,reactive} from "vue";
+  import * as XLSX from 'xlsx'
   import useUserStore from '@/store/modules/user'
   import {addExcel, getExcelList, getExcelById,editExcel} from '@/api/tool/excel'
 
@@ -12,6 +13,7 @@
   const excelList = ref([])
   const curExcel = reactive({
     excelId:'',
+    excelName:'',
     excelData:null,
   })
 
@@ -36,10 +38,12 @@
       init:false
     })
     const userStore = useUserStore()
-    // console.log('store.state.userName',userStore.name)
+    // console.log('store.state.userName',userStore)
     excelPkg.setUserName(userStore.name)
+    excelPkg.setUserId(userStore.userId)
     freshList().then(data=>{
       curExcel.excelId = data[0].excelId
+      curExcel.excelName = data[0].excelName
       getExcelDataById(curExcel.excelId).then(()=>{
         excelPkg.connectWebSocket('ws://localhost:8090/tool/excel/connected')
       })
@@ -81,6 +85,7 @@
     return new Promise((resolve, reject) => {
       getExcelById(excelId).then(res=>{
         curExcel.excelId = excelId
+        curExcel.excelName = res.data.excelName
         // const data = JSON.parse(res.data.excelData)
         // console.log('curExcel.excelData',data[0].sheet)
         // try {
@@ -114,6 +119,44 @@
     })
 
   }
+  
+  function exportData() {
+    const jsonData = excelPkg.exportXlsxData();
+    // console.log('jsonData',jsonData)
+    const wb = XLSX.utils.book_new()
+    jsonData.forEach(item=>{
+      XLSX.utils.book_append_sheet(wb,item.sheet,item.label)
+    })
+    downBlobFile(workbookToBlob(wb),curExcel.excelName)
+  }
+
+  /**
+   * @param {ArrayBuffer} blob
+   * @param {string} fileName
+   */
+  function downBlobFile(blob,fileName="新文件.xlsx") {
+    if(typeof blob === 'object' && blob instanceof Blob){
+      blob = URL.createObjectURL(blob)
+    }
+    const aLink = document.createElement('a');
+    aLink.href = blob
+    if(!fileName.includes('.xlsx')){
+      fileName += '.xlsx'
+    }
+    aLink.download = fileName;
+    aLink.click()
+    aLink.remove()
+  }
+
+  function workbookToBlob(workbook) {
+    const wopts = { bookType:"xlsx", bookSST:false, type:"array" }
+
+    const wbout = XLSX.write(workbook,wopts);
+
+    return new Blob([wbout], {
+      type: 'application/octet-stream'
+    });
+  }
 
 </script>
 
@@ -122,6 +165,7 @@
     <div class="left-side">
       <div>
         <el-button @click="openAddDialog" type="primary">创新新文档</el-button>
+        <el-button @click="exportData" type="primary">导出数据</el-button>
       </div>
       <ul class="excel-list-layout">
         <li :class="curExcel.excelId === item.excelId?'selected':''" class="excel-item-layout" @click="getExcelDataById(item.excelId)" v-for="item in excelList" :key="item.excelId">{{item.excelName}}</li>

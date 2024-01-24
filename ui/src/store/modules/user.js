@@ -8,6 +8,7 @@ const useUserStore = defineStore(
     state: () => ({
       token: getToken(),
       name: '',
+      userId: '',
       avatar: '',
       roles: [],
       permissions: []
@@ -43,6 +44,7 @@ const useUserStore = defineStore(
               this.roles = ['ROLE_DEFAULT']
             }
             this.name = user.userName
+            this.userId = user.userId
             this.avatar = avatar;
             resolve(res)
           }).catch(error => {
