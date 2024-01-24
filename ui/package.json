@@ -19,7 +19,7 @@
     "@vueup/vue-quill": "1.1.0",
     "@vueuse/core": "9.5.0",
     "axios": "0.27.2",
-    "e-sheet": "^1.2.7",
+    "e-sheet": "^1.2.10",
     "echarts": "5.4.0",
     "element-plus": "2.2.27",
     "file-saver": "2.0.5",

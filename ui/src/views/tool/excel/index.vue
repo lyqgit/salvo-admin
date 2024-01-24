@@ -85,8 +85,13 @@
         // console.log('curExcel.excelData',data[0].sheet)
         // try {
         // console.log('JSON.parse(res.data.excelData)',JSON.parse(res.data.excelData))
-        res.data.excelData && excelPkg.drawExcel(JSON.parse(res.data.excelData))
-        console.log('excelPkg.sheetWidth',excelPkg.sheetWidth)
+        if(res.data.excelData){
+          excelPkg.drawExcel(JSON.parse(res.data.excelData))
+        }else{
+          excelPkg.drawExcel()
+        }
+
+        // console.log('excelPkg.sheetWidth',excelPkg.sheetWidth)
         // }catch (e) {
         //   console.log(' excelPkg.getCurrentSheet()', excelPkg.getCurrentSheet())
         // }
@@ -119,7 +124,7 @@
         <el-button @click="openAddDialog" type="primary">创新新文档</el-button>
       </div>
       <ul class="excel-list-layout">
-        <li :class="curExcel.excelId === item.excelId?'selected':''" @click="devTip" v-for="item in excelList" :key="item.excelId">{{item.excelName}}</li>
+        <li :class="curExcel.excelId === item.excelId?'selected':''" class="excel-item-layout" @click="getExcelDataById(item.excelId)" v-for="item in excelList" :key="item.excelId">{{item.excelName}}</li>
       </ul>
     </div>
     <div class="right-content">
@@ -152,10 +157,13 @@
     width: 300px;
     .excel-list-layout{
       list-style: none;
-      padding-left: 0;
+      padding: 6px;
       .selected{
         background: #1c84c6;
         color: #FFFFFF;
+      }
+      .excel-item-layout{
+        padding: 16px;
       }
     }
   }
