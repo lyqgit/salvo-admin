@@ -1,6 +1,6 @@
 use salvo::{Depot, handler, Request, Response};
 use salvo::http::StatusError;
-use salvo::oapi::endpoint;
+use salvo::{oapi::endpoint,Writer};
 use salvo::oapi::extract::{JsonBody, PathParam};
 use crate::model::excel_model::{ExcelModifyPayload,ExcelList,ExcelDetail};
 use crate::service::excel_service;

@@ -46,7 +46,7 @@ pub struct SysRoleListFlag{
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
 #[serde(rename_all(deserialize ="camelCase"))]
 #[salvo(parameters(rename_all="camelCase"))]
-#[salvo(parameters(parameter_in = Query))]
+#[salvo(parameters(default_parameter_in = Query))]
 pub struct SysRolePagePayload{
     pub page_num:Option<u64>,
     pub page_size:Option<u64>,
@@ -96,7 +96,7 @@ pub struct SysRoleStatusPayload{
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
 #[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
-#[salvo(parameters(parameter_in = Query))]
+#[salvo(parameters(default_parameter_in = Query))]
 pub struct SysUserRolePagePayload{
     pub role_id:i64,
     #[serde(rename(deserialize = "phonenumber"))]
@@ -119,7 +119,7 @@ pub struct SysRoleCancelUserPayload{
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
 #[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize = "camelCase"))]
-#[salvo(parameters(parameter_in = Query))]
+#[salvo(parameters(default_parameter_in = Query))]
 pub struct SysUserRoleCancelPayload{
     pub role_id:i64,
     pub user_ids:String,

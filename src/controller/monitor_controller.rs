@@ -1,4 +1,4 @@
-use salvo::oapi::endpoint;
+use salvo::{oapi::endpoint};
 use crate::utils::res::{ match_ok_common_result_no_error, Res, ResObj};
 use crate::service::monitor_service;
 use crate::model::monitor_model::ServerInfo;

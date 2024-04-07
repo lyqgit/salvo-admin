@@ -60,7 +60,7 @@ pub struct SysMenuPage{
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
 #[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize="camelCase"))]
-#[salvo(parameters(parameter_in = Query))]
+#[salvo(parameters(default_parameter_in = Query))]
 pub struct SysMenuPagePayload{
   pub menu_name:Option<String>,
   pub status:Option<String>,

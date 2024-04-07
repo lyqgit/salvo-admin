@@ -1,4 +1,4 @@
-use salvo::oapi::endpoint;
+use salvo::{oapi::endpoint,Writer};
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{Depot, Request};
 use crate::model::common_model::Page;

@@ -16,7 +16,7 @@ pub struct AddDictType{
 
 #[derive(Debug,Serialize,Deserialize,Clone,ToParameters)]
 #[salvo(parameters(rename_all="camelCase"))]
-#[salvo(parameters(parameter_in = Query))]
+#[salvo(parameters(default_parameter_in = Query))]
 pub struct DictTypePagePayload{
   pub page_num:u64,
   pub page_size:u64,

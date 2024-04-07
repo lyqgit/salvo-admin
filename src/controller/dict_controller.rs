@@ -1,6 +1,6 @@
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::Depot;
-use salvo::{oapi::endpoint, Request};
+use salvo::{oapi::endpoint,Writer, Request};
 use crate::entity::sys_dict_data_entity::SysDictData;
 use crate::model::common_model::Page;
 use crate::model::dict_model::{AddDictType, DictTypeDataPagePayload, AddSysDictDataVo, DictTypePagePayload, DictDataDetail, EditSysDictData};

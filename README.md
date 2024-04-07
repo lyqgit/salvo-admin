@@ -9,6 +9,12 @@
 * [salvo](https://github.com/salvo-rs/salvo) 是一个极其简单且功能强大的 Rust Web 后端框架. 仅仅需要基础 Rust 知识即可开发后端服务。
 * [Ruoyi-vue3](https://github.com/yangzongzhuan/RuoYi-Vue3) Vue3 + Element Plus + Vite 版本
 
+## 环境
+
+os：windows 10 </br>
+rust：1.77.1 </br>
+salvo：0.66.2 </br>
+
 ## 运行
 
 ```bash

@@ -2,7 +2,7 @@ use crate::utils::captcha;
 use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::{JsonBody, PathParam};
-use salvo::{oapi::endpoint};
+use salvo::{oapi::endpoint,Writer};
 use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysAuthPayload, SysUserAuthRole, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserEditPwdPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
 use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok, match_no_res_ok};
 use uuid::Uuid;

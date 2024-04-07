@@ -25,7 +25,7 @@ pub struct DeptList{
 #[derive(Debug,Serialize,ToParameters,Deserialize,Clone)]
 #[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize="camelCase"))]
-#[salvo(parameters(parameter_in = Query))]
+#[salvo(parameters(default_parameter_in = Query))]
 pub struct DeptListPayload{
     pub dept_name:Option<String>,
     pub status:Option<String>,

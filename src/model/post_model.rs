@@ -20,7 +20,7 @@ pub struct SysPostList{
 #[derive(Debug,Serialize,Deserialize,ToParameters,Clone)]
 #[salvo(parameters(rename_all="camelCase"))]
 #[serde(rename_all(deserialize="camelCase"))]
-#[salvo(parameters(parameter_in = Query))]
+#[salvo(parameters(default_parameter_in = Query))]
 pub struct SysPostListPayload{
     pub page_num:u64,
     pub page_size:u64,
