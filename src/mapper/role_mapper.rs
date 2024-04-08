@@ -6,6 +6,11 @@ use crate::model::role_model::{SysRoleList, SysRoleListFlag};
 use crate::model::user_model::SysUserList;
 
 #[html_sql("src/mapper/xml/role_xml.html")]
+pub async fn select_role_list_by_user_id(rb: &mut dyn Executor,user_id:i32)->rbatis::Result<Vec<SysRoleList>>{
+  impled!()
+}
+
+#[html_sql("src/mapper/xml/role_xml.html")]
 pub async fn select_roles_by_user_id(rb: &mut dyn Executor,id:i32)->rbatis::Result<Vec<SysRole>>{
   impled!()
 }

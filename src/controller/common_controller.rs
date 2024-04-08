@@ -36,6 +36,7 @@ pub async fn catcher_err(res: &mut Response, ctrl: &mut FlowCtrl) {
       },
       StatusCode::INTERNAL_SERVER_ERROR=>{
         println!("500错误");
+        tracing::info!("500报错信息--------{:#?}",res.to_string());
         ctrl.skip_rest();
         res.body("".into());
         res.render(res_json_custom::<()>(500, "服务器发生错误".to_string()));
@@ -47,7 +48,8 @@ pub async fn catcher_err(res: &mut Response, ctrl: &mut FlowCtrl) {
       //   // res.render(res_json_custom::<()>(500, "发生错误".to_string()));
       // }
       _=>{
-        // println!("任意状态,{:#?}",res.body.size());
+        // println!("任意状态,{:#?}",res.to_string());
+        tracing::info!("报错信息--------{:#?}",res.to_string());
         res.status_code(StatusCode::INTERNAL_SERVER_ERROR);
         // res.render(res_json_custom::<()>(500, "发生错误".to_string()));
         res.body("".into());

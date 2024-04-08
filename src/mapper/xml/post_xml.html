@@ -1,5 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
+    <select id="get_post_list_by_user_id">
+        `select sp.* from sys_post sp inner join sys_user_post sup on sp.post_id = sup.role_id where sup.user_id = #{user_id}`
+    </select>
     <select id="get_post_page">
         `select * from sys_post`
         <where>

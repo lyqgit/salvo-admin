@@ -175,3 +175,70 @@ pub struct SysAuthPayload{
   #[salvo(parameter(value_type = Option<String>))]
   pub role_ids:Option<String>,
 }
+
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[salvo(schema(rename_all="camelCase"))]
+#[serde(rename_all(serialize = "camelCase"))]
+pub struct SysUserProfile{
+  pub admin:bool,
+  pub user_id:i64,
+  pub dept_id:Option<i64>,
+  pub user_name:String,
+  pub nick_name:String,
+  pub user_type:Option<String>,
+  pub email:Option<String>,
+  #[serde(rename(serialize = "phonenumber"))]
+  pub phone_number:Option<String>,
+  pub sex:Option<String>,
+  pub avatar:Option<String>,
+  pub password:Option<String>,
+  pub status:Option<String>,
+  pub del_flag:Option<String>,
+  pub login_ip:Option<String>,
+  pub login_date:Option<DateTime>,
+  pub create_by:Option<String>,
+  pub create_time:Option<DateTime>,
+  pub update_by:Option<String>,
+  pub update_time:Option<DateTime>,
+  pub remark:Option<String>,
+  pub real_name:Option<String>,
+  pub expire_time:Option<i64>,
+  pub dept:Option<DeptList>,
+  pub roles:Option<Vec<SysRoleList>>,
+  pub post_group:Option<String>,
+  pub role_group:Option<String>,
+}
+
+impl SysUserList{
+  pub fn into_sys_user_profile(self)->SysUserProfile{
+    SysUserProfile{
+      admin: false,
+      user_id: self.user_id,
+      dept_id: self.dept_id,
+      user_name: self.user_name,
+      nick_name: self.nick_name,
+      user_type: self.user_type,
+      email: self.email,
+      phone_number: self.phone_number,
+      sex: self.sex,
+      avatar: self.avatar,
+      password: self.password,
+      status: self.status,
+      del_flag: self.del_flag,
+      login_ip: self.login_ip,
+      login_date: self.login_date,
+      create_by: self.create_by,
+      create_time: self.create_time,
+      update_by: self.update_by,
+      update_time: self.update_time,
+      remark: self.remark,
+      real_name: self.real_name,
+      expire_time: self.expire_time,
+      dept: None,
+      roles: None,
+      post_group: None,
+      role_group: None,
+    }
+  }
+}

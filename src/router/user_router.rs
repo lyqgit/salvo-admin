@@ -15,6 +15,10 @@ pub fn init_router()->Router{
         Router::with_path("/system/user/list").get(user_controller::get_user_page)
     )
     .push(
+        // 退出登录
+        Router::with_path("/system/user/profile").get(user_controller::get_user_profile)
+    )
+    .push(
         Router::with_path("/system/user/<id>").get(user_controller::get_user_detail).delete(user_controller::del_user)
     )
     .push(

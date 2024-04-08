@@ -3,7 +3,7 @@ use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{oapi::endpoint,Writer};
-use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysAuthPayload, SysUserAuthRole, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserEditPwdPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, UserInfo};
+use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysAuthPayload, SysUserAuthRole, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserEditPwdPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, SysUserProfile, UserInfo};
 use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok, match_no_res_ok};
 use uuid::Uuid;
 use crate::model::common_model::Page;
@@ -328,4 +328,17 @@ pub async fn add_user_and_role(req:&mut Request)->Res<()>{
     }
   }
 
+}
+
+
+/// 个人中心-获取用户信息
+#[endpoint(
+  tags("用户"),
+  responses(
+    (status_code = 200,body=ResObj<SysUserProfile>,description = "个人中心-获取用户信息")
+  )
+)]
+pub async fn get_user_profile(depot:&mut Depot)->Res<SysUserProfile>{
+  let user_id:i32 = depot.get::<i32>("userId").copied().expect("获取用户信息错误");
+  match_ok(user_service::get_user_profile_service(user_id).await)
 }

@@ -5,9 +5,11 @@ use crate::GLOBAL_DB;
 use rbatis::rbdc::Error;
 use crate::entity::sys_user_post_entity::SysUserPostEntity;
 use crate::entity::sys_user_role_entity::SysUserRoleEntity;
-use crate::mapper::{post_mapper, role_mapper, user_mapper};
+use crate::mapper::{dept_mapper, post_mapper, role_mapper, user_mapper};
 use crate::model::common_model::Page;
-use crate::model::user_model::{SysUserAuthRole, SysUserDetail, SysUserList};
+use crate::model::post_model::SysPostList;
+use crate::model::role_model::SysRoleList;
+use crate::model::user_model::{SysUserAuthRole, SysUserDetail, SysUserList, SysUserProfile};
 use crate::service::dept_service;
 use crate::utils::func;
 use crate::utils::func::{create_page, create_page_list};
@@ -310,4 +312,31 @@ pub async fn add_user_and_role(user_id:i64,role_id:Option<Vec<i64>>)->rbatis::Re
     Ok(func::is_modify_ok(rows.rows_affected))
   }
 
+}
+
+pub async fn get_user_profile_service(user_id:i32)->rbatis::Result<SysUserProfile>{
+  let role_list:Vec<SysRoleList> = role_mapper::select_role_list_by_user_id(&mut GLOBAL_DB.clone(), user_id).await?;
+  let dept_list = dept_mapper::get_dept_by_user_id(&mut GLOBAL_DB.clone(),user_id).await?;
+  let post_list:Vec<SysPostList> = post_mapper::get_post_by_id(&mut GLOBAL_DB.clone(),user_id as i64).await?;
+  let user = user_mapper::get_user_by_id(&mut GLOBAL_DB.clone(),Some(user_id as i64)).await?;
+  let user:Option<SysUserList> = user.get(0).cloned();
+
+  if let Some(user_list) = user{
+    let mut sys_user_profile:SysUserProfile = user_list.into_sys_user_profile();
+    if role_list.len() > 0 {
+      sys_user_profile.role_group = role_list.get(0).cloned().expect("没有查到角色").role_name
+    }
+    sys_user_profile.roles = Some(role_list);
+    sys_user_profile.dept = dept_list.get(0).cloned();
+    if post_list.len() > 0 {
+      sys_user_profile.post_group = post_list.get(0).cloned().expect("没有查到职位").post_name
+    }
+    if user_id == 1{
+      sys_user_profile.admin = true
+    }
+    Ok(sys_user_profile)
+  }else{
+    Err(Error::from("没有数据"))
+
+  }
 }

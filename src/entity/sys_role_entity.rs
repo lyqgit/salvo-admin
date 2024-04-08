@@ -1,5 +1,6 @@
-use serde::{Serialize,Deserialize};
+use serde::{Serialize, Deserialize};
 use rbatis::rbdc::datetime::DateTime;
+use crate::model::role_model::SysRoleList;
 
 #[derive(Debug,Serialize,Deserialize,Clone)]
 pub struct SysRole{
@@ -17,4 +18,27 @@ pub struct SysRole{
   pub update_by:Option<String>,
   pub update_time:Option<DateTime>,
   pub remark:Option<String>,
+}
+
+impl SysRole {
+  #[allow(dead_code)]
+  #[allow(unused_must_use)]
+  pub fn into_sys_role_list(self)->SysRoleList{
+    SysRoleList{
+      role_id: Some(self.role_id),
+      role_name: Some(self.role_name),
+      role_key: Some(self.role_key),
+      role_sort: Some(self.role_sort),
+      data_scope: Some(self.data_scope),
+      menu_check_strictly: Some(self.menu_check_strictly),
+      dept_check_strictly: Some(self.dept_check_strictly),
+      status: Some(self.status),
+      del_flag: Some(self.del_flag),
+      create_by: Some(self.create_by),
+      create_time: Some(self.create_time),
+      update_by: self.update_by,
+      update_time: self.update_time,
+      remark: self.remark
+    }
+  }
 }

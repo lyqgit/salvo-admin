@@ -29,4 +29,10 @@ pub async fn get_post_list(rb: &mut dyn Executor)->rbatis::Result<Vec<SysPostLis
     impled!()
 }
 
+#[html_sql("src/mapper/xml/post_xml.html")]
+pub async fn get_post_list_by_user_id(rb: &mut dyn Executor,user_id:i32)->rbatis::Result<Vec<SysPostList>>{
+    impled!()
+}
+
+
 crud!(SysPostEntity{},"sys_post");

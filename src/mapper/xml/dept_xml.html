@@ -1,5 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
+    <select id="get_dept_by_user_id">
+        `select sd.* from sys_dept sd inner join sys_user su on su.dept_id = sd.dept_id`
+        <where>
+            `su.user_id = #{user_id}`
+        </where>
+    </select>
     <select id="get_dept_list">
         `select * from sys_dept`
         <where>
