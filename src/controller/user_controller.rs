@@ -3,7 +3,7 @@ use salvo::Depot;
 use salvo::Request;
 use salvo::oapi::extract::{JsonBody, PathParam};
 use salvo::{oapi::endpoint,Writer};
-use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysAuthPayload, SysUserAuthRole, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserEditPwdPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, SysUserProfile, UserInfo};
+use crate::model::user_model::{CaptchaRes, LoginReq, LoginRes, SysAuthPayload, SysUpdateUserPwdPayload, SysUserAuthRole, SysUserChangeStatusPayload, SysUserDetail, SysUserEditPayload, SysUserEditPwdPayload, SysUserList, SysUserListPayload, SysUserModifyPayload, SysUserProfile, UserInfo};
 use crate::utils::res::{Res, res_json_ok, res_json_err, ResObj, res_json_custom, match_ok, match_no_res_ok};
 use uuid::Uuid;
 use crate::model::common_model::Page;
@@ -341,4 +341,23 @@ pub async fn add_user_and_role(req:&mut Request)->Res<()>{
 pub async fn get_user_profile(depot:&mut Depot)->Res<SysUserProfile>{
   let user_id:i32 = depot.get::<i32>("userId").copied().expect("获取用户信息错误");
   match_ok(user_service::get_user_profile_service(user_id).await)
+}
+
+#[endpoint(
+  tags("用户"),
+  responses(
+    (status_code = 200,body=ResObj<()>,description = "个人中心-修改用户密码")
+  )
+)]
+pub async fn reset_user_password(payload:JsonBody<SysUpdateUserPwdPayload>,depot:&mut Depot)->Res<()>{
+  let user_id:i32 = depot.get::<i32>("userId").copied().expect("获取用户信息错误");
+  if let (Some(old_password),Some(new_password)) = (&payload.old_password,&payload.new_password){
+    if old_password.len() > 0 && new_password.len() > 0{
+      return match_no_res_ok(user_service::reset_user_password(user_id,old_password.clone().to_string(),new_password.clone().to_string()).await);
+    }else{
+        return Err(res_json_custom(400,"旧密码和新密码不能为空".to_string()));
+    }
+  }else{
+    Err(res_json_custom(400,"旧密码和新密码不能为空".to_string()))
+  }
 }

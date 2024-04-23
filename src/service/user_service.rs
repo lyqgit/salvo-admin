@@ -341,7 +341,7 @@ pub async fn get_user_profile_service(user_id:i32)->rbatis::Result<SysUserProfil
   }
 }
 
-pub async fn reset_user_password(user_id:i32, mut old_password:String, new_password:String) ->rbatis::Result<bool>{
+pub async fn reset_user_password(user_id:i32, mut old_password:String,mut new_password:String) ->rbatis::Result<bool>{
   let user_list = SysUser::select_by_column(&mut GLOBAL_DB.clone(), "user_id", &user_id).await?;
   if user_list.len() == 1{
     let user = user_list.get(0).cloned().unwrap();
@@ -349,6 +349,8 @@ pub async fn reset_user_password(user_id:i32, mut old_password:String, new_passw
       old_password.push_str("salvo_admin");
       let old_password_md5 = crate::utils::md5::create_md5(old_password);
       if old_p == old_password_md5{
+        new_password.push_str("salvo_admin");
+        let new_password_md5 = crate::utils::md5::create_md5(new_password);
         let user_entity = SysUserEntity{
           user_id:Some(user_id as i64),
           dept_id:None,
@@ -359,7 +361,7 @@ pub async fn reset_user_password(user_id:i32, mut old_password:String, new_passw
           phone_number: None,
           sex: None,
           avatar: None,
-          password: Some(new_password),
+          password: Some(new_password_md5),
           status: None,
           del_flag: None,
           login_ip: None,
@@ -373,8 +375,9 @@ pub async fn reset_user_password(user_id:i32, mut old_password:String, new_passw
           expire_time: None,
         };
         let rows = SysUserEntity::update_by_column(&mut GLOBAL_DB.clone(),&user_entity,"user_id").await?;
-        Ok(func::is_modify_ok(rows.rows_affected))
+        return Ok(func::is_modify_ok(rows.rows_affected));
       }
+      return Ok(false);
     }
     Ok(false)
   }else{

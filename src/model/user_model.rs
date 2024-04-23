@@ -242,3 +242,11 @@ impl SysUserList{
     }
   }
 }
+
+#[derive(Debug,Serialize,Deserialize,Clone,ToSchema)]
+#[salvo(parameters(rename_all="camelCase"))]
+#[serde(rename_all(deserialize = "camelCase"))]
+pub struct SysUpdateUserPwdPayload{
+  pub old_password:Option<String>,
+  pub new_password:Option<String>,
+}

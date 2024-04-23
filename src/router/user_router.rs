@@ -15,7 +15,10 @@ pub fn init_router()->Router{
         Router::with_path("/system/user/list").get(user_controller::get_user_page)
     )
     .push(
-        // 退出登录
+        // 个人中心-修改密码
+        Router::with_path("/system/user/profile/updatePwd").put(user_controller::reset_user_password)
+    ).push(
+        // 获取个人中心信息
         Router::with_path("/system/user/profile").get(user_controller::get_user_profile)
     )
     .push(
