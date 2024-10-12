@@ -17,7 +17,7 @@
         `select excel_id,excel_name,excel_data,create_time,update_time from tool_excel`
         <where>
             ` 1 = 1`
-            <if test="excel_id != ''">
+            <if test="excel_id != '' && excel_id != null">
                 ` and excel_id = #{excel_id}`
             </if>
         </where>

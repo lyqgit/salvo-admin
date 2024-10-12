@@ -21,10 +21,10 @@
     `select * from sys_menu`
     <where>
       `1 = 1`
-      <if test="menu_name != ''">
+      <if test="menu_name != '' && menu_name != null">
         ` and menu_name like '%${menu_name}%'`
       </if>
-      <if test="status != ''">
+      <if test="status != '' && status != null">
         ` and status = #{status}`
       </if>
     </where>

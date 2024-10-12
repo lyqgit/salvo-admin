@@ -10,10 +10,10 @@
         `select * from sys_dept`
         <where>
             1 = 1
-            <if test="dept_name != ''">
+            <if test="dept_name != '' && dept_name != null">
                 ` and dept_name = #{dept_name}`
             </if>
-            <if test="status != ''">
+            <if test="status != '' && status != null">
                 ` and status = #{status}`
             </if>
         </where>
@@ -22,7 +22,7 @@
         `select * from sys_dept`
         <where>
             1 = 1
-            <if test="dept_id != ''">
+            <if test="dept_id != '' && dept_id != null">
                 ` and dept_id != #{dept_id}`
             </if>
         </where>
