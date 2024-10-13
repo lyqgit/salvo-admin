@@ -10,3 +10,4 @@ pub mod swagger_controller;
 pub mod monitor_controller;
 
 pub mod excel_controller;
+pub mod notice_controller;

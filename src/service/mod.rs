@@ -6,3 +6,4 @@ pub mod dept_service;
 pub mod post_service;
 pub mod monitor_service;
 pub mod excel_service;
+pub mod notice_service;
