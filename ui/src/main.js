@@ -43,6 +43,10 @@ import TreeSelect from '@/components/TreeSelect'
 // 字典标签组件
 import DictTag from '@/components/DictTag'
 
+// 表单生成器fcDesigner
+import FcDesigner from '@form-create/designer';
+import 'element-plus/dist/index.css';
+
 const app = createApp(App)
 
 // 全局方法挂载
@@ -79,5 +83,9 @@ app.use(ElementPlus, {
   // 支持 large、default、small
   size: Cookies.get('size') || 'default'
 })
+
+// 使用 Element Plus 和 FcDesigner
+app.use(FcDesigner);
+app.use(FcDesigner.formCreate);
 
 app.mount('#app')
