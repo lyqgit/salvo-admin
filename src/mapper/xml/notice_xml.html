@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+    <select id="get_notice_list_by_user_id">
+        `select sp.* from sys_notice sp inner join sys_user_notice sup on sp.notice_id = sup.role_id where sup.user_id = #{user_id}`
+    </select>
+    <select id="get_notice_page">
+        `select * from sys_notice`
+        <where>
+            1 = 1
+            <if test="notice_title != '' && notice_title != null">
+                ` and notice_title = #{notice_title}`
+            </if>
+            <if test="notice_type != '' && notice_type != null ">
+                ` and notice_type = #{notice_type}`
+            </if>
+            <if test="status != '' && status != null">
+                ` and status = #{status}`
+            </if>
+            ` limit #{page_num},#{page_size}`
+        </where>
+    </select>
+    <select id="get_notice_by_id">
+        `select * from sys_notice`
+        <where>
+            `notice_id = #{notice_id}`
+        </where>
+    </select>
+    <select id="get_notice_count">
+        `select count(*) from sys_notice`
+        <where>
+            1 = 1
+            <if test="notice_title != '' && notice_title != null">
+                ` and notice_title = #{notice_title}`
+            </if>
+            <if test="notice_type != '' && notice_type != null">
+                ` and notice_type = #{notice_type}`
+            </if>
+            <if test="status != '' && status != null">
+                ` and status = #{status}`
+            </if>
+        </where>
+    </select>
+    <delete id="del_notice_by_id">
+        `delete from sys_notice`
+        <where>
+            `1 = 1 and notice_id in ( ${notice_id} )`
+        </where>
+    </delete>
+    <select id="get_notice_list">
+        `select * from sys_notice`
+    </select>
+</mapper>

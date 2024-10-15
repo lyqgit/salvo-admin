@@ -9,3 +9,4 @@ pub mod chat_model;
 pub mod swagger_model;
 pub mod monitor_model;
 pub mod excel_model;
+pub mod notice_model;
