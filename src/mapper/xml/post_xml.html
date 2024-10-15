@@ -7,13 +7,13 @@
         `select * from sys_post`
         <where>
             1 = 1
-            <if test="post_code != ''">
+            <if test="post_code != '' && post_code != null">
                 ` and post_code = #{post_code}`
             </if>
-            <if test="post_name != ''">
+            <if test="post_name != '' && post_name != null ">
                 ` and post_name = #{post_name}`
             </if>
-            <if test="status != ''">
+            <if test="status != '' && status != null">
                 ` and status = #{status}`
             </if>
             ` limit #{page_num},#{page_size}`
@@ -29,13 +29,13 @@
         `select count(*) from sys_post`
         <where>
             1 = 1
-            <if test="post_code != ''">
+            <if test="post_code != '' && post_code != null">
                 ` and post_code = #{post_code}`
             </if>
-            <if test="post_name != ''">
+            <if test="post_name != '' && post_name != null">
                 ` and post_name = #{post_name}`
             </if>
-            <if test="status != ''">
+            <if test="status != '' && status != null">
                 ` and status = #{status}`
             </if>
         </where>

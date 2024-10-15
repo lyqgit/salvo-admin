@@ -16,16 +16,16 @@
     `select * from sys_role`
     <where>
       ` 1 = 1`
-      <if test="role_name != ''">
+      <if test="role_name != '' && role_name != null">
         ` and role_name like '%${role_name}%' `
       </if>
-      <if test="role_key != ''">
+      <if test="role_key != '' && role_key != null">
         ` and role_key = #{role_key} `
       </if>
-      <if test="status != ''">
+      <if test="status != '' && status != null">
         ` and status = #{status} `
       </if>
-      <if test="begin_time != ''">
+      <if test="begin_time != '' && begin_time != null">
         ` and create_time between #{begin_time} and #{end_time} `
       </if>
       ` limit #{page_num},#{page_size}`
@@ -35,16 +35,16 @@
     `select count(*) from sys_role`
     <where>
       ` 1 = 1`
-      <if test="role_name != ''">
+      <if test="role_name != '' && role_name != null">
         ` and role_name like '%${role_name}%' `
       </if>
-      <if test="role_key != ''">
+      <if test="role_key != '' && role_key != null">
         ` and role_key = #{role_key} `
       </if>
-      <if test="status != ''">
+      <if test="status != '' && status != null">
         ` and status = #{status} `
       </if>
-      <if test="begin_time != ''">
+      <if test="begin_time != '' && begin_time != null">
         ` and create_time between #{begin_time} and #{end_time} `
       </if>
     </where>
@@ -85,10 +85,10 @@
     <where>
       `sur.role_id = #{role_id}`
 
-      <if test="user_name != ''">
+      <if test="user_name != '' && user_name != null">
         ` and su.user_name like '%${user_name}%'`
       </if>
-      <if test="phone_number != ''">
+      <if test="phone_number != '' && phone_number != null">
         ` and su.phonenumber like '%${phone_number}%'`
       </if>
       ` limit #{page_num},#{page_size}`
@@ -98,10 +98,10 @@
     `select count(su.user_id) from sys_user su inner join sys_user_role sur on su.user_id = sur.user_id
     <where>
       `sur.role_id = #{role_id}`
-      <if test="user_name != ''">
+      <if test="user_name != '' && user_name != null">
         ` and su.user_name like '%${user_name}%'`
       </if>
-      <if test="phone_number != ''">
+      <if test="phone_number != '' && phone_number != null">
         ` and su.phonenumber like '%${phone_number}%'`
       </if>
     </where>
@@ -111,10 +111,10 @@
     <where>
       `(sur.role_id != #{role_id} or sur.role_id is null) and su.user_id != 1`
 
-      <if test="user_name != ''">
+      <if test="user_name != '' && user_name != null">
         ` and su.user_name like '%${user_name}%'`
       </if>
-      <if test="phone_number != ''">
+      <if test="phone_number != '' && phone_number != null">
         ` and su.phonenumber like '%${phone_number}%'`
       </if>
       ` limit #{page_num},#{page_size}`
@@ -124,10 +124,10 @@
     `select count(su.user_id) from sys_user su left join sys_user_role sur on su.user_id = sur.user_id
     <where>
       `(sur.role_id != #{role_id} or sur.role_id is null) and su.user_id != 1`
-      <if test="user_name != ''">
+      <if test="user_name != '' && user_name != null">
         ` and su.user_name like '%${user_name}%'`
       </if>
-      <if test="phone_number != ''">
+      <if test="phone_number != '' && phone_number != null">
         ` and su.phonenumber like '%${phone_number}%'`
       </if>
     </where>

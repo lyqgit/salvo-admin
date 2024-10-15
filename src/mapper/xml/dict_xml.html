@@ -6,16 +6,16 @@
     `select * from sys_dict_type`
     <where>
       `1 = 1`
-      <if test="dict_name != ''">
+      <if test="dict_name != '' && dict_name != null">
         ` and dict_name like '%${dict_name}%'`
       </if>
-      <if test="dict_type != ''">
+      <if test="dict_type != '' && dict_type != null">
         ` and dict_type = #{dict_type}`
       </if>
-      <if test="status != ''">
+      <if test="status != '' && status != null">
         ` and status = #{status}`
       </if>
-      <if test="begin_time != ''">
+      <if test="begin_time != '' && begin_time != null">
         ` and create_time between #{begin_time} and #{end_time}`
       </if>
         ` limit #{page_num},#{page_size}`
@@ -25,16 +25,16 @@
     `select count(*) from sys_dict_type`
     <where>
       `1 = 1`
-      <if test="dict_name != ''">
+      <if test="dict_name != '' && dict_name != null">
         ` and dict_name = #{dict_name}`
       </if>
-      <if test="dict_type != ''">
+      <if test="dict_type != '' && dict_type != null">
         ` and dict_type = #{dict_type}`
       </if>
-      <if test="status != ''">
+      <if test="status != '' && status != null">
         ` and status = #{status}`
       </if>
-      <if test="begin_time != ''">
+      <if test="begin_time != '' && begin_time != null">
         ` and create_time between #{begin_time} and #{end_time}`
       </if>
     </where>
@@ -72,13 +72,13 @@
     `select * from sys_dict_data
     <where>
       `1 = 1`
-      <if test="dict_label != ''">
+      <if test="dict_label != '' && dict_label != null">
         ` and dict_label = #{dict_label}`
       </if>
-      <if test="dict_type != ''">
+      <if test="dict_type != '' && dict_type != null">
         ` and dict_type = #{dict_type}`
       </if>
-      <if test="status != ''">
+      <if test="status != '' && status != null">
         ` and status = #{status}`
       </if>
         ` limit #{page_num},#{page_size}`
@@ -88,13 +88,13 @@
     `select count(*) from sys_dict_data`
     <where>
       `1 = 1`
-      <if test="dict_label != ''">
+      <if test="dict_label != '' && dict_label != null">
         ` and dict_label = #{dict_label}`
       </if>
-      <if test="dict_type != ''">
+      <if test="dict_type != '' && dict_type != null">
         ` and dict_type = #{dict_type}`
       </if>
-      <if test="status != ''">
+      <if test="status != '' && status != null">
         ` and status = #{status}`
       </if>
     </where>

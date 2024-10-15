@@ -4,16 +4,16 @@
         `select su.* from sys_user su inner join sys_dept sd on su.dept_id = sd.dept_id`
         <where>
             `1 = 1`
-            <if test="user_name != ''">
+            <if test="user_name != '' && user_name != null">
                 ` and su.user_name like concat('%', #{user_name}, '%')`
             </if>
-            <if test="phone_number != ''">
+            <if test="phone_number != '' && phone_number != null">
                 ` and su.phonenumber like concat('%', #{phone_number}, '%')`
             </if>
-            <if test="status != ''">
+            <if test="status != '' && status != null">
                 ` and su.status = #{status}`
             </if>
-            <if test="begin_time != ''">
+            <if test="begin_time != '' && begin_time != null">
                 ` and su.create_time between #{begin_time} and #{end_time}`
             </if>
             <if test="dept_id != null">
@@ -27,16 +27,16 @@
         `select count(*) from sys_user su inner join sys_dept sd on su.dept_id = sd.dept_id`
         <where>
             `1 = 1`
-            <if test="user_name != ''">
+            <if test="user_name != '' && user_name != null">
                 ` and su.user_name = #{user_name}`
             </if>
-            <if test="phonenumber != ''">
+            <if test="phone_number != '' && phone_number != null">
                 ` and su.phonenumber = #{phone_number}`
             </if>
-            <if test="status != ''">
+            <if test="status != '' && status != null">
                 ` and su.status = #{status}`
             </if>
-            <if test="begin_time != ''">
+            <if test="begin_time != '' && begin_time != null">
                 ` and su.create_time between #{begin_time} and #{end_time}`
             </if>
             <if test="dept_id != null">
