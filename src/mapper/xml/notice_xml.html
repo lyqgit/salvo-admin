@@ -8,7 +8,7 @@
         <where>
             1 = 1
             <if test="notice_title != '' && notice_title != null">
-                ` and notice_title = #{notice_title}`
+                ` and notice_title like concat('%', #{notice_title}, '%')`
             </if>
             <if test="notice_type != '' && notice_type != null ">
                 ` and notice_type = #{notice_type}`
