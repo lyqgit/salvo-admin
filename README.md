@@ -12,8 +12,8 @@
 ## 环境
 
 os：windows 10 </br>
-rust：1.77.1 </br>
-salvo：0.66.2 </br>
+rust：1.81.0 </br>
+salvo：0.73.0 </br>
 
 ## 运行
 
@@ -66,3 +66,4 @@ yarn dev
 5.  角色管理：角色菜单权限分配、设置角色按机构进行数据范围权限划分。
 6.  字典管理：对系统中经常使用的一些较为固定的数据进行维护。
 7.  excel管理：嵌入[e-sheet](https://github.com/lyqgit/e-sheet),web excel支持多人协同编辑---beta。
+8.  公告管理：配置系统公告信息。
